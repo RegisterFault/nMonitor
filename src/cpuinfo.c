@@ -74,6 +74,8 @@ void get_mem(struct meminfo * in)
 {
         char * path = "/proc/meminfo";
         FILE * f = fopen(path,"r");
+        if(!f)
+                return;
         int size = 1024;
         char * lbuf = malloc(size);
         char * token;
