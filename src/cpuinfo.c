@@ -20,6 +20,8 @@ void get_cpuname(char **str, int in_size)
 {
         char * path = "/proc/cpuinfo";
         FILE * f = fopen(path, "r");
+        if(!f)
+                return;
         int size = 1024;
         char *lbuf = malloc(size);
         char *token;

@@ -6,10 +6,6 @@
 #include "cpuinfo.h"
 #include "list.h"
 
-
-
-
-
 struct node * draw_wattage(WINDOW *win, struct node * list)
 {       
         list = draw_graph(win, list, 35000);
@@ -18,8 +14,6 @@ struct node * draw_wattage(WINDOW *win, struct node * list)
         add_node(list,get_wattage());
         return list;
 }
-
-
 
 struct node * draw_freq(WINDOW *win, struct node * list)
 {
@@ -34,6 +28,8 @@ void draw_cpu(WINDOW *win)
 {
         char *cpu_name = malloc(20);
         struct meminfo mem;
+        
+        bzero(cpu_name,20);
         get_cpuname(&cpu_name, 20);
         get_mem(&mem);
 
@@ -47,7 +43,6 @@ void draw_cpu(WINDOW *win)
         mvwprintw(win,6,1,"Used:  %5ld MB",(mem.total - mem.avail)/1000);
         wrefresh(win);
 }
-
 
 int main()
 {
