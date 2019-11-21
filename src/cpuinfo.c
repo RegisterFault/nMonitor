@@ -61,8 +61,11 @@ int get_bat_pct()
         char *energy_now = "/sys/class/power_supply/BAT0/energy_now";
         float e_full = (float) get_sysfs_int(energy_full);
         float e_now = (float) get_sysfs_int(energy_now);
-
-        return (int) ((e_now/e_full)*100);
+        
+        if(e_now > 0 && e_full > 0)
+                return (int) ((e_now/e_full)*100);
+                
+        return 0;
 }
 
 void get_mem(struct meminfo * in)
