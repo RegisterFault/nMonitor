@@ -1,2 +1,2 @@
 bin_PROGRAMS = nmonitor
-nmonitor_SOURCES = graph.c cpuinfo.c 
+nmonitor_SOURCES = main.c cpuinfo.c list.c
