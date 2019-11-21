@@ -108,4 +108,56 @@ void get_mem(struct meminfo * in)
                 if(in->free && in->total && in->avail && in->cache)
                         break;
         }
+        free(lbuf);
+        fclose(f);
+}
+
+int get_turbo()
+{       
+        /* no_turbo is 1 if turbo is off. returning 0 if off */
+        char * path = "/sys/devices/system/cpu/intel_pstate/no_turbo";
+        return get_sysfs_int(path) ? 0 : 1;
+}
+
+int get_cores()
+{
+        char * path = "/proc/cpuinfo";
+        FILE * f = fopen(path,"r");
+        size_t size = 1024;
+        char * lbuf = malloc(size);
+        int cores = 0;
+        if(!f)
+                return 0;
+        while(getline(&lbuf, &size, f)){
+                if(strstr(lbuf, "cpu cores")){
+                        if(sscanf(lbuf, "cpu cores\t: %d", &cores) != 1)
+                                return 0;
+                        break;
+                }
+        }
+        fclose(f);
+        free(lbuf);
+        return cores;
+}
+
+
+int get_threads()
+{
+        char * path = "/proc/cpuinfo";
+        FILE * f = fopen(path,"r");
+        size_t size = 1024;
+        char * lbuf = malloc(size);
+        int threads = 0;
+        if(!f)
+                return 0;
+        while(getline(&lbuf, &size, f)){
+                if(strstr(lbuf, "siblings")){
+                        if(sscanf(lbuf, "siblings\t: %d", &threads) != 1)
+                                return 0;
+                        break;
+                }
+        }
+        fclose(f);
+        free(lbuf);
+        return threads;
 }

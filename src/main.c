@@ -28,19 +28,24 @@ void draw_cpu(WINDOW *win)
 {
         char *cpu_name = malloc(20);
         struct meminfo mem;
+        int line = 0;
         
         bzero(cpu_name,20);
         get_cpuname(&cpu_name, 20);
         get_mem(&mem);
 
         box(win,0,0);
-        mvwprintw(win,0,0,"CPU INFO");
-        mvwprintw(win,1,1,cpu_name);
-        mvwprintw(win,2,1,"Total: %5ld MB",mem.total/1000);
-        mvwprintw(win,3,1,"Avail: %5ld MB",mem.avail/1000);
-        mvwprintw(win,4,1,"Free:  %5ld MB",mem.free/1000);
-        mvwprintw(win,5,1,"Cache: %5ld MB",mem.cache/1000);
-        mvwprintw(win,6,1,"Used:  %5ld MB",(mem.total - mem.avail)/1000);
+        mvwprintw(win,line++,0,"CPU INFO");
+        mvwprintw(win,line++,1,"%s %dC/%dT",
+                        cpu_name,
+                        get_cores(),
+                        get_threads());
+        mvwprintw(win,line++,1,"Turbo: %s",get_turbo() ? "on" : "off" );
+        mvwprintw(win,line++,1,"Total: %5ld MB",mem.total/1000);
+        mvwprintw(win,line++,1,"Avail: %5ld MB",mem.avail/1000);
+        mvwprintw(win,line++,1,"Free:  %5ld MB",mem.free/1000);
+        mvwprintw(win,line++,1,"Cache: %5ld MB",mem.cache/1000);
+        mvwprintw(win,line++,1,"Used:  %5ld MB",(mem.total - mem.avail)/1000);
         wrefresh(win);
 }
 
