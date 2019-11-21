@@ -78,36 +78,24 @@ void get_mem(struct meminfo * in)
                 return;
         int size = 1024;
         char * lbuf = malloc(size);
-        char * token;
         in->total = 0;
         in->free = 0;
         in->avail = 0;
         in->cache = 0;
 
         while(getline(&lbuf,(size_t *)&size, f)){
-                if(strstr(lbuf,"MemTotal:")) {
-                        strtok(lbuf," ");
-                        token = strtok(NULL," ");
-                        sscanf(token,"%lld",&(in->total));
-                }
-                if(strstr(lbuf,"MemFree:")) {
-                        strtok(lbuf, " ");
-                        token = strtok(NULL, " ");
-                        sscanf(token, "%lld", &(in->free));
-                } 
-                if(strstr(lbuf,"MemAvailable:")) {
-                        strtok(lbuf, " ");
-                        token = strtok(NULL, " ");
-                        sscanf(token, "%lld", &(in->avail));
-                } 
-                if(strstr(lbuf,"Cached:")) {
-                        strtok(lbuf, " ");
-                        token = strtok(NULL, " ");
-                        sscanf(token, "%lld", &(in->cache));
-                } 
+                if(strstr(lbuf,"MemTotal:"))
+                        sscanf(lbuf,"MemTotal:\t%lld",&(in->total));
+                if(strstr(lbuf,"MemFree:"))
+                        sscanf(lbuf, "MemFree:\t%lld", &(in->free));
+                if(strstr(lbuf,"MemAvailable:")) 
+                        sscanf(lbuf, "MemAvailable:\t%lld", &(in->avail));
+                if(strstr(lbuf,"Cached:")) 
+                        sscanf(lbuf, "Cached:\t%lld", &(in->cache));
                 if(in->free && in->total && in->avail && in->cache)
                         break;
         }
+
         free(lbuf);
         fclose(f);
 }
