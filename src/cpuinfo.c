@@ -24,18 +24,18 @@ void get_cpuname(char **str, int in_size)
                 return;
         int size = 1024;
         char *lbuf = malloc(size);
-        char token[in_size];
-        char *a, *b; /* placeholders, not important */
+        char *name;
 
         while(getline(&lbuf, (size_t *)&size, f)){
                 if(strstr(lbuf,"model name")){
-                        sscanf(lbuf, "model name\t: %*s %*s %s",token);
+                        sscanf(lbuf, "model name\t: %*s %*s %ms",&name);
                         break;
                 }
         }
 
-        strncpy(*str, token, in_size);
+        strncpy(*str, name, in_size);
         free(lbuf);
+        free(name);
         fclose(f);
 }
 
