@@ -24,16 +24,12 @@ void get_cpuname(char **str, int in_size)
                 return;
         int size = 1024;
         char *lbuf = malloc(size);
-        char *token;
+        char token[in_size];
+        char *a, *b; /* placeholders, not important */
 
         while(getline(&lbuf, (size_t *)&size, f)){
                 if(strstr(lbuf,"model name")){
-                        strtok(lbuf," ");
-                        strtok(NULL," ");
-                        strtok(NULL," ");
-                        strtok(NULL," ");
-                        token = strtok(NULL," ");
-                        printf("%s\n",token);
+                        sscanf(lbuf, "model name\t: %*s %*s %s",token);
                         break;
                 }
         }
