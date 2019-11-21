@@ -4,6 +4,10 @@ LT_PREREQ([2.2])
 LT_INIT()
 LT_OUTPUT()
 AC_PROG_CC
+AC_CHECK_FUNCS([bzero memset strstr])
+AC_CHECK_HEADERS([fcntl.h])
+AC_FUNC_MALLOC()
+AC_TYPE_SIZE_T
 AC_CHECK_HEADER([ncurses.h],
                 AC_CHECK_LIB([ncurses],[initscr],,AC_MSG_ERROR([no  ncurses])),
                 AC_MSG_ERROR([no ncurses]))
