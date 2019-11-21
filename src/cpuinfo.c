@@ -26,7 +26,6 @@ void get_cpuname(char **str, int in_size)
         char *lbuf = malloc(size);
         char *token;
 
-        
         while(getline(&lbuf, (size_t *)&size, f)){
                 if(strstr(lbuf,"model name")){
                         strtok(lbuf," ");
@@ -78,10 +77,8 @@ void get_mem(struct meminfo * in)
                 return;
         int size = 1024;
         char * lbuf = malloc(size);
-        in->total = 0;
-        in->free = 0;
-        in->avail = 0;
-        in->cache = 0;
+      
+        memset(in,0,sizeof(struct meminfo)); /* we use all members for parsing condition, set to zero */
 
         while(getline(&lbuf,(size_t *)&size, f)){
                 if(strstr(lbuf,"MemTotal:"))
@@ -93,7 +90,7 @@ void get_mem(struct meminfo * in)
                 if(strstr(lbuf,"Cached:")) 
                         sscanf(lbuf, "Cached:\t%lld", &(in->cache));
                 if(in->free && in->total && in->avail && in->cache)
-                        break;
+                        break; /*stop parsing file, we have what we need */
         }
 
         free(lbuf);
@@ -116,6 +113,7 @@ int get_cores()
         int cores = 0;
         if(!f)
                 return 0;
+
         while(getline(&lbuf, &size, f)){
                 if(strstr(lbuf, "cpu cores")){
                         if(sscanf(lbuf, "cpu cores\t: %d", &cores) != 1)
@@ -123,6 +121,7 @@ int get_cores()
                         break;
                 }
         }
+
         fclose(f);
         free(lbuf);
         return cores;
@@ -145,6 +144,7 @@ int get_threads()
                         break;
                 }
         }
+
         fclose(f);
         free(lbuf);
         return threads;
