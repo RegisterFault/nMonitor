@@ -41,7 +41,7 @@ void draw_cpu(WINDOW *win)
                         get_cores(),
                         get_threads());
         mvwprintw(win,line++,1,"Temp: %dC",get_temp());
-        mvwprintw(win,line++,1,"Turbo: %s",get_turbo() ? "on" : "off" );
+        mvwprintw(win,line++,1,"Turbo: %s ",get_turbo() ? "on" : "off" );
         mvwprintw(win,line++,1,"Total: %5ld MB",mem.total/1000);
         mvwprintw(win,line++,1,"Avail: %5ld MB",mem.avail/1000);
         mvwprintw(win,line++,1,"Free:  %5ld MB",mem.free/1000);
