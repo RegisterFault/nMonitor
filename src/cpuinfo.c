@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <glob.h>
 #include "cpuinfo.h"
 
 long int get_sysfs_int(char *path)
@@ -13,6 +14,20 @@ long int get_sysfs_int(char *path)
                 return 0;
         if(fscanf(f, "%lld", &out) != 1)
                 out = 0;
+        fclose(f);
+        return out;
+}
+
+/* always make sure to free the results of this function */
+char * get_sysfs_string(const char * path)
+{
+        FILE * f = fopen(path, "r");
+        char * out;
+        if(!f)
+                return NULL;;
+        /* reminder that %m means scanf will malloc */
+        if(fscanf(f,"%ms",&out) != 1)
+                out = NULL;
         fclose(f);
         return out;
 }
@@ -146,3 +161,40 @@ int get_threads()
         free(lbuf);
         return threads;
 }
+
+int get_temp()
+{
+        /* find x86_pkg_temp */
+        char * therm_pattern = "/sys/class/thermal/thermal_zone*/type";
+        glob_t therm_glob;
+        char * type_path;
+        char * temp_path = malloc(100);
+        int temp;
+        int i;
+        
+        bzero(temp_path,100);
+        
+        if(glob(therm_pattern, 0, NULL, &therm_glob) != 0)
+                return 0;
+
+        for(i = 0; i < therm_glob.gl_pathc; i++){
+                type_path = get_sysfs_string(therm_glob.gl_pathv[i]);
+                if(strcmp(type_path, "x86_pkg_temp") == 0){
+                        free(type_path);
+                        break; /* found thermal zone for proc */
+                }
+                free(type_path);
+        }
+
+        /* i is the correct thermal zone number */
+        snprintf(temp_path,100,"/sys/class/thermal/thermal_zone%d/temp",i);
+        temp = get_sysfs_int(temp_path);
+        free(temp_path);
+
+        return temp/1000;
+}
+
+
+
+
+

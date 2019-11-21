@@ -9,6 +9,7 @@ struct meminfo {
 };
 
 long int get_sysfs_int(char*);
+char * get_sysfs_string(const char *);
 void get_cpuname(char **, int );
 long int get_wattage(void);
 long int get_freq(void);
@@ -17,4 +18,5 @@ int get_bat_pct(void);
 int get_turbo(void);
 int get_cores(void);
 int get_threads(void);
+int get_temp(void);
 #endif
