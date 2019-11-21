@@ -12,7 +12,8 @@ long int get_sysfs_int(char *path)
         if(!f)
                 return 0;
         if(fscanf(f, "%lld", &out) != 1)
-                return 0;
+                out = 0;
+        fclose(f);
         return out;
 }
 
@@ -113,7 +114,7 @@ int get_cores()
         while(getline(&lbuf, &size, f)){
                 if(strstr(lbuf, "cpu cores")){
                         if(sscanf(lbuf, "cpu cores\t: %d", &cores) != 1)
-                                return 0;
+                                cores = 0;
                         break;
                 }
         }
@@ -136,7 +137,7 @@ int get_threads()
         while(getline(&lbuf, &size, f)){
                 if(strstr(lbuf, "siblings")){
                         if(sscanf(lbuf, "siblings\t: %d", &threads) != 1)
-                                return 0;
+                                threads = 0;
                         break;
                 }
         }
