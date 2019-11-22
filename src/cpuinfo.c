@@ -231,16 +231,25 @@ int get_pl2()
 }
 
 /* requires root */
-double get_joules()
+double get_pkg_joules()
 {
         RAPLU u;
-        ENRG e;
+        NRGP e;
 
         u.w = rdmsr(RAPLU_MSR);
-        e.w = rdmsr(ENRG_MSR);
+        e.w = rdmsr(NRGP_MSR);
 
         return (double) (e.s.energy*(pow(0.5,(double)u.s.es_units)));
 }
 
+/* requires root */
+double get_pp0_joules()
+{
+        RAPLU u;
+        NRG0 e;
 
+        u.w = rdmsr(RAPLU_MSR);
+        e.w = rdmsr(NRG0_MSR);
 
+        return (double) (e.s.energy*(pow(0.5,(double)u.s.es_units)));
+}
