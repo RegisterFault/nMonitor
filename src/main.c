@@ -8,7 +8,7 @@
 #include "list.h"
 #include "msr.h"
 
-#define DUR (500000L)
+#define DUR (50000L)
 #define DUR_SEC (DUR*0.000001)
 
 struct node * draw_wattage(WINDOW *win, struct node * list)
@@ -32,13 +32,11 @@ struct node * draw_freq(WINDOW *win, struct node * list)
 void draw_cpu(WINDOW *win)
 {
         char *cpu_name = malloc(20);
-        struct meminfo mem;
         int line = 0;
         static double last_pkg_nrg = 0;
         
         bzero(cpu_name,20);
         get_cpuname(&cpu_name, 20);
-        get_mem(&mem);
 
         wclear(win);
         box(win,0,0);
@@ -50,25 +48,44 @@ void draw_cpu(WINDOW *win)
                         get_threads());
         mvwprintw(win,line++,1,"Temp: %dC",get_temp());
         mvwprintw(win,line++,1,"Turbo: %s ",get_turbo() ? "on" : "off" );
-        if(geteuid() == 0){
+        if(geteuid() == 0){ /* if we are root */
                 mvwprintw(win, line++, 1, "Throttle: %c", get_throttle_char());
                 if(last_pkg_nrg != 0)
-                        mvwprintw(win,line++,1,"PKG: %3.2f W",(get_pkg_joules()-last_pkg_nrg)/DUR_SEC);
+                        mvwprintw(win,line++,1,"PKG:   %6.2f W",(get_pkg_joules()-last_pkg_nrg)/DUR_SEC);
                 last_pkg_nrg = get_pkg_joules();
+                mvwprintw(win,line++,1,"CPU:   %+2.2f mV",get_volt(CPU_PLANE));
+                mvwprintw(win,line++,1,"CACHE: %+2.2f mV",get_volt(CACHE_PLANE));
+
         }
+        wrefresh(win);
+}
+
+void draw_mem(WINDOW * win)
+{
+        struct meminfo mem;
+        int line = 0;
+        
+        get_mem(&mem);
+        wclear(win);
+        box(win,0,0);
+
+        mvwprintw(win,line++,0,"MEM INFO");
         mvwprintw(win,line++,1,"Total: %5ld MB",mem.total/1000);
         mvwprintw(win,line++,1,"Avail: %5ld MB",mem.avail/1000);
         mvwprintw(win,line++,1,"Free:  %5ld MB",mem.free/1000);
         mvwprintw(win,line++,1,"Cache: %5ld MB",mem.cache/1000);
         mvwprintw(win,line++,1,"Used:  %5ld MB",(mem.total - mem.avail)/1000);
+        
         wrefresh(win);
 }
+
 
 int main()
 {
         WINDOW * wwin;
         WINDOW * fwin;
         WINDOW *cpuwin;
+        WINDOW *memwin;
         struct node * wlist = malloc(sizeof(struct node));
         wlist->next = NULL;
         wlist->foo = 0;
@@ -79,16 +96,16 @@ int main()
         initscr();
         curs_set(0);
 
-        cpuwin = newwin(13,20,1,0);
+        cpuwin = newwin(14,20,0,0);
+        memwin = newwin(10,20,14,0);
         
-        mvprintw(0,20,"Power");
-        wwin = newwin(11,50,1,20);
-        mvprintw(12,20,"Frequency");
-        fwin = newwin(11,50,13,20);
+        wwin = newwin(12,50,0,20);
+        fwin = newwin(12,50,12,20);
         
 
         while(1){
                 draw_cpu(cpuwin);
+                draw_mem(memwin);
                 wlist = draw_wattage(wwin, wlist);
                 flist = draw_freq(fwin, flist);
                 

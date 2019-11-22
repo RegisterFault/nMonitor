@@ -253,3 +253,18 @@ double get_pp0_joules()
 
         return (double) (e.s.energy*(pow(0.5,(double)u.s.es_units)));
 }
+
+double get_volt( unsigned int plane)
+{
+        VOLT v;
+        if(plane > 4)
+                return 0.0;
+
+        /* have to write which plane to read */
+        v.w = VOLT_READ;
+        v.s.plane = plane;
+        wrmsr(VOLT_MSR,v.w);
+
+        v.w = rdmsr(VOLT_MSR);
+        return v.s.volt/1.024;
+}       

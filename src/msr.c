@@ -46,6 +46,8 @@ unsigned long wrmsr(unsigned int reg, unsigned long val)
                 perror(NULL);
                 return -1;
         }
+        close(fd);
+        return 0;
 }
 
 
