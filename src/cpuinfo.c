@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <math.h>
 #include <glob.h>
 #include "cpuinfo.h"
 #include "msr.h"
