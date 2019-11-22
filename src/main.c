@@ -35,7 +35,6 @@ void draw_cpu(WINDOW *win)
         struct meminfo mem;
         int line = 0;
         static double last_pkg_nrg = 0;
-        static double last_pp0_nrg = 0;
         
         bzero(cpu_name,20);
         get_cpuname(&cpu_name, 20);
@@ -56,10 +55,6 @@ void draw_cpu(WINDOW *win)
                 if(last_pkg_nrg != 0)
                         mvwprintw(win,line++,1,"PKG: %3.2f W",(get_pkg_joules()-last_pkg_nrg)/DUR_SEC);
                 last_pkg_nrg = get_pkg_joules();
-                if(last_pp0_nrg != 0)
-                        mvwprintw(win,line++,1,"PP0: %3.2f W",(get_pp0_joules()-last_pp0_nrg)/DUR_SEC);
-                last_pp0_nrg = get_pp0_joules();
-
         }
         mvwprintw(win,line++,1,"Total: %5ld MB",mem.total/1000);
         mvwprintw(win,line++,1,"Avail: %5ld MB",mem.avail/1000);
