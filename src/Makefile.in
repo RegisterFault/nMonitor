@@ -101,7 +101,8 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_nmonitor_OBJECTS = main.$(OBJEXT) cpuinfo.$(OBJEXT) list.$(OBJEXT)
+am_nmonitor_OBJECTS = main.$(OBJEXT) cpuinfo.$(OBJEXT) list.$(OBJEXT) \
+	msr.$(OBJEXT)
 nmonitor_OBJECTS = $(am_nmonitor_OBJECTS)
 nmonitor_LDADD = $(LDADD)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -124,7 +125,7 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/cpuinfo.Po ./$(DEPDIR)/list.Po \
-	./$(DEPDIR)/main.Po
+	./$(DEPDIR)/main.Po ./$(DEPDIR)/msr.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -287,7 +288,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-nmonitor_SOURCES = main.c cpuinfo.c list.c
+nmonitor_SOURCES = main.c cpuinfo.c list.c msr.c
 all: all-am
 
 .SUFFIXES:
@@ -384,6 +385,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cpuinfo.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/msr.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -548,6 +550,7 @@ distclean: distclean-am
 		-rm -f ./$(DEPDIR)/cpuinfo.Po
 	-rm -f ./$(DEPDIR)/list.Po
 	-rm -f ./$(DEPDIR)/main.Po
+	-rm -f ./$(DEPDIR)/msr.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -596,6 +599,7 @@ maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/cpuinfo.Po
 	-rm -f ./$(DEPDIR)/list.Po
 	-rm -f ./$(DEPDIR)/main.Po
+	-rm -f ./$(DEPDIR)/msr.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

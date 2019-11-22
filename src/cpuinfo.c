@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <glob.h>
 #include "cpuinfo.h"
+#include "msr.h"
 
 long int get_sysfs_int(char *path)
 {
@@ -192,6 +193,40 @@ int get_temp()
         free(temp_path);
 
         return temp/1000;
+}
+
+/* requires root */
+char get_throttle_char()
+{
+        LIMITS a;
+        a.w = rdmsr(LIMITS_MSR);
+
+        if(a.s.thermal || a.s.ratl || a.s.vreg || a.s.prochot )
+                return 'T';
+        if(a.s.cur)
+                return 'C';
+        if(a.s.pl1 || a.s.pl2)
+                return 'P';
+        if(a.s.max_turbo || a.s.ttas)
+                return 'B';
+
+        return ' ';
+}
+
+/* requires root */
+int get_pl1()
+{
+        PPLC a;
+        a.w = rdmsr(PPLC_MSR);
+        return (int) (a.s.pl1_value*0.032);
+}
+
+/* requires root */
+int get_pl2()
+{
+        PPLC a;
+        a.w = rdmsr(PPLC_MSR);
+        return (int) (a.s.pl2_value*0.032);
 }
 
 

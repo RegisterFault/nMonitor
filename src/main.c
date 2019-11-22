@@ -42,6 +42,10 @@ void draw_cpu(WINDOW *win)
                         get_threads());
         mvwprintw(win,line++,1,"Temp: %dC",get_temp());
         mvwprintw(win,line++,1,"Turbo: %s ",get_turbo() ? "on" : "off" );
+        if(geteuid() == 0){
+                mvwprintw(win, line++, 1, "Throttle: %c", get_throttle_char());
+                mvwprintw(win, line++, 1, "PL1: %d PL2: %d", get_pl1(), get_pl2());
+        }
         mvwprintw(win,line++,1,"Total: %5ld MB",mem.total/1000);
         mvwprintw(win,line++,1,"Avail: %5ld MB",mem.avail/1000);
         mvwprintw(win,line++,1,"Free:  %5ld MB",mem.free/1000);
