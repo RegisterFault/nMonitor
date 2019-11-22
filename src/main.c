@@ -8,7 +8,7 @@
 #include "list.h"
 #include "msr.h"
 
-#define DUR (50000L)
+#define DUR (500000L)
 #define DUR_SEC (DUR*0.000001)
 
 struct node * draw_wattage(WINDOW *win, struct node * list)
