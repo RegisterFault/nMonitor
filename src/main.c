@@ -3,8 +3,13 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
+#include <math.h>
 #include "cpuinfo.h"
 #include "list.h"
+#include "msr.h"
+
+#define DUR (500000L)
+#define DUR_SEC (DUR*0.000001)
 
 struct node * draw_wattage(WINDOW *win, struct node * list)
 {       
@@ -29,12 +34,15 @@ void draw_cpu(WINDOW *win)
         char *cpu_name = malloc(20);
         struct meminfo mem;
         int line = 0;
+        static double last_enrg = 0;
         
         bzero(cpu_name,20);
         get_cpuname(&cpu_name, 20);
         get_mem(&mem);
 
+        wclear(win);
         box(win,0,0);
+
         mvwprintw(win,line++,0,"CPU INFO");
         mvwprintw(win,line++,1,"%s %dC/%dT",
                         cpu_name,
@@ -44,7 +52,9 @@ void draw_cpu(WINDOW *win)
         mvwprintw(win,line++,1,"Turbo: %s ",get_turbo() ? "on" : "off" );
         if(geteuid() == 0){
                 mvwprintw(win, line++, 1, "Throttle: %c", get_throttle_char());
-                mvwprintw(win, line++, 1, "PL1: %d PL2: %d", get_pl1(), get_pl2());
+                if(last_enrg != 0)
+                        mvwprintw(win, line++, 1, "PKG: %3.2f W", (get_joules()-last_enrg)/DUR_SEC);
+                last_enrg = get_joules();
         }
         mvwprintw(win,line++,1,"Total: %5ld MB",mem.total/1000);
         mvwprintw(win,line++,1,"Avail: %5ld MB",mem.avail/1000);
@@ -69,7 +79,7 @@ int main()
         initscr();
         curs_set(0);
 
-        cpuwin = newwin(12,20,1,0);
+        cpuwin = newwin(13,20,1,0);
         
         mvprintw(0,20,"Power");
         wwin = newwin(11,50,1,20);
@@ -83,7 +93,7 @@ int main()
                 flist = draw_freq(fwin, flist);
                 
                 refresh();
-                usleep(1000000L);
+                usleep(DUR);
         }
 
         endwin();

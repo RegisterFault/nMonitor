@@ -229,7 +229,17 @@ int get_pl2()
         return (int) (a.s.pl2_value*0.032);
 }
 
+/* requires root */
+double get_joules()
+{
+        RAPLU u;
+        ENRG e;
 
+        u.w = rdmsr(RAPLU_MSR);
+        e.w = rdmsr(ENRG_MSR);
+
+        return (double) (e.s.energy*(pow(0.5,(double)u.s.es_units)));
+}
 
 
 

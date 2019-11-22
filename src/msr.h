@@ -147,6 +147,14 @@ typedef union {
         unsigned long w;
 }VOLT;
 
+#define ENRG_MSR 0x611
+typedef union {
+        struct {
+                unsigned long energy:32; /* joules consumed total, 15.3 uJ */
+                unsigned long res:32;
+        }s __attribute__ ((packed));
+        unsigned long w;
+} ENRG;
 
 void fail(void);
 unsigned long rdmsr(unsigned int);

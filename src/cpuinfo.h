@@ -22,4 +22,5 @@ int get_temp(void);
 char get_throttle_char(void);
 int get_pl1(void);
 int get_pl2(void);
+double get_joules();
 #endif
