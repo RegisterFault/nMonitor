@@ -92,7 +92,6 @@ struct node * draw_graph(WINDOW * win, struct node * list, long int max)
                 x++;
         }
         
-        wrefresh(win);
         return list;
 }
 
