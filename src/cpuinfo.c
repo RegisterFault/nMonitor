@@ -34,6 +34,37 @@ char * get_sysfs_string(const char * path)
         return out;
 }
 
+int is_amd()
+{
+        char *path = "/proc/cpuinfo";
+        FILE *f = fopen(path, "r");
+        if(!f)
+                return 0;
+        size_t size = 1024;
+        char *lbuf = malloc(size);
+        char *name = NULL;
+        int is_amd = 0;
+        
+        while(getline(&lbuf, &size, f)){
+                if(strstr(lbuf, "vendor_id")){
+                        sscanf(lbuf, "vendor_id\t: %ms", &name);
+                        break;
+                }
+        }
+                                
+        if(!name)
+                goto exit;
+        if(strcmp(name, "AuthenticAMD") == 0)
+                is_amd = 1;
+        
+        free(name);
+
+exit:
+        fclose(f);
+        free(lbuf);
+        return is_amd;
+}
+
 void get_cpuname(char **str, int in_size)
 {
         char * path = "/proc/cpuinfo";
@@ -43,10 +74,16 @@ void get_cpuname(char **str, int in_size)
         int size = 1024;
         char *lbuf = malloc(size);
         char *name;
+        char *scanf_pattern;
+
+        if(is_amd())
+                scanf_pattern = "model name\t: %*s %*s %*s %ms";
+        else
+                scanf_pattern = "model name\t: %*s %*s %ms";
 
         while(getline(&lbuf, (size_t *)&size, f)){
                 if(strstr(lbuf,"model name")){
-                        sscanf(lbuf, "model name\t: %*s %*s %ms",&name);
+                        sscanf(lbuf, scanf_pattern,&name);
                         break;
                 }
         }
@@ -113,9 +150,8 @@ void get_mem(struct meminfo * in)
 
 int get_turbo()
 {       
-        /* no_turbo is 1 if turbo is off. returning 0 if off */
-        char * path = "/sys/devices/system/cpu/intel_pstate/no_turbo";
-        return get_sysfs_int(path) ? 0 : 1;
+        char * path = "/sys/devices/system/cpu/cpufreq/boost";
+        return get_sysfs_int(path);
 }
 
 int get_cores()
@@ -166,18 +202,54 @@ int get_threads()
 
 int get_temp()
 {
+        return is_amd() ? get_amd_temp() : get_intel_temp();
+}
+
+int get_amd_temp()
+{
+        char *therm_pattern = "/sys/class/hwmon/hwmon*/name";
+        glob_t therm_glob;
+        char *name_path;
+        char *temp_path = malloc(100);
+        int temp = 0;
+        int i;
+
+        if(glob(therm_pattern, 0, NULL, &therm_glob) != 0)
+                goto cleanup;
+
+        for(i = 0; i< therm_glob.gl_pathc; i++){
+                name_path = get_sysfs_string(therm_glob.gl_pathv[i]);
+                if(strcmp(name_path, "k10temp") == 0){
+                        free(name_path);
+                        break; /* found hwmon entry */
+                }
+                free(name_path);
+        }
+
+        snprintf(temp_path, 100, "/sys/class/hwmon/hwmon%d/temp1_input", i);
+        temp = get_sysfs_int(temp_path)/1000;
+
+
+cleanup:
+        globfree(&therm_glob);
+        free(temp_path);
+        return temp;
+}
+
+int get_intel_temp()
+{
         /* find x86_pkg_temp */
         char * therm_pattern = "/sys/class/thermal/thermal_zone*/type";
         glob_t therm_glob;
         char * type_path;
         char * temp_path = malloc(100);
-        int temp;
+        int temp = 0;
         int i;
         
         bzero(temp_path,100);
         
         if(glob(therm_pattern, 0, NULL, &therm_glob) != 0)
-                return 0;
+                goto cleanup;
 
         for(i = 0; i < therm_glob.gl_pathc; i++){
                 type_path = get_sysfs_string(therm_glob.gl_pathv[i]);
@@ -190,10 +262,12 @@ int get_temp()
 
         /* i is the correct thermal zone number */
         snprintf(temp_path,100,"/sys/class/thermal/thermal_zone%d/temp",i);
-        temp = get_sysfs_int(temp_path);
-        free(temp_path);
+        temp = get_sysfs_int(temp_path)/1000;
 
-        return temp/1000;
+cleanup:
+        globfree(&therm_glob);
+        free(temp_path);
+        return temp;
 }
 
 /* requires root */
