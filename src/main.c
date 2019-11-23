@@ -47,13 +47,13 @@ void draw_cpu(WINDOW *win)
                         get_cores(),
                         get_threads());
         mvwprintw(win,line++,1,"Temp: %dC",get_temp());
-        mvwprintw(win,line++,1,"Turbo: %s ",get_turbo() ? "on" : "off" );
+        mvwprintw(win,line++,1,"Boost: %s ",get_turbo() ? "on" : "off" );
+        if(last_pkg_nrg != 0)
+                mvwprintw(win,line++,1,"PKG:   %6.2f W",(get_pkg_joules()-last_pkg_nrg)/DUR_SEC);
+        last_pkg_nrg = get_pkg_joules();
         if(geteuid() == 0){ /* if we are root */
                 if(!is_amd()){
                         mvwprintw(win, line++, 1, "Throttle: %c", get_throttle_char());
-                        if(last_pkg_nrg != 0)
-                                mvwprintw(win,line++,1,"PKG:   %6.2f W",(get_pkg_joules()-last_pkg_nrg)/DUR_SEC);
-                        last_pkg_nrg = get_pkg_joules();
                         mvwprintw(win,line++,1,"CPU:   %+2.2f mV",get_volt(CPU_PLANE));
                         mvwprintw(win,line++,1,"CACHE: %+2.2f mV",get_volt(CACHE_PLANE));
                 }

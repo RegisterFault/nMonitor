@@ -172,6 +172,31 @@ typedef union {
         unsigned long w;
 } NRG0;
 
+#define AMD_RAPLU_MSR 0xC0010299
+typedef union {
+        struct {
+                unsigned power_units:4;
+                unsigned res1:4;
+                unsigned energy_units:5;
+                unsigned res2:3;
+                unsigned time_units:4;
+                unsigned long res3:44;
+        }s __attribute__ ((packed));
+        unsigned long w;
+} AMD_RAPLU;
+
+#define AMD_NRGP_MSR 0xC001029B
+typedef union{
+        struct {
+                unsigned long energy:32;
+                unsigned long res:32;
+        }s __attribute__ ((packed));
+        unsigned long w;
+} AMD_NRGP;
+
+
+
+
 void fail(void);
 unsigned long rdmsr(unsigned int);
 unsigned long wrmsr(unsigned int, unsigned long);

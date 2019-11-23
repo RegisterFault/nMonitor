@@ -307,6 +307,12 @@ int get_pl2()
 /* requires root */
 double get_pkg_joules()
 {
+        return is_amd() ? get_amd_pkg_joules() : get_intel_pkg_joules();
+}
+
+/* requires root */
+double get_intel_pkg_joules()
+{
         RAPLU u;
         NRGP e;
 
@@ -314,6 +320,18 @@ double get_pkg_joules()
         e.w = rdmsr(NRGP_MSR);
 
         return (double) (e.s.energy*(pow(0.5,(double)u.s.es_units)));
+}
+
+/* requires root */
+double get_amd_pkg_joules()
+{
+        AMD_RAPLU u;
+        AMD_NRGP e;
+
+        u.w = rdmsr(AMD_RAPLU_MSR);
+        e.w = rdmsr(AMD_NRGP_MSR);
+
+        return (double) (e.s.energy*(pow(0.5,(double)u.s.energy_units)));
 }
 
 /* requires root */
