@@ -107,6 +107,13 @@ long int get_freq()
         return get_sysfs_int(path)/1000;
 }
 
+/* need to free the result of this function */
+char * get_governor()
+{
+        char *path = "/sys/devices/system/cpu/cpufreq/policy0/scaling_governor";
+        return get_sysfs_string(path);
+}
+
 int get_bat_pct()
 {
         char *energy_full = "/sys/class/power_supply/BAT0/energy_full";

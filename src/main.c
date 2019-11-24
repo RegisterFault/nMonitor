@@ -34,6 +34,7 @@ void draw_cpu(WINDOW *win)
         char *cpu_name = malloc(20);
         int line = 0;
         static double last_pkg_nrg = 0;
+        char * governor = get_governor();
         
         bzero(cpu_name,20);
         get_cpuname(&cpu_name, 20);
@@ -48,6 +49,7 @@ void draw_cpu(WINDOW *win)
                         get_threads());
         mvwprintw(win,line++,1,"Temp: %dC",get_temp());
         mvwprintw(win,line++,1,"Boost: %s ",get_turbo() ? "on" : "off" );
+        mvwprintw(win,line++,1,"Gov: %s",governor);
         if(last_pkg_nrg != 0)
                 mvwprintw(win,line++,1,"PKG:   %6.2f W",(get_pkg_joules()-last_pkg_nrg)/DUR_SEC);
         last_pkg_nrg = get_pkg_joules();
@@ -59,6 +61,7 @@ void draw_cpu(WINDOW *win)
                 }
 
         }
+        free(governor);
         wrefresh(win);
 }
 
