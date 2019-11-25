@@ -17,6 +17,8 @@ char * get_governor(void);
 long int get_freq(void);
 void get_mem(struct meminfo *);
 int get_bat_pct(void);
+int get_bat_full(void);
+int get_bat_design(void);
 int get_turbo(void);
 int get_amd_boost(void);
 int get_intel_boost(void);

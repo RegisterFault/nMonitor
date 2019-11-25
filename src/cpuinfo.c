@@ -127,6 +127,18 @@ int get_bat_pct()
         return 0;
 }
 
+int get_bat_full()
+{
+        char *path = "/sys/class/power_supply/BAT0/energy_full";
+        return get_sysfs_int(path)/1000000;
+}
+
+int get_bat_design()
+{
+        char *path = "/sys/class/power_supply/BAT0/energy_full_design";
+        return get_sysfs_int(path)/1000000;
+}
+
 void get_mem(struct meminfo * in)
 {
         char * path = "/proc/meminfo";

@@ -14,7 +14,11 @@
 struct node * draw_wattage(WINDOW *win, struct node * list)
 {       
         list = draw_graph(win, list, 35000);
-        mvwprintw(win,0,0,"%lld mW -- Battery: %d%%",last_elem(list)->foo,get_bat_pct());
+        mvwprintw(win,0,0,"%lld mW -- Battery: %d%% -- Capacity: %d/%d Wh",
+                        last_elem(list)->foo,
+                        get_bat_pct(),
+                        get_bat_full(),
+                        get_bat_design());
         wrefresh(win);
         add_node(list,get_wattage());
         return list;
