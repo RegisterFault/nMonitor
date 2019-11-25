@@ -9,11 +9,11 @@ struct meminfo {
 };
 
 long int get_sysfs_int(char*);
-char * get_sysfs_string(const char *);
+char *get_sysfs_string(const char *);
 int is_amd(void);
 void get_cpuname(char **, int );
 long int get_wattage(void);
-char * get_governor(void);
+char *get_governor(void);
 long int get_freq(void);
 void get_mem(struct meminfo *);
 int get_bat_pct(void);
