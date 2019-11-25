@@ -39,14 +39,16 @@ void draw_cpu(WINDOW *win)
         int line = 0;
         static double last_pkg_nrg = 0;
         char * governor = get_governor();
+        char *cpu_brand;
         
         bzero(cpu_name,20);
         get_cpuname(&cpu_name, 20);
+        cpu_brand = is_amd() ? "AMD" : "Intel";
 
         wclear(win);
         box(win,0,0);
 
-        mvwprintw(win,line++,0,"CPU INFO");
+        mvwprintw(win,line++,0,"CPU INFO: %s",cpu_brand);
         mvwprintw(win,line++,1,"%s %dC/%dT",
                         cpu_name,
                         get_cores(),
