@@ -57,6 +57,8 @@ void draw_cpu(WINDOW *win)
         if(geteuid() == 0){ /* if we are root */
                 if(last_pkg_nrg != 0)
                         mvwprintw(win,line++,1,"PKG:   %6.2f W",(get_pkg_joules()-last_pkg_nrg)/DUR_SEC);
+                else
+                        mvwprintw(win,line++,1,"PKG:   %6.2f W",0.0);
                 last_pkg_nrg = get_pkg_joules();
                 if(!is_amd()){
                         mvwprintw(win, line++, 1, "Throttle: %c", get_throttle_char());
@@ -110,7 +112,9 @@ int main()
         
         wwin = newwin(12,50,0,20);
         fwin = newwin(12,50,12,20);
-        
+
+        /* this helps reduce glitchiness during initial loading */
+        refresh();
 
         while(1){
                 draw_cpu(cpuwin);
