@@ -25,7 +25,7 @@ typedef union {  //msr 0x19C
                 unsigned res:4;
                 unsigned valid:1;
                 unsigned pad:32;
-        }s __attribute__ ((packed));
+        }s __attribute__((packed));
         unsigned long w;
 } THERM;
 
@@ -61,7 +61,7 @@ typedef union { //msr 0x64F
                 unsigned max_turbo_log:1;
                 unsigned ttas_log:1;
                 unsigned long res6:34;
-        }s __attribute__ ((packed));
+        }s __attribute__((packed));
         unsigned long w;
 }LIMITS;
 
@@ -75,7 +75,7 @@ typedef union{
                 unsigned r2h_disable:1;
                 unsigned eeo_disable:1;
                 unsigned long res3:43;
-        }s __attribute__ ((packed));
+        }s __attribute__((packed));
         unsigned long w;
 }PWCTL;
 
@@ -94,7 +94,7 @@ typedef union {
                 unsigned res2:14;
                 unsigned lock:1;
 
-        }s __attribute__ ((packed));
+        }s __attribute__((packed));
         unsigned long w;
 }PPLC;
 
@@ -108,7 +108,7 @@ typedef union {
                 unsigned res2:2;
                 unsigned time_units:4;
                 unsigned long res3:44;
-        }s __attribute__ ((packed));
+        }s __attribute__((packed));
         unsigned long w;
 }RAPLU;
 
@@ -119,7 +119,7 @@ typedef union {
                 unsigned stibp:1;
                 unsigned ssbd:1;
                 unsigned long res1:61;
-        }s __attribute__ ((packed));
+        }s __attribute__((packed));
         unsigned long w;
 }SPEC;
 
@@ -128,7 +128,7 @@ typedef union {
         struct {
                 unsigned long energy:32; //multiply by RAPL_UNITS
                 unsigned long res1:32;
-        }s __attribute__ ((packed));
+        }s __attribute__((packed));
         unsigned long w;
 }ENER;
 
@@ -150,7 +150,7 @@ typedef union {
                 unsigned res3:3;
                 unsigned plane:4;
                 unsigned long res4:20;
-        }s __attribute__ ((packed));
+        }s __attribute__((packed));
         unsigned long w;
 }VOLT;
 
@@ -159,7 +159,7 @@ typedef union {
         struct {
                 unsigned long energy:32; /* joules consumed total, 15.3 uJ */
                 unsigned long res:32;
-        }s __attribute__ ((packed));
+        }s __attribute__((packed));
         unsigned long w;
 } NRGP;
 
@@ -168,7 +168,7 @@ typedef union {
         struct {
                 unsigned long energy:32; /* joules consumed total, 15.3 uJ */
                 unsigned long res:32;
-        }s __attribute__ ((packed));
+        }s __attribute__((packed));
         unsigned long w;
 } NRG0;
 
@@ -181,7 +181,7 @@ typedef union {
                 unsigned res2:3;
                 unsigned time_units:4;
                 unsigned long res3:44;
-        }s __attribute__ ((packed));
+        }s __attribute__((packed));
         unsigned long w;
 } AMD_RAPLU;
 
@@ -190,7 +190,7 @@ typedef union{
         struct {
                 unsigned long energy:32;
                 unsigned long res:32;
-        }s __attribute__ ((packed));
+        }s __attribute__((packed));
         unsigned long w;
 } AMD_NRGP;
 
