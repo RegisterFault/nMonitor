@@ -157,8 +157,20 @@ void get_mem(struct meminfo * in)
 
 int get_turbo()
 {       
+        return is_amd() ? get_amd_boost() : get_intel_boost();
+}
+
+int get_amd_boost()
+{
         char * path = "/sys/devices/system/cpu/cpufreq/boost";
-        return get_sysfs_int(path);
+        return get_sysfs_int(path);        
+}
+
+int get_intel_boost()
+{
+        /* no_turbo returns 1 if turbo is off */
+        char * path = "/sys/devices/system/cpu/intel_pstate/no_turbo";
+        return get_sysfs_int(path) ? 0 : 1; 
 }
 
 int get_cores()

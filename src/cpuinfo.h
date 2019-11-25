@@ -18,6 +18,8 @@ long int get_freq(void);
 void get_mem(struct meminfo *);
 int get_bat_pct(void);
 int get_turbo(void);
+int get_amd_boost(void);
+int get_intel_boost(void);
 int get_cores(void);
 int get_threads(void);
 int get_temp(void);
