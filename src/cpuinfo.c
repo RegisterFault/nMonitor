@@ -185,6 +185,72 @@ int get_intel_boost()
         return get_sysfs_int(path) ? 0 : 1; 
 }
 
+int get_boost_freq()
+{
+       return is_amd() ? get_amd_boost_freq() : get_intel_boost_freq();
+}
+
+int get_amd_boost_freq()
+{
+        return 5000; /* STUB */
+}
+
+
+int get_intel_freq(int freq)
+{
+       char *path = "/dev/cpu/0/cpuid";
+       int fd = open(path, O_RDONLY);
+       struct cpuid_result r;
+       union cpuid_access a;
+
+       a.eax = CPUID_FREQ_OFFSET;
+       a.ecx = 0;
+
+       if (fd < 0)
+               return 0;
+
+       lseek(fd, a.w, SEEK_SET);
+
+       if (read(fd, &r, 16) != 16) {
+               close(fd);
+               return 0;
+       }
+
+       close(fd);
+
+       switch(freq){
+       case INTEL_BASE:
+                return r.a;
+                break;
+       case INTEL_BOOST:
+                return r.b;
+                break;
+       default:
+                return 0;
+                break;
+       }
+}
+
+int get_intel_boost_freq()
+{
+        return get_intel_freq(INTEL_BOOST);
+}
+
+int get_base_freq()
+{
+        return is_amd() ? get_amd_base_freq() : get_intel_base_freq();
+}
+
+int get_amd_base_freq()
+{
+        return 5000; /* STUB */
+}
+
+int get_intel_base_freq()
+{
+        return get_intel_freq(INTEL_BASE);
+}
+
 int get_cores()
 {
         char *path = "/proc/cpuinfo";

@@ -26,7 +26,15 @@ struct node *draw_wattage(WINDOW *win, struct node *list)
 
 struct node *draw_freq(WINDOW *win, struct node *list)
 {
-        list = draw_graph(win, list, 5000);
+        int max_boost;
+        if(geteuid() == 0) {
+                max_boost = get_boost_freq();
+                if (max_boost == 0)
+                        max_boost = 5000;
+                list = draw_graph(win, list, max_boost);
+        } else {
+                list = draw_graph(win, list, 5000);
+        }
         mvwprintw(win,0,0,"%lld MHz",last_elem(list)->foo);
         wrefresh(win);
         add_node(list, get_freq());
@@ -57,6 +65,8 @@ void draw_cpu(WINDOW *win)
         mvwprintw(win, line++, 1, "Boost: %s ", get_turbo() ? "on" : "off" );
         mvwprintw(win, line++, 1, "Gov: %s", governor);
         if (geteuid() == 0){ /* if we are root */
+                mvwprintw(win, line++, 1, "BASE:  %ld MHz", get_base_freq());
+                mvwprintw(win, line++, 1, "BOOST: %ld MHz", get_boost_freq());
                 if (last_pkg_nrg != 0)
                         mvwprintw(win, line++, 1, "PKG:   %6.2f W",
                                         (get_pkg_joules() - last_pkg_nrg) / DUR_SEC);

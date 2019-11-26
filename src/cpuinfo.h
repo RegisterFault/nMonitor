@@ -1,5 +1,7 @@
 #ifndef CPUINFO_H
 #define CPUINFO_H
+#include <stdint.h>
+
 
 struct meminfo {
         unsigned long total;
@@ -7,6 +9,23 @@ struct meminfo {
         unsigned long free;
         unsigned long cache;
 };
+
+#define CPUID_FREQ_OFFSET (0x16)
+union cpuid_access {
+        struct {
+                uint32_t eax;
+                uint32_t ecx;
+        } __attribute__((packed));
+        uint64_t w;
+};
+
+struct cpuid_result {
+        uint32_t a;
+        uint32_t b;
+        uint32_t c;
+        uint32_t d;
+} __attribute__((packed));
+
 
 long int get_sysfs_int(char*);
 char *get_sysfs_string(const char *);
@@ -22,6 +41,15 @@ int get_bat_design(void);
 int get_turbo(void);
 int get_amd_boost(void);
 int get_intel_boost(void);
+int get_boost_freq(void);
+#define INTEL_BASE 0
+#define INTEL_BOOST 1
+int get_intel_freq(int);
+int get_base_freq(void);
+int get_amd_base_freq(void);
+int get_intel_base_freq(void);
+int get_intel_boost_freq(void);
+int get_amd_boost_freq(void);
 int get_cores(void);
 int get_threads(void);
 int get_temp(void);
