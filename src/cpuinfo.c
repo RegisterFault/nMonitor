@@ -187,14 +187,8 @@ int get_intel_boost()
 
 int get_boost_freq()
 {
-       return is_amd() ? get_amd_boost_freq() : get_intel_boost_freq();
+       return get_intel_boost_freq();
 }
-
-int get_amd_boost_freq()
-{
-        return 5000; /* STUB */
-}
-
 
 int get_intel_freq(int freq)
 {
@@ -238,12 +232,7 @@ int get_intel_boost_freq()
 
 int get_base_freq()
 {
-        return is_amd() ? get_amd_base_freq() : get_intel_base_freq();
-}
-
-int get_amd_base_freq()
-{
-        return 5000; /* STUB */
+        return get_intel_base_freq();
 }
 
 int get_intel_base_freq()

@@ -46,10 +46,8 @@ int get_boost_freq(void);
 #define INTEL_BOOST 1
 int get_intel_freq(int);
 int get_base_freq(void);
-int get_amd_base_freq(void);
 int get_intel_base_freq(void);
 int get_intel_boost_freq(void);
-int get_amd_boost_freq(void);
 int get_cores(void);
 int get_threads(void);
 int get_temp(void);
