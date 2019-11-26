@@ -27,7 +27,7 @@ struct node *draw_wattage(WINDOW *win, struct node *list)
 struct node *draw_freq(WINDOW *win, struct node *list)
 {
         int max_boost;
-        if(geteuid() == 0) {
+        if (!is_amd() && geteuid() == 0) {
                 max_boost = get_boost_freq();
                 if (max_boost == 0)
                         max_boost = 5000;
