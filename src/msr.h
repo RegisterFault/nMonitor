@@ -171,7 +171,6 @@ typedef union {
         }s __attribute__((packed));
         unsigned long w;
 } NRG0;
-<<<<<<< HEAD
 
 #define AMD_RAPLU_MSR 0xC0010299
 typedef union {
@@ -216,11 +215,6 @@ typedef union {
         unsigned long w;
 } AMD_PS;
 
-
-
-
-=======
->>>>>>> 01575332f2ae132bbf7f4f4fa7b9dd49357a0ebf
 
 void fail(void);
 unsigned long rdmsr(unsigned int);
