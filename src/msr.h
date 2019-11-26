@@ -171,6 +171,7 @@ typedef union {
         }s __attribute__((packed));
         unsigned long w;
 } NRG0;
+<<<<<<< HEAD
 
 #define AMD_RAPLU_MSR 0xC0010299
 typedef union {
@@ -194,8 +195,32 @@ typedef union{
         unsigned long w;
 } AMD_NRGP;
 
+#define AMDPS0_MSR 0xC0010064
+#define AMDPS1_MSR 0xC0010065
+#define AMDPS2_MSR 0xC0010066
+#define AMDPS3_MSR 0xC0010067
+#define AMDPS4_MSR 0xC0010068
+#define AMDPS5_MSR 0xC0010069
+#define AMDPS6_MSR 0xC001006A
+#define AMDPS7_MSR 0xC001006B
+typedef union {
+        struct {
+                unsigned cfid:8; /* core frequency multiplier */
+                unsigned cdid:6; /* core frequency divisor */
+                unsigned cvid:8; /* core vid */
+                unsigned ciddv:8; /* core Idd value */
+                unsigned ciddd:2; /* core Idd divisor */
+                unsigned long res:31;
+                unsigned en:1; /* pstate enable */
+        } s __attribute__ ((packed));
+        unsigned long w;
+} AMD_PS;
 
 
+
+
+=======
+>>>>>>> 01575332f2ae132bbf7f4f4fa7b9dd49357a0ebf
 
 void fail(void);
 unsigned long rdmsr(unsigned int);
