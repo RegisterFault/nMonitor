@@ -190,6 +190,12 @@ int get_boost_freq()
        return get_intel_boost_freq();
 }
 
+int have_cpuid()
+{
+        return (access("/dev/cpu/0/cpuid", F_OK) != -1) ? 1 : 0;
+}
+
+/* requires root */
 int get_intel_freq(int freq)
 {
        char *path = "/dev/cpu/0/cpuid";

@@ -44,6 +44,7 @@ int get_intel_boost(void);
 int get_boost_freq(void);
 #define INTEL_BASE 0
 #define INTEL_BOOST 1
+int have_cpuid(void);
 int get_intel_freq(int);
 int get_base_freq(void);
 int get_intel_base_freq(void);

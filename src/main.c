@@ -64,7 +64,7 @@ void draw_cpu(WINDOW *win)
         mvwprintw(win, line++, 1, "Temp: %dC", get_temp());
         mvwprintw(win, line++, 1, "Boost: %s ", get_turbo() ? "on" : "off" );
         mvwprintw(win, line++, 1, "Gov: %s", governor);
-        if (geteuid() == 0){ /* if we are root */
+        if (geteuid() == 0 && have_msr()){ /* if we are root */
                 if (last_pkg_nrg != 0)
                         mvwprintw(win, line++, 1, "PKG:   %6.2f W",
                                         (get_pkg_joules() - last_pkg_nrg) / DUR_SEC);
@@ -73,8 +73,10 @@ void draw_cpu(WINDOW *win)
                 last_pkg_nrg = get_pkg_joules();
                 if (!is_amd()) {
                         mvwprintw(win, line++, 1, "Throttle: %c", get_throttle_char());
-                        mvwprintw(win, line++, 1, "Base:  %ld MHz", get_base_freq());
-                        mvwprintw(win, line++, 1, "Boost: %ld MHz", get_boost_freq());
+                        if (have_cpuid()) {
+                                mvwprintw(win, line++, 1, "Base:  %ld MHz", get_base_freq());
+                                mvwprintw(win, line++, 1, "Boost: %ld MHz", get_boost_freq());
+                        }
                         mvwprintw(win, line++, 1, "CPU:   %+2.2f mV", get_volt(CPU_PLANE));
                         mvwprintw(win, line++, 1, "Cache: %+2.2f mV", get_volt(CACHE_PLANE));
                 }

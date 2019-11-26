@@ -7,30 +7,26 @@
 
 #include "msr.h"
 
-void fail()
+int have_msr()
 {
-        perror(NULL);
-        exit(1);
+        return (access("/dev/cpu/0/msr", F_OK) != -1) ? 1 : 0;
 }
-
 
 unsigned long rdmsr(unsigned int reg)
 {
         int fd;
-        unsigned long out;
+        unsigned long out = 0;
         if ((fd = open("/dev/cpu/0/msr", O_RDONLY)) == -1)
-                fail();
+                return 0;
 
         if (lseek(fd, (off_t) reg, SEEK_SET) == -1)
-                fail();
+                goto cleanup;
         
-        if (read(fd, &out, 8) == -1){
-                close(fd);
-                return -1;
-        }
+        if (read(fd, &out, 8) < 0)
+                out = 0;
 
+cleanup:
         close(fd);
-
         return out;
 }
 

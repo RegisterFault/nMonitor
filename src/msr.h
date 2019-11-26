@@ -215,8 +215,7 @@ typedef union {
         unsigned long w;
 } AMD_PS;
 
-
-void fail(void);
+int have_msr(void);
 unsigned long rdmsr(unsigned int);
 unsigned long wrmsr(unsigned int, unsigned long);
 
