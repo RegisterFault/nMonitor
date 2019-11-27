@@ -12,7 +12,7 @@ int have_msr()
         return (access("/dev/cpu/0/msr", F_OK) != -1) ? 1 : 0;
 }
 
-unsigned long rdmsr(unsigned int reg)
+uint64_t rdmsr(uint32_t reg)
 {
         int fd;
         unsigned long out = 0;
@@ -31,7 +31,7 @@ cleanup:
 }
 
 
-unsigned long wrmsr(unsigned int reg, unsigned long val)
+uint64_t  wrmsr(uint32_t reg, uint64_t val)
 {
         int fd;
         if ((fd = open("/dev/cpu/0/msr", O_WRONLY)) == -1)

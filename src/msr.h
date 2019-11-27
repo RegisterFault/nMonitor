@@ -1,135 +1,136 @@
 #ifndef MSR_H
 #define MSR_H
+#include <stdint.h>
 
 #define THERM_MSR 0x19C
 typedef union {  //msr 0x19C
         struct  {
-                unsigned status:1;
-                unsigned slog:1;
-                unsigned prochot:1;
-                unsigned prochotlog:1;
-                unsigned crit:1;
-                unsigned critlog:1;
-                unsigned thresh1:1;
-                unsigned thresh1l:1;
-                unsigned thresh2:1;
-                unsigned thresh2l:1;
-                unsigned powl:1;
-                unsigned powll:1;
-                unsigned curl:1;
-                unsigned curll:1;
-                unsigned xdoml:1;
-                unsigned xdomll:1;
-                unsigned ro:7;
-                unsigned pad1:4;
-                unsigned res:4;
-                unsigned valid:1;
-                unsigned pad:32;
+                uint8_t status:1;
+                uint8_t slog:1;
+                uint8_t prochot:1;
+                uint8_t prochotlog:1;
+                uint8_t crit:1;
+                uint8_t critlog:1;
+                uint8_t thresh1:1;
+                uint8_t thresh1l:1;
+                uint8_t thresh2:1;
+                uint8_t thresh2l:1;
+                uint8_t powl:1;
+                uint8_t powll:1;
+                uint8_t curl:1;
+                uint8_t curll:1;
+                uint8_t xdoml:1;
+                uint8_t xdomll:1;
+                uint8_t ro:7;
+                uint8_t pad1:4;
+                uint8_t res:4;
+                uint8_t valid:1;
+                uint32_t pad:32;
         }s __attribute__((packed));
-        unsigned long w;
+        uint64_t w;
 } THERM;
 
 
 #define LIMITS_MSR 0x64F
 typedef union { //msr 0x64F
         struct{
-                unsigned prochot:1;     /* prochot line active */
-                unsigned thermal:1;     /* thermal throttling */
-                unsigned res1:2;        /* reserved */
-                unsigned rsr:1;         /* residency state regulation */
-                unsigned ratl:1;        /* running average thermal limit */
-                unsigned vreg:1;        /* voltage regulator thermal alert */
-                unsigned cur:1;         /* thermal design current exceeded */
-                unsigned other:1;       /* other constraints */
-                unsigned res2:1;        /* reserved */
-                unsigned pl1:1;         /* power limit 1 exceeded */
-                unsigned pl2:1;         /* power limit 2 exceeded */
-                unsigned max_turbo:1;   /* proc at max all-core turbo */
-                unsigned ttas:1;        /* turbo transition attenuation */
-                unsigned res3:2;        /* reserved */
-                unsigned prochot_log:1; /* the rest are log versions of the above */
-                unsigned thermal_log:1;
-                unsigned res4:2;
-                unsigned rsr_log:1;
-                unsigned ratl_log:1;
-                unsigned vreg_log:1;
-                unsigned cur_log:1;
-                unsigned other_log:1;
-                unsigned res5:1;
-                unsigned pl1_log:1;
-                unsigned pl2_log:1;
-                unsigned max_turbo_log:1;
-                unsigned ttas_log:1;
-                unsigned long res6:34;
+                uint8_t prochot:1;     /* prochot line active */
+                uint8_t thermal:1;     /* thermal throttling */
+                uint8_t res1:2;        /* reserved */
+                uint8_t rsr:1;         /* residency state regulation */
+                uint8_t ratl:1;        /* running average thermal limit */
+                uint8_t vreg:1;        /* voltage regulator thermal alert */
+                uint8_t cur:1;         /* thermal design current exceeded */
+                uint8_t other:1;       /* other constraints */
+                uint8_t res2:1;        /* reserved */
+                uint8_t pl1:1;         /* power limit 1 exceeded */
+                uint8_t pl2:1;         /* power limit 2 exceeded */
+                uint8_t max_turbo:1;   /* proc at max all-core turbo */
+                uint8_t ttas:1;        /* turbo transition attenuation */
+                uint8_t res3:2;        /* reserved */
+                uint8_t prochot_log:1; /* the rest are log versions of the above */
+                uint8_t thermal_log:1;
+                uint8_t res4:2;
+                uint8_t rsr_log:1;
+                uint8_t ratl_log:1;
+                uint8_t vreg_log:1;
+                uint8_t cur_log:1;
+                uint8_t other_log:1;
+                uint8_t res5:1;
+                uint8_t pl1_log:1;
+                uint8_t pl2_log:1;
+                uint8_t max_turbo_log:1;
+                uint8_t ttas_log:1;
+                uint64_t res6:34;
         }s __attribute__((packed));
-        unsigned long w;
+        uint64_t w;
 }LIMITS;
 
 
 #define PWCTL_MSR 0x1FC
 typedef union{
         struct {
-                unsigned res1:1;
-                unsigned c1e_enable;
-                unsigned res2:17;
-                unsigned r2h_disable:1;
-                unsigned eeo_disable:1;
-                unsigned long res3:43;
+                uint8_t res1:1;
+                uint8_t c1e_enable;
+                uint32_t res2:17;
+                uint8_t r2h_disable:1;
+                uint8_t eeo_disable:1;
+                uint64_t res3:43;
         }s __attribute__((packed));
-        unsigned long w;
+        uint64_t w;
 }PWCTL;
 
 #define PPLC_MSR 0x65C //power limit control register
 typedef union {
         struct {
-                unsigned pl1_value:15; //long duration power limit. multiplied by MSR_RAPLPOWER_UNIT
-                unsigned pl1_enable:1;
-                unsigned pl1_clamping:1;
-                unsigned pl1_window:7;
-                unsigned res1:8;
-                unsigned pl2_value:15;
-                unsigned pl2_enable:1;
-                unsigned pl2_clamping:1;
-                unsigned pl2_window:7;
-                unsigned res2:14;
-                unsigned lock:1;
+                uint16_t pl1_value:15; //long duration power limit. multiplied by MSR_RAPLPOWER_UNIT
+                uint8_t pl1_enable:1;
+                uint8_t pl1_clamping:1;
+                uint8_t pl1_window:7;
+                uint8_t res1:8;
+                uint16_t pl2_value:15;
+                uint8_t pl2_enable:1;
+                uint8_t pl2_clamping:1;
+                uint8_t pl2_window:7;
+                uint16_t res2:14;
+                uint8_t lock:1;
 
         }s __attribute__((packed));
-        unsigned long w;
+        uint64_t w;
 }PPLC;
 
 
 #define RAPLU_MSR 0x606  //power unit register
 typedef union {
         struct {
-                unsigned power_units:4; // 1 / 2^power_units. default 3 = 1/8 watts
-                unsigned res1:4;
-                unsigned es_units:5;
-                unsigned res2:2;
-                unsigned time_units:4;
-                unsigned long res3:44;
+                uint8_t power_units:4; // 1 / 2^power_units. default 3 = 1/8 watts
+                uint8_t res1:4;
+                uint8_t es_units:5;
+                uint8_t res2:2;
+                uint8_t time_units:4;
+                uint64_t res3:44;
         }s __attribute__((packed));
-        unsigned long w;
+        uint64_t w;
 }RAPLU;
 
 #define SPEC_MSR 0x48
 typedef union {
         struct {
-                unsigned ibrs:1;
-                unsigned stibp:1;
-                unsigned ssbd:1;
-                unsigned long res1:61;
+                uint8_t ibrs:1;
+                uint8_t stibp:1;
+                uint8_t ssbd:1;
+                uint64_t res1:61;
         }s __attribute__((packed));
-        unsigned long w;
+        uint64_t w;
 }SPEC;
 
 #define ENER_MSR 0x64D
 typedef union {
         struct {
-                unsigned long energy:32; //multiply by RAPL_UNITS
-                unsigned long res1:32;
+                uint32_t energy:32; //multiply by RAPL_UNITS
+                uint32_t res1:32;
         }s __attribute__((packed));
-        unsigned long w;
+        uint64_t w;
 }ENER;
 
 #define CPU_PLANE 0
@@ -142,56 +143,56 @@ typedef union {
 #define VOLT_MSR 0x150 //undocumented voltage msr
 typedef union {
         struct {
-                unsigned long res1:21;
-                signed volt:11;
-                unsigned rw:1;  //read/write bit
-                unsigned res2:3;
-                unsigned one:1;
-                unsigned res3:3;
-                unsigned plane:4;
-                unsigned long res4:20;
+                uint64_t res1:21;
+                int16_t volt:11;
+                uint8_t rw:1;  //read/write bit
+                uint8_t res2:3;
+                uint8_t one:1;
+                uint8_t res3:3;
+                uint8_t plane:4;
+                uint32_t res4:20;
         }s __attribute__((packed));
-        unsigned long w;
+        uint64_t w;
 }VOLT;
 
 #define NRGP_MSR 0x611
 typedef union {
         struct {
-                unsigned long energy:32; /* joules consumed total, 15.3 uJ */
-                unsigned long res:32;
+                uint64_t energy:32; /* joules consumed total, 15.3 uJ */
+                uint64_t res:32;
         }s __attribute__((packed));
-        unsigned long w;
+        uint64_t w;
 } NRGP;
 
 #define NRG0_MSR 0x639
 typedef union {
         struct {
-                unsigned long energy:32; /* joules consumed total, 15.3 uJ */
-                unsigned long res:32;
+                uint64_t energy:32; /* joules consumed total, 15.3 uJ */
+                uint64_t res:32;
         }s __attribute__((packed));
-        unsigned long w;
+        uint64_t w;
 } NRG0;
 
 #define AMD_RAPLU_MSR 0xC0010299
 typedef union {
         struct {
-                unsigned power_units:4;
-                unsigned res1:4;
-                unsigned energy_units:5;
-                unsigned res2:3;
-                unsigned time_units:4;
-                unsigned long res3:44;
+                uint8_t power_units:4;
+                uint8_t res1:4;
+                uint8_t energy_units:5;
+                uint8_t res2:3;
+                uint8_t time_units:4;
+                uint64_t res3:44;
         }s __attribute__((packed));
-        unsigned long w;
+        uint64_t w;
 } AMD_RAPLU;
 
 #define AMD_NRGP_MSR 0xC001029B
 typedef union{
         struct {
-                unsigned long energy:32;
-                unsigned long res:32;
+                uint32_t energy:32;
+                uint32_t res:32;
         }s __attribute__((packed));
-        unsigned long w;
+        uint64_t w;
 } AMD_NRGP;
 
 #define AMDPS0_MSR 0xC0010064
@@ -204,19 +205,19 @@ typedef union{
 #define AMDPS7_MSR 0xC001006B
 typedef union {
         struct {
-                unsigned cfid:8; /* core frequency multiplier */
-                unsigned cdid:6; /* core frequency divisor */
-                unsigned cvid:8; /* core vid */
-                unsigned ciddv:8; /* core Idd value */
-                unsigned ciddd:2; /* core Idd divisor */
-                unsigned long res:31;
-                unsigned en:1; /* pstate enable */
+                uint8_t cfid:8; /* core frequency multiplier */
+                uint8_t cdid:6; /* core frequency divisor */
+                uint8_t cvid:8; /* core vid */
+                uint8_t ciddv:8; /* core Idd value */
+                uint8_t ciddd:2; /* core Idd divisor */
+                uint64_t res:31;
+                uint8_t en:1; /* pstate enable */
         } s __attribute__ ((packed));
-        unsigned long w;
+        uint64_t w;
 } AMD_PS;
 
 int have_msr(void);
-unsigned long rdmsr(unsigned int);
-unsigned long wrmsr(unsigned int, unsigned long);
+uint64_t rdmsr(uint32_t);
+uint64_t wrmsr(uint32_t, uint64_t);
 
 #endif
