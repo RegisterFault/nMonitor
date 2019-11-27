@@ -4,10 +4,10 @@
 
 
 struct meminfo {
-        unsigned long total;
-        unsigned long avail;
-        unsigned long free;
-        unsigned long cache;
+        uint64_t total;
+        uint64_t avail;
+        uint64_t free;
+        uint64_t cache;
 };
 
 #define CPUID_FREQ_OFFSET (0x16)

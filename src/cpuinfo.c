@@ -282,13 +282,13 @@ void get_mem(struct meminfo *in)
 
         while (getline(&lbuf,(size_t *)&size, f) != -1){
                 if (strstr(lbuf, "MemTotal:"))
-                        sscanf(lbuf, "MemTotal:\t%lld", &(in->total));
+                        sscanf(lbuf, "MemTotal:\t%llu", &(in->total));
                 if (strstr(lbuf,"MemFree:"))
-                        sscanf(lbuf, "MemFree:\t%lld", &(in->free));
+                        sscanf(lbuf, "MemFree:\t%llu", &(in->free));
                 if (strstr(lbuf,"MemAvailable:")) 
-                        sscanf(lbuf, "MemAvailable:\t%lld", &(in->avail));
+                        sscanf(lbuf, "MemAvailable:\t%llu", &(in->avail));
                 if (strstr(lbuf,"Cached:")) 
-                        sscanf(lbuf, "Cached:\t%lld", &(in->cache));
+                        sscanf(lbuf, "Cached:\t%llu", &(in->cache));
                 if (in->free && in->total && in->avail && in->cache)
                         break; /*stop parsing file, we have what we need */
         }
