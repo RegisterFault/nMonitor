@@ -23,7 +23,7 @@ struct node *draw_wattage(WINDOW *win, struct node *list)
                 wrefresh(win);
                 add_node(list, get_charge_wattage());
         } else {
-                mvwprintw(win,0,0,"%lld mW -- Battery: %d%% -- Capacity: %d/%d Wh",
+                mvwprintw(win,0,0,"%ld mW -- Battery: %d%% -- Capacity: %d/%d Wh",
                         last_elem(list)->foo,
                         get_bat_pct(),
                         get_bat_full(),
@@ -45,7 +45,7 @@ struct node *draw_freq(WINDOW *win, struct node *list)
         } else {
                 list = draw_graph(win, list, 5000);
         }
-        mvwprintw(win,0,0,"%lld MHz",last_elem(list)->foo);
+        mvwprintw(win,0,0,"%ld MHz",last_elem(list)->foo);
         wrefresh(win);
         add_node(list, get_freq());
         return list;
