@@ -45,7 +45,7 @@ int is_amd()
         char *name = NULL;
         int is_amd = 0;
         
-        while (getline(&lbuf, &size, f)){
+        while (getline(&lbuf, &size, f) != -1){
                 if (strstr(lbuf, "vendor_id")){
                         sscanf(lbuf, "vendor_id\t: %ms", &name);
                         break;
@@ -75,7 +75,7 @@ int get_cpu_family()
         char *lbuf = malloc(size);
         int out = 0;
 
-        while (getline(&lbuf, &size, f)) { 
+        while (getline(&lbuf, &size, f) != -1) { 
                 if (strstr(lbuf, "cpu family")) {
                         sscanf(lbuf, "cpu family\t: %d", &out);
                         break;
@@ -108,7 +108,7 @@ void get_amd_cpuname(char **str , int in_size)
         
         fam = get_cpu_family();
 
-        while (getline(&lbuf, &size, f))
+        while (getline(&lbuf, &size, f) != -1)
                 if (strstr(lbuf, "model name"))
                         break;
 
@@ -158,7 +158,7 @@ void get_cpuname(char **str, int in_size)
                 scanf_pattern = "model name\t: %*s %*s %ms";
         }
 
-        while (getline(&lbuf, (size_t *)&size, f)){
+        while (getline(&lbuf, (size_t *)&size, f) != -1){
                 if (strstr(lbuf, "model name")){
                         sscanf(lbuf, scanf_pattern,&name);
                         break;
@@ -280,7 +280,7 @@ void get_mem(struct meminfo *in)
         /* we use all members for parsing condition, set to zero */
         memset(in, 0, sizeof(struct meminfo)); 
 
-        while (getline(&lbuf,(size_t *)&size, f)){
+        while (getline(&lbuf,(size_t *)&size, f) != -1){
                 if (strstr(lbuf, "MemTotal:"))
                         sscanf(lbuf, "MemTotal:\t%lld", &(in->total));
                 if (strstr(lbuf,"MemFree:"))
@@ -386,7 +386,7 @@ int get_cores()
         if (!f)
                 return 0;
 
-        while (getline(&lbuf, &size, f)){
+        while (getline(&lbuf, &size, f) != -1){
                 if(strstr(lbuf, "cpu cores")){
                         if(sscanf(lbuf, "cpu cores\t: %d", &cores) != 1)
                                 cores = 0;
@@ -409,7 +409,7 @@ int get_threads()
         int threads = 0;
         if (!f)
                 return 0;
-        while (getline(&lbuf, &size, f)){
+        while (getline(&lbuf, &size, f) != -1){
                 if (strstr(lbuf, "siblings")){
                         if(sscanf(lbuf, "siblings\t: %d", &threads) != 1)
                                 threads = 0;
