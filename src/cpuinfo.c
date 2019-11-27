@@ -119,16 +119,16 @@ int get_charge_pct()
 }
 
 /* this is in amp-hours, not watts */
-int get_charge_full()
+float get_charge_full()
 {
         char *path = "/sys/class/power_supply/BAT0/charge_full";
-        return get_sysfs_int(path) / 1000000;
+        return ((float) get_sysfs_int(path)) / 1000000.0;
 }
 
-int get_charge_full_design()
+float get_charge_full_design()
 {
         char *path = "/sys/class/power_supply/BAT0/charge_full_design";
-        return get_sysfs_int(path) / 1000000;
+        return ((float) get_sysfs_int(path)) / 1000000.0;
 }
 
 /* we return milliwatts */
