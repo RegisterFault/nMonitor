@@ -15,7 +15,7 @@ struct node *draw_wattage(WINDOW *win, struct node *list)
 {       
         list = draw_graph(win, list, 35000);
         if (is_charge()) {
-                mvwprintw(win, 0, 0, "%ld mW -- >Battery: %d%% -- Capacity: %2.1f/%2.1f Ah",
+                mvwprintw(win, 0, 0, "%ld mW -- Battery: %d%% -- Capacity: %2.1f/%2.1f Ah",
                                 last_elem(list)->foo,
                                 get_charge_pct(),
                                 get_charge_full(),
