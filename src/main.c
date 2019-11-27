@@ -14,13 +14,23 @@
 struct node *draw_wattage(WINDOW *win, struct node *list)
 {       
         list = draw_graph(win, list, 35000);
-        mvwprintw(win,0,0,"%lld mW -- Battery: %d%% -- Capacity: %d/%d Wh",
+        if (is_charge()) {
+                mvwprintw(win, 0, 0, "%ld mW -- >Battery: %d%% -- Capacity: %d/%d Ah",
+                                last_elem(list)->foo,
+                                get_charge_pct(),
+                                get_charge_full(),
+                                get_charge_full_design());
+                wrefresh(win);
+                add_node(list, get_charge_wattage());
+        } else {
+                mvwprintw(win,0,0,"%lld mW -- Battery: %d%% -- Capacity: %d/%d Wh",
                         last_elem(list)->foo,
                         get_bat_pct(),
                         get_bat_full(),
                         get_bat_design());
-        wrefresh(win);
-        add_node(list, get_wattage());
+                wrefresh(win);
+                add_node(list, get_wattage());
+        }
         return list;
 }
 

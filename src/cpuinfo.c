@@ -94,6 +94,56 @@ void get_cpuname(char **str, int in_size)
         fclose(f);
 }
 
+int has_battery()
+{
+        return (access("/sys/class/power_supply/BAT0", F_OK) == 0) ? 1 : 0;
+}
+
+/* some systems report current charge, some report wattage */
+int is_charge()
+{
+        return (access("/sys/class/power_supply/BAT0/charge_full", F_OK) == 0) ? 1 : 0;
+}
+
+int get_charge_pct()
+{
+        char *full = "/sys/class/power_supply/BAT0/charge_full";
+        char *now = "/sys/class/power_supply/BAT0/charge_now";
+        float c_full = (float) get_sysfs_int(full);
+        float c_now = (float) get_sysfs_int(now);
+
+        if (c_full > 0.0 && c_now > 0.0)
+                return (int) ((c_now / c_full) * 100);
+
+        return 0;
+}
+
+/* this is in amp-hours, not watts */
+int get_charge_full()
+{
+        char *path = "/sys/class/power_supply/BAT0/charge_full";
+        return get_sysfs_int(path) / 1000000;
+}
+
+int get_charge_full_design()
+{
+        char *path = "/sys/class/power_supply/BAT0/charge_full_design";
+        return get_sysfs_int(path) / 1000000;
+}
+
+/* we return milliwatts */
+int get_charge_wattage()
+{
+        char *cur = "/sys/class/power_supply/BAT0/current_now";
+        char *volt = "/sys/class/power_supply/BAT0/voltage_now";
+        float c_now = (float) get_sysfs_int(cur);
+        float v_now = (float) get_sysfs_int(volt);
+
+        float wattage = (c_now / 1000000.0) * (v_now / 1000000.0);
+
+        return (int) (wattage * 1000);
+}
+
 long int get_wattage(void)
 {
         char *path = "/sys/class/power_supply/BAT0/power_now";
