@@ -1,5 +1,6 @@
 AC_INIT([nMonitor], [1.0], [registerfault@gmail.com])
 AM_INIT_AUTOMAKE([foreign])
+AM_MAINTAINER_MODE
 LT_PREREQ([2.2])
 LT_INIT()
 LT_OUTPUT()
