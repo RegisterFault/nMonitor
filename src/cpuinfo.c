@@ -42,7 +42,7 @@ long int get_sysfs_int(char *path)
         long int out;
         if (!f)
                 return 0;
-        if (fscanf(f, "%lld", &out) != 1)
+        if (fscanf(f, "%ld", &out) != 1)
                 out = 0;
         fclose(f);
         return out;
@@ -361,13 +361,13 @@ void get_mem(struct meminfo *in)
 
         while (getline(&lbuf,(size_t *)&size, f) != -1){
                 if (strstr(lbuf, "MemTotal:"))
-                        sscanf(lbuf, "MemTotal:\t%llu", &(in->total));
+                        sscanf(lbuf, "MemTotal:\t%lu", &(in->total));
                 if (strstr(lbuf,"MemFree:"))
-                        sscanf(lbuf, "MemFree:\t%llu", &(in->free));
+                        sscanf(lbuf, "MemFree:\t%lu", &(in->free));
                 if (strstr(lbuf,"MemAvailable:")) 
-                        sscanf(lbuf, "MemAvailable:\t%llu", &(in->avail));
+                        sscanf(lbuf, "MemAvailable:\t%lu", &(in->avail));
                 if (strstr(lbuf,"Cached:")) 
-                        sscanf(lbuf, "Cached:\t%llu", &(in->cache));
+                        sscanf(lbuf, "Cached:\t%lu", &(in->cache));
                 if (in->free && in->total && in->avail && in->cache)
                         break; /*stop parsing file, we have what we need */
         }
