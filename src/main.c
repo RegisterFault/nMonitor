@@ -104,13 +104,14 @@ void draw_mem(WINDOW *win)
         get_mem(&mem);
         wclear(win);
         box(win,0,0);
-
+        
+        // /proc/cpuinfo reports in KiB, despite actually showing kB 
         mvwprintw(win, line++, 0, "MEM INFO");
-        mvwprintw(win, line++, 1, "Total: %5ld MB", mem.total / 1000);
-        mvwprintw(win, line++, 1, "Avail: %5ld MB", mem.avail / 1000);
-        mvwprintw(win, line++, 1, "Free:  %5ld MB", mem.free / 1000);
-        mvwprintw(win, line++, 1, "Cache: %5ld MB", mem.cache / 1000);
-        mvwprintw(win, line++, 1, "Used:  %5ld MB", (mem.total - mem.avail) / 1000);
+        mvwprintw(win, line++, 1, "Total: %5ld MiB", mem.total / 1024);
+        mvwprintw(win, line++, 1, "Avail: %5ld MiB", mem.avail / 1024);
+        mvwprintw(win, line++, 1, "Free:  %5ld MiB", mem.free / 1024);
+        mvwprintw(win, line++, 1, "Cache: %5ld MiB", mem.cache / 1024);
+        mvwprintw(win, line++, 1, "Used:  %5ld MiB", (mem.total - mem.avail) / 1024);
         
         wrefresh(win);
 }
