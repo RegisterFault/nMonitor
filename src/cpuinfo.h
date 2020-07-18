@@ -27,6 +27,7 @@ struct cpuid_result {
 } __attribute__((packed));
 
 
+void init_batinfo(void);
 long int get_sysfs_int(char*);
 char *get_sysfs_string(const char *);
 int is_amd(void);

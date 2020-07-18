@@ -129,6 +129,8 @@ int main()
         flist->next = NULL;
         flist->foo = 0;
 
+        init_batinfo();
+
         initscr();
         curs_set(0);
 

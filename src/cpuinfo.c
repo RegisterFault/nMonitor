@@ -8,6 +8,33 @@
 #include "cpuinfo.h"
 #include "msr.h"
 
+char * BatteryPath = NULL; //populated by init_batinfo
+
+
+//locate the primary BAT*
+void init_batinfo(void)
+{
+        glob_t globbuf;
+        char *battery_glob = "/sys/class/power_supply/BAT*";
+        size_t len;
+        
+        glob(battery_glob, 0, NULL, &globbuf);
+        
+        if(globbuf.gl_pathc == 0){
+                BatteryPath = NULL;
+        } else {
+                len = strlen(globbuf.gl_pathv[0]) + 1;
+                /* BatteryPath only gets allocated once, and should never be freed except for termination*/
+                BatteryPath = calloc(len, 1);
+                /* glob automatically sorts results, so I should get the lowest-numbered BAT entry */
+                strcpy(BatteryPath, globbuf.gl_pathv[0]); 
+        }
+
+        globfree(&globbuf);
+        return;       
+}
+
+
 long int get_sysfs_int(char *path)
 {
         FILE *f = fopen(path,"r");
