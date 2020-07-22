@@ -16,7 +16,7 @@ struct node *draw_wattage(WINDOW *win, struct node *list)
         list = draw_graph(win, list, 35000);
         if (is_charge()) {
                 mvwprintw(win, 0, 0, "%ld mW -- Battery: %d%% -- Capacity: %2.1f/%2.1f Ah",
-                                last_elem(list)->foo,
+                                last_elem(list)->data,
                                 get_charge_pct(),
                                 get_charge_full(),
                                 get_charge_full_design());
@@ -24,7 +24,7 @@ struct node *draw_wattage(WINDOW *win, struct node *list)
                 add_node(list, get_charge_wattage());
         } else {
                 mvwprintw(win,0,0,"%ld mW -- Battery: %d%% -- Capacity: %d/%d Wh",
-                        last_elem(list)->foo,
+                        last_elem(list)->data,
                         get_bat_pct(),
                         get_bat_full(),
                         get_bat_design());
@@ -45,7 +45,7 @@ struct node *draw_freq(WINDOW *win, struct node *list)
         } else {
                 list = draw_graph(win, list, 5000);
         }
-        mvwprintw(win,0,0,"%ld MHz",last_elem(list)->foo);
+        mvwprintw(win,0,0,"%ld MHz",last_elem(list)->data);
         wrefresh(win);
         add_node(list, get_freq());
         return list;
@@ -125,10 +125,10 @@ int main()
         WINDOW *memwin;
         struct node *wlist = malloc(sizeof(struct node));
         wlist->next = NULL;
-        wlist->foo = 0;
+        wlist->data = 0;
         struct node *flist = malloc(sizeof(struct node));
         flist->next = NULL;
-        flist->foo = 0;
+        flist->data = 0;
 
         init_batinfo();
 

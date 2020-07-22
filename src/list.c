@@ -15,7 +15,7 @@ void add_node(struct node *in, long int a)
         in = last_elem(in);
         in->next = malloc(sizeof(struct node));
         in = in->next;
-        in->foo = a;
+        in->data = a;
         in->next = NULL;
 }
 
@@ -88,7 +88,7 @@ struct node *draw_graph(WINDOW *win, struct node *list, long int max)
         cur = list;
         
         for(cur; cur->next != NULL; cur = cur->next){
-                for(y = get_val_y(max, lines - 2, cur->foo); y < lines - 2; y++)
+                for(y = get_val_y(max, lines - 2, cur->data); y < lines - 2; y++)
                         mvwprintw(win, y + 1, x + 1, "*");
                 x++;
         }

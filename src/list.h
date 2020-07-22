@@ -3,7 +3,7 @@
 
 struct node {
         struct node *next;
-        long int foo;
+        long int data;
 };
 
 
