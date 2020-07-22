@@ -26,7 +26,7 @@ struct cpuid_result {
         uint32_t d;
 } __attribute__((packed));
 
-
+int is_root(void);
 void init_batinfo(void);
 long int get_sysfs_int(char*);
 char *get_sysfs_string(const char *);

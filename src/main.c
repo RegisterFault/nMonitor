@@ -14,10 +14,6 @@
 /* used in logic of display routine */
 #define DUR_SEC (DUR*0.000001)
 
-int is_root(void){
-        return geteuid() == 0;
-}
-
 void draw_amperage(WINDOW *win, struct node *list)
 {
         mvwprintw(win, 0, 0, "%ld mW -- Battery: %d%% -- Capacity: %2.1f/%2.1f Ah",
@@ -54,16 +50,11 @@ struct node *draw_power(WINDOW *win, struct node *list)
 
 struct node *draw_freq(WINDOW *win, struct node *list)
 {
-        int max_boost;
-        if (!is_amd() && is_root()) {
-                max_boost = get_boost_freq();
-                if (max_boost == 0)
-                        max_boost = 5000;
-                list = draw_graph(win, list, max_boost);
-        } else {
-                list = draw_graph(win, list, 5000);
-        }
+        int max_boost = get_boost_freq();
+
+        list = draw_graph(win, list, max_boost);
         mvwprintw(win,0,0,"%ld MHz",last_elem(list)->data);
+
         wrefresh(win);
         add_node(list, get_freq());
         return list;

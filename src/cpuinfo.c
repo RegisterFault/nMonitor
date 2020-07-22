@@ -9,8 +9,14 @@
 #include "cpuinfo.h"
 #include "msr.h"
 
+/* arbitrary max frequency bounds to use when max freq of processor unfetchable */
+#define MAX_FREQ_ARB 5000
+
 char * BatteryPath = NULL; //populated by init_batinfo
 
+int is_root(void){
+        return geteuid() == 0;
+}
 
 //locate the primary BAT*
 void init_batinfo(void)
@@ -396,7 +402,10 @@ int get_intel_boost()
 
 int get_boost_freq()
 {
-       return get_intel_boost_freq();
+        if(is_root() && !is_amd())
+                return get_intel_boost_freq();
+        else
+                return MAX_FREQ_ARB;
 }
 
 int have_cpuid()
