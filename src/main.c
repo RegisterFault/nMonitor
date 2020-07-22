@@ -8,29 +8,43 @@
 #include "list.h"
 #include "msr.h"
 
+/* hard-coded update interval, in microseconds */
 #define DUR (500000L)
+
+/* used in logic of display routine */
 #define DUR_SEC (DUR*0.000001)
 
-struct node *draw_wattage(WINDOW *win, struct node *list)
+void draw_amperage(WINDOW *win, struct node *list)
+{
+        mvwprintw(win, 0, 0, "%ld mW -- Battery: %d%% -- Capacity: %2.1f/%2.1f Ah",
+                        last_elem(list)->data,
+                        get_charge_pct(),
+                        get_charge_full(),
+                        get_charge_full_design());
+        wrefresh(win);
+        add_node(list, get_charge_wattage());
+}
+
+void draw_wattage(WINDOW *win, struct node *list)
+{
+        mvwprintw(win,0,0,"%ld mW -- Battery: %d%% -- Capacity: %d/%d Wh",
+                last_elem(list)->data,
+                get_bat_pct(),
+                get_bat_full(),
+                get_bat_design());
+        wrefresh(win);
+        add_node(list, get_wattage());
+}
+
+struct node *draw_power(WINDOW *win, struct node *list)
 {       
         list = draw_graph(win, list, 35000);
-        if (is_charge()) {
-                mvwprintw(win, 0, 0, "%ld mW -- Battery: %d%% -- Capacity: %2.1f/%2.1f Ah",
-                                last_elem(list)->data,
-                                get_charge_pct(),
-                                get_charge_full(),
-                                get_charge_full_design());
-                wrefresh(win);
-                add_node(list, get_charge_wattage());
-        } else {
-                mvwprintw(win,0,0,"%ld mW -- Battery: %d%% -- Capacity: %d/%d Wh",
-                        last_elem(list)->data,
-                        get_bat_pct(),
-                        get_bat_full(),
-                        get_bat_design());
-                wrefresh(win);
-                add_node(list, get_wattage());
-        }
+        /* some systems report Amp-Hours, some report Watt-Hours */
+        if (is_current())
+                draw_amperage(win, list);
+        else
+                draw_wattage(win, list);
+
         return list;
 }
 
@@ -147,7 +161,7 @@ int main()
         while (1) {
                 draw_cpu(cpuwin);
                 draw_mem(memwin);
-                wlist = draw_wattage(wwin, wlist);
+                wlist = draw_power(wwin, wlist);
                 flist = draw_freq(fwin, flist);
                 
                 refresh();

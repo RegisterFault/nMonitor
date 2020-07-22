@@ -208,7 +208,7 @@ int has_battery()
 }
 
 /* some systems report current charge, some report wattage */
-int is_charge()
+int is_current()
 {
         char *path = NULL;
         int ret;

@@ -38,7 +38,7 @@ char *get_governor(void);
 long int get_freq(void);
 void get_mem(struct meminfo *);
 int has_battery(void);
-int is_charge(void);
+int is_current(void);
 int get_charge_pct(void);
 float get_charge_full(void);
 float get_charge_full_design(void);
