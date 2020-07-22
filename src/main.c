@@ -14,6 +14,10 @@
 /* used in logic of display routine */
 #define DUR_SEC (DUR*0.000001)
 
+int is_root(void){
+        return geteuid() == 0;
+}
+
 void draw_amperage(WINDOW *win, struct node *list)
 {
         mvwprintw(win, 0, 0, "%ld mW -- Battery: %d%% -- Capacity: %2.1f/%2.1f Ah",
@@ -51,7 +55,7 @@ struct node *draw_power(WINDOW *win, struct node *list)
 struct node *draw_freq(WINDOW *win, struct node *list)
 {
         int max_boost;
-        if (!is_amd() && geteuid() == 0) {
+        if (!is_amd() && is_root()) {
                 max_boost = get_boost_freq();
                 if (max_boost == 0)
                         max_boost = 5000;
@@ -88,7 +92,7 @@ void draw_cpu(WINDOW *win)
         mvwprintw(win, line++, 1, "Temp: %dC", get_temp());
         mvwprintw(win, line++, 1, "Boost: %s ", get_turbo() ? "on" : "off" );
         mvwprintw(win, line++, 1, "Gov: %s", governor);
-        if (geteuid() == 0 && have_msr()){ /* if we are root */
+        if (is_root() && have_msr()){ 
                 if (last_pkg_nrg != 0)
                         mvwprintw(win, line++, 1, "PKG:   %6.2f W",
                                         (get_pkg_joules() - last_pkg_nrg) / DUR_SEC);
