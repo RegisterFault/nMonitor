@@ -36,28 +36,25 @@ void draw_wattage(WINDOW *win, struct node *list)
         add_node(list, get_wattage());
 }
 
-struct node *draw_power(WINDOW *win, struct node *list)
+void draw_power(WINDOW *win, struct node **list)
 {       
-        list = draw_graph(win, list, 35000);
+        draw_graph(win, list, 35000);
         /* some systems report Amp-Hours, some report Watt-Hours */
         if (is_current())
-                draw_amperage(win, list);
+                draw_amperage(win, *list);
         else
-                draw_wattage(win, list);
-
-        return list;
+                draw_wattage(win, *list);
 }
 
-struct node *draw_freq(WINDOW *win, struct node *list)
+void draw_freq(WINDOW *win, struct node **list)
 {
         int max_boost = get_boost_freq();
 
-        list = draw_graph(win, list, max_boost);
-        mvwprintw(win,0,0,"%ld MHz",last_elem(list)->data);
+        draw_graph(win, list, max_boost);
+        mvwprintw(win,0,0,"%ld MHz",last_elem(*list)->data);
 
         wrefresh(win);
-        add_node(list, get_freq());
-        return list;
+        add_node(*list, get_freq());
 }
 
 void draw_cpu(WINDOW *win)
@@ -156,8 +153,8 @@ int main()
         while (1) {
                 draw_cpu(cpuwin);
                 draw_mem(memwin);
-                wlist = draw_power(wwin, wlist);
-                flist = draw_freq(fwin, flist);
+                draw_power(wwin, &wlist);
+                draw_freq(fwin, &flist);
                 
                 refresh();
                 usleep(DUR);

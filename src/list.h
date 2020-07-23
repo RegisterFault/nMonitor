@@ -14,5 +14,5 @@ struct node *nth_elem(struct node *, int);
 struct node *free_top(struct node *);
 struct node *free_to_nth(struct node *, int );
 int get_val_y(long int, long int, long int);
-struct node *draw_graph(WINDOW *, struct node *, long int);
+void draw_graph(WINDOW *, struct node **, long int);
 #endif

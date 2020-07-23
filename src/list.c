@@ -69,23 +69,23 @@ int get_val_y(long int max, long int lines, long int in)
         return (int) (c - ((a / b) * c)) -1;
 }
 
-struct node *draw_graph(WINDOW *win, struct node *list, long int max)
+void draw_graph(WINDOW *win, struct node **list, long int max)
 {
         int lines = 0;
         int cols = 0;
         int x = 0;
         int y;
         struct node *cur;
-        int size = count_elems(list);
+        int size = count_elems(*list);
         getmaxyx(win, lines, cols);
         wclear(win);
         box(win, 0, 0);
 
         while (size > (cols - 2) && size > 0 ){
-                list = free_top(list);
-                size = count_elems(list);
+                *list = free_top(*list);
+                size = count_elems(*list);
         }
-        cur = list;
+        cur = *list;
         
         for(cur; cur->next != NULL; cur = cur->next){
                 for(y = get_val_y(max, lines - 2, cur->data); y < lines - 2; y++)
@@ -93,6 +93,5 @@ struct node *draw_graph(WINDOW *win, struct node *list, long int max)
                 x++;
         }
         
-        return list;
 }
 
