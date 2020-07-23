@@ -3,6 +3,13 @@
 #include "list.h"
 
 
+struct node *init_node(void)
+{
+        struct node *out = malloc(sizeof(struct node));
+        out->next = NULL;
+        out->data = 0;
+        return out;
+}
 
 struct node *last_elem(struct node *in)
 {

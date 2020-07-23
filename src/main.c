@@ -117,6 +117,7 @@ void draw_mem(WINDOW *win)
         mvwprintw(win, line++, 1, "Avail: %5ld MiB", mem.avail / 1024);
         mvwprintw(win, line++, 1, "Free:  %5ld MiB", mem.free / 1024);
         mvwprintw(win, line++, 1, "Cache: %5ld MiB", mem.cache / 1024);
+        /* this appears to be inaccurate */
         mvwprintw(win, line++, 1, "Used:  %5ld MiB", (mem.total - mem.avail) / 1024);
         
         wrefresh(win);
@@ -129,12 +130,8 @@ int main()
         WINDOW *fwin;
         WINDOW *cpuwin;
         WINDOW *memwin;
-        struct node *wlist = malloc(sizeof(struct node));
-        wlist->next = NULL;
-        wlist->data = 0;
-        struct node *flist = malloc(sizeof(struct node));
-        flist->next = NULL;
-        flist->data = 0;
+        struct node *wlist = init_node();
+        struct node *flist = init_node();
 
         init_batinfo();
 
