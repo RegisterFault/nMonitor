@@ -17,12 +17,12 @@ struct node *last_elem(struct node *in)
         return in;
 }
 
-void add_node(struct node *in, long int a)
+void add_node(struct node *in, long int data)
 {
         struct node *curs = last_elem(in);
         curs->next = malloc(sizeof(struct node));
         curs = curs->next;
-        curs->data = a;
+        curs->data = data;
         curs->next = NULL;
 }
 
