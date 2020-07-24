@@ -173,38 +173,37 @@ cleanup:
         return;
 }
 
-void get_cpuname(char **str, int in_size)
+void get_intel_cpuname(char **str, int in_size)
 {
         char *path = "/proc/cpuinfo";
         FILE *f = fopen(path, "r");
+        size_t size = 1024;
+        char *name;
+        char *lbuf = malloc(size);
+        char *scanf_pattern = "model name\t: %*s %*s %ms";
+        
         if (!f)
                 return;
-        int size = 1024;
-        char *lbuf = malloc(size);
-        char *name;
-        char *scanf_pattern;
-
-        if (is_amd()) {        
-                get_amd_cpuname(str, in_size);
-                goto cleanup;
-        } else {
-                scanf_pattern = "model name\t: %*s %*s %ms";
-        }
-
-        while (getline(&lbuf, (size_t *)&size, f) != -1){
+        
+        while (getline(&lbuf, &size, f) != -1){
                 if (strstr(lbuf, "model name")){
-                        sscanf(lbuf, scanf_pattern,&name);
+                        sscanf(lbuf, scanf_pattern, &name);
                         break;
                 }
         }
 
         strncpy(*str, name, in_size);
-        
         free(name);
-cleanup:
         free(lbuf);
         fclose(f);
-        return;
+}
+
+void get_cpuname(char **str, int in_size)
+{
+        if (is_amd())
+                get_amd_cpuname(str, in_size);
+        else 
+                get_intel_cpuname(str, in_size);
 }
 
 int has_battery()
