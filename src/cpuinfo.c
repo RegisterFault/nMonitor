@@ -14,7 +14,8 @@
 
 char * BatteryPath = NULL; //populated by init_batinfo
 
-int is_root(void){
+int is_root(void)
+{
         return geteuid() == 0;
 }
 
@@ -40,7 +41,6 @@ void init_batinfo(void)
         globfree(&globbuf);
         return;       
 }
-
 
 long int get_sysfs_int(char *path)
 {
@@ -172,7 +172,6 @@ cleanup:
         free(b);
         return;
 }
-
 
 void get_cpuname(char **str, int in_size)
 {
@@ -486,7 +485,6 @@ int get_cores()
         free(lbuf);
         return cores;
 }
-
 
 int get_threads()
 {
