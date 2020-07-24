@@ -6,7 +6,8 @@ LT_INIT()
 LT_OUTPUT()
 AC_CONFIG_MACRO_DIRS([m4])
 AC_PROG_CC
-PKG_CHECK_MODULES([CHECK], [check])
+PKG_CHECK_MODULES([CHECK], [check],,
+                  AC_MSG_NOTICE([no unit testing available]))
 AM_PROG_CC_C_O
 AC_CHECK_FUNCS([bzero memset strstr])
 AC_CHECK_HEADERS([fcntl.h])
