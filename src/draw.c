@@ -87,13 +87,12 @@ void draw_freq(WINDOW *win, struct node **list)
 
 void draw_cpu(WINDOW *win)
 {
-        char *cpu_name = "";
         int line = 0;
         static double last_pkg_nrg = 0;
         char *governor = get_governor();
+        char *cpu_name = get_cpuname();
         char *cpu_brand;
         
-        get_cpuname(&cpu_name);
         
         cpu_brand = is_amd() ? "AMD" : "Intel";
 

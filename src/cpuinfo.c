@@ -132,6 +132,7 @@ void get_amd_cpuname(char **str)
         char *a, *b; //placeholder strings for scanf parsing
         size_t size = 1024;
         char *lbuf;
+        char *scanf_out;
         int fam;
 
         if (!f)
@@ -149,24 +150,29 @@ void get_amd_cpuname(char **str)
                 sscanf(lbuf, "model name\t: %*s %ms %ms", &a, &b);
                 if (strcmp(a, "PRO") == 0) {
                         free(a);
-                        *str = b;
+                        scanf_out = b;
                 } else {
                         free(b);
-                        *str = a;
+                        scanf_out = a;
                 }
         } else if (fam == 23 ) {
                 sscanf(lbuf, "model name\t: %*s %*s %*s %ms %ms", &a, &b);
                 if (strcmp(a, "PRO") == 0){
                         free(a);
-                        *str = b;
+                        scanf_out = b;
                 } else {
                         free(b);
-                        *str = a;
+                        scanf_out = a;
                 }
         } else {
                 sscanf(lbuf, "model name\t: %*s %*s %*s %ms", &a);
-                        *str = a;
+                        scanf_out = a;
         }
+        
+        if(scanf_out != NULL)
+                *str = scanf_out;
+        else
+                free(scanf_out);
 
         fclose(f);
         free(lbuf);
@@ -181,6 +187,7 @@ void get_intel_cpuname(char **str)
         size_t size = 1024;
         char *lbuf;
         char *scanf_pattern = "model name\t: %*s %*s %ms";
+        char *scanf_buf;
         
         if (!f)
                 return;
@@ -189,21 +196,25 @@ void get_intel_cpuname(char **str)
 
         while (getline(&lbuf, &size, f) != -1){
                 if (strstr(lbuf, "model name")){
-                        sscanf(lbuf, scanf_pattern, str);
+                        sscanf(lbuf, scanf_pattern, &scanf_buf);
                         break;
                 }
         }
-
+        
+        if(scanf_buf != NULL)
+               *str = scanf_buf; 
         free(lbuf);
         fclose(f);
 }
 
-void get_cpuname(char **str)
+char *get_cpuname()
 {
+        char *str = "";
         if (is_amd())
-                get_amd_cpuname(str);
+                get_amd_cpuname(&str);
         else 
-                get_intel_cpuname(str);
+                get_intel_cpuname(&str);
+        return str;
 }
 
 int has_battery()

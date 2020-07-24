@@ -34,7 +34,7 @@ int is_amd(void);
 int get_cpu_family(void);
 void get_amd_cpuname(char **);
 void get_intel_cpuname(char **);
-void get_cpuname(char **);
+char *get_cpuname(void);
 long int get_wattage(void);
 char *get_governor(void);
 long int get_freq(void);
