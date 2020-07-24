@@ -68,7 +68,18 @@ struct node *free_to_nth(struct node *in, int n)
         return in;
 }
 
-int get_val_y(long int max, long int lines, long int in)
+void trunc_list(struct node **list, int limit)
+{
+        int size = count_elems(*list);
+        
+        while (size > limit && size > 0 ){
+                *list = free_top(*list);
+                size = count_elems(*list);
+        }
+}
+
+
+int calc_y(long int max, long int lines, long int in)
 {
         float a = in;
         float b = max;
@@ -76,29 +87,33 @@ int get_val_y(long int max, long int lines, long int in)
         return (int) (c - ((a / b) * c)) -1;
 }
 
+void draw_points(WINDOW *win, struct node **list, int max, char point)
+{
+        int lines = 0;
+        int cols = 0;
+        int x,y;
+        struct node *cur;
+
+        getmaxyx(win, lines, cols);
+        lines -= 2; //account for box
+        
+        for(x = 0, cur = *list; cur->next != NULL; cur = cur->next){
+                for(y = calc_y(max, lines, cur->data); y < lines; y++)
+                        mvwprintw(win, y + 1, x + 1, "%c", point);
+                x++;
+        }
+}
+
 void draw_graph(WINDOW *win, struct node **list, long int max)
 {
         int lines = 0;
         int cols = 0;
-        int x = 0;
-        int y;
-        struct node *cur;
-        int size = count_elems(*list);
+        
         getmaxyx(win, lines, cols);
         wclear(win);
         box(win, 0, 0);
-
-        while (size > (cols - 2) && size > 0 ){
-                *list = free_top(*list);
-                size = count_elems(*list);
-        }
-        cur = *list;
         
-        for(cur; cur->next != NULL; cur = cur->next){
-                for(y = get_val_y(max, lines - 2, cur->data); y < lines - 2; y++)
-                        mvwprintw(win, y + 1, x + 1, "*");
-                x++;
-        }
-        
+        trunc_list(list, cols - 2);
+        draw_points(win, list, max, '*'); 
 }
 

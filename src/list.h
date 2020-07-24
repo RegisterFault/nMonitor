@@ -14,6 +14,8 @@ int count_elems(struct node *);
 struct node *nth_elem(struct node *, int);
 struct node *free_top(struct node *);
 struct node *free_to_nth(struct node *, int );
-int get_val_y(long int, long int, long int);
+void trunc_list(struct node **, int);
+int calc_y(long int, long int, long int);
+void draw_points(WINDOW *, struct node **, int, char);
 void draw_graph(WINDOW *, struct node **, long int);
 #endif
