@@ -125,20 +125,19 @@ int get_cpu_family()
  * I really, really shouldn't have to string-scan human-readable 
  * output in order to get this information....
  */
-void get_amd_cpuname(char **str , int in_size)
+void get_amd_cpuname(char **str)
 {
         char *path = "/proc/cpuinfo";
         FILE *f = fopen(path, "r");
-        char *a = malloc(50);
-        char *b = malloc(50);
+        char *a, *b; //placeholder strings for scanf parsing
         size_t size = 1024;
-        char *lbuf = malloc(size);
+        char *lbuf;
         int fam;
-        if (!f)
-                goto cleanup;
 
-        bzero(a,50);
-        bzero(b,50);
+        if (!f)
+                return;
+
+        lbuf = malloc(size);
         
         fam = get_cpu_family();
 
@@ -146,64 +145,65 @@ void get_amd_cpuname(char **str , int in_size)
                 if (strstr(lbuf, "model name"))
                         break;
 
-
         if(fam == 21) {
-                sscanf(lbuf, "model name\t: %*s %s %s", a, b);
-                if (strcmp(a, "PRO") == 0)
-                        strncpy(*str, b, in_size);
-                else
-                        strncpy(*str, a, in_size);
+                sscanf(lbuf, "model name\t: %*s %ms %ms", &a, &b);
+                if (strcmp(a, "PRO") == 0) {
+                        free(a);
+                        *str = b;
+                } else {
+                        free(b);
+                        *str = a;
+                }
         } else if (fam == 23 ) {
-                sscanf(lbuf, "model name\t: %*s %*s %*s %s %s", a, b);
-                if (strcmp(a, "PRO") == 0)
-                        strncpy(*str, b, in_size);
-                else
-                        strncpy(*str, a, in_size);
+                sscanf(lbuf, "model name\t: %*s %*s %*s %ms %ms", &a, &b);
+                if (strcmp(a, "PRO") == 0){
+                        free(a);
+                        *str = b;
+                } else {
+                        free(b);
+                        *str = a;
+                }
         } else {
-                sscanf(lbuf, "model name\t: %*s %*s %*s %s", a);
-                strncpy(*str, a, in_size);
+                sscanf(lbuf, "model name\t: %*s %*s %*s %ms", &a);
+                        *str = a;
         }
 
-cleanup_f:
         fclose(f);
-cleanup:
         free(lbuf);
-        free(a);
-        free(b);
         return;
 }
 
-void get_intel_cpuname(char **str, int in_size)
+/* mallocs output string, free after use */
+void get_intel_cpuname(char **str)
 {
         char *path = "/proc/cpuinfo";
         FILE *f = fopen(path, "r");
         size_t size = 1024;
-        char *lbuf = malloc(size);
-        char *name;
+        char *lbuf;
         char *scanf_pattern = "model name\t: %*s %*s %ms";
         
         if (!f)
                 return;
-        
+
+        lbuf = malloc(size);
+
         while (getline(&lbuf, &size, f) != -1){
                 if (strstr(lbuf, "model name")){
-                        sscanf(lbuf, scanf_pattern, &name);
+                        sscanf(lbuf, scanf_pattern, str);
                         break;
                 }
         }
 
-        strncpy(*str, name, in_size);
-        free(name);
         free(lbuf);
         fclose(f);
 }
 
-void get_cpuname(char **str, int in_size)
+void get_cpuname(char **str)
 {
         if (is_amd())
-                get_amd_cpuname(str, in_size);
+                get_amd_cpuname(str);
         else 
-                get_intel_cpuname(str, in_size);
+                get_intel_cpuname(str);
 }
 
 int has_battery()
