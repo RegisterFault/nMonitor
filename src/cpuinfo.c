@@ -178,8 +178,8 @@ void get_intel_cpuname(char **str, int in_size)
         char *path = "/proc/cpuinfo";
         FILE *f = fopen(path, "r");
         size_t size = 1024;
-        char *name;
         char *lbuf = malloc(size);
+        char *name;
         char *scanf_pattern = "model name\t: %*s %*s %ms";
         
         if (!f)

@@ -126,6 +126,7 @@ void draw_cpu(WINDOW *win)
                 }
 
         }
+        free(cpu_name);
         free(governor);
         wrefresh(win);
 }
