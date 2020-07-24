@@ -24,7 +24,7 @@ void add_node(struct node **in, long int data)
                 *in = malloc(sizeof(struct node));
                 curs = *in;
         } else {
-                curs = last_elem(in);
+                curs = last_elem(*in);
                 curs->next = malloc(sizeof(struct node));
                 curs = curs->next;
         }
@@ -42,12 +42,12 @@ int count_elems(struct node *in)
         return i;
 }
 
-struct node *nth_elem(struct node *in, int num)
+struct node *nth_elem(struct node *in, int index)
 {
-        if (num > count_elems(in))
+        if (index > count_elems(in))
                 return last_elem(in);
 
-        for (int i = 0; i<num; i++)
+        for (int i = 0; i < index; i++)
                 in = in->next;
         return in;
 }
@@ -65,18 +65,20 @@ struct node *free_top(struct node *in)
         return in;
 }
 
-struct node *free_to_nth(struct node *in, int n)
+void free_to_nth(struct node **in, int n)
 {
         struct node *prev;
-        if (n > count_elems(in))
-                return in;
+        if(*in == NULL)
+                return;
 
-        for (int i=0; i<n; i++) {
-                prev = in;
-                in = in->next;
+        if (n > count_elems(*in))
+                return;
+
+        for (int i = 0; i < n; i++) {
+                prev = *in;
+                *in = (*in)->next;
                 free(prev);
         }
-        return in;
 }
 
 void free_list(struct node *in)

@@ -3,10 +3,12 @@
 
 #include "../src/list.h"
 
-START_TEST(list_creates_one)
+START_TEST(list_element_count_consistent)
         struct node *list = init_node();
         add_node(&list,1);
-        ck_assert_int_eq(count_elems(list), 1);
+        add_node(&list,1);
+        add_node(&list,1);
+        ck_assert_int_eq(count_elems(list), 3);
         free_list(list);
 END_TEST
 
@@ -32,6 +34,29 @@ START_TEST(list_free_top_consistent)
         free_list(list);
 END_TEST
         
+START_TEST(list_last_elem_consistent)
+        struct node *list = init_node();
+        add_node(&list, 1);
+        add_node(&list, 2);
+        add_node(&list, 3);
+        ck_assert_int_eq(last_elem(list)->data, 3);
+        ck_assert_int_eq(nth_elem(list, 15)->data, 3);
+        free_list(list);
+END_TEST
+
+START_TEST(list_free_to_nth)
+        struct node *list = init_node();
+        add_node(&list, 1);
+        add_node(&list, 2);
+        add_node(&list, 3);
+        add_node(&list, 4);
+        add_node(&list, 5);
+        add_node(&list, 6);
+        free_to_nth(&list,3);
+        ck_assert_int_eq(list->data, 4);
+        free_list(list);
+END_TEST
+
 
 Suite * list_suite(void)
 {
@@ -42,9 +67,11 @@ Suite * list_suite(void)
 
         tc_core = tcase_create("Core");
 
-        tcase_add_test(tc_core, list_creates_one);
+        tcase_add_test(tc_core, list_element_count_consistent);
         tcase_add_test(tc_core, list_nth_values_consistent);
         tcase_add_test(tc_core, list_free_top_consistent);
+        tcase_add_test(tc_core, list_last_elem_consistent);
+        tcase_add_test(tc_core, list_free_to_nth);
 
         suite_add_tcase(s, tc_core);
 
