@@ -8,7 +8,7 @@ struct node {
 
 struct node *init_node(void);
 struct node *last_elem(struct node *);
-void add_node(struct node *, long int );
+void add_node(struct node **, long int );
 int count_elems(struct node *);
 struct node *nth_elem(struct node *, int);
 struct node *free_top(struct node *);

@@ -33,52 +33,56 @@ void draw_graph(WINDOW *win, struct node **list, long int max)
         getmaxyx(win, lines, cols);
         wclear(win);
         box(win, 0, 0);
-        
-        trunc_list(list, cols - 2);
+       
+        if(*list == NULL)
+               return; 
+        trunc_list(list, cols - 1);
         draw_points(win, list, max, '*'); 
 }
 
-void draw_amperage(WINDOW *win, struct node *list)
+void draw_amperage(WINDOW *win, struct node **list)
 {
         mvwprintw(win, 0, 0, "%ld mW -- Battery: %d%% -- Capacity: %2.1f/%2.1f Ah",
-                  last_elem(list)->data,
+                  last_elem(*list)->data,
                   get_charge_pct(),
                   get_charge_full(),
                   get_charge_full_design());
         wrefresh(win);
-        add_node(list, get_charge_wattage());
 }
 
-void draw_wattage(WINDOW *win, struct node *list)
+void draw_wattage(WINDOW *win, struct node **list)
 {
         mvwprintw(win, 0, 0, "%ld mW -- Battery: %d%% -- Capacity: %d/%d Wh",
-                  last_elem(list)->data,
+                  last_elem(*list)->data,
                   get_bat_pct(),
                   get_bat_full(),
                   get_bat_design());
         wrefresh(win);
-        add_node(list, get_wattage());
 }
 
 void draw_power(WINDOW *win, struct node **list)
 {       
-        draw_graph(win, list, 35000);
         /* some systems report Amp-Hours, some report Watt-Hours */
-        if (is_current())
-                draw_amperage(win, *list);
-        else
-                draw_wattage(win, *list);
+        if (is_current()){
+                add_node(list, get_charge_wattage());
+                draw_graph(win, list, 35000);
+                draw_amperage(win, list);
+        } else {
+                add_node(list, get_wattage());
+                draw_graph(win, list, 35000);
+                draw_wattage(win, list);
+        }
 }
 
 void draw_freq(WINDOW *win, struct node **list)
 {
         int max_boost = get_boost_freq();
 
+        add_node(list, get_freq());
         draw_graph(win, list, max_boost);
         mvwprintw(win, 0, 0, "%ld MHz", last_elem(*list)->data);
 
         wrefresh(win);
-        add_node(*list, get_freq());
 }
 
 void draw_cpu(WINDOW *win)

@@ -19,8 +19,8 @@
 int calc_y(long int, long int, long int);
 void draw_points(WINDOW *, struct node **, int, char);
 void draw_graph(WINDOW *, struct node **, long int);
-void draw_amperage(WINDOW *, struct node *);
-void draw_wattage(WINDOW *, struct node *);
+void draw_amperage(WINDOW *, struct node **);
+void draw_wattage(WINDOW *, struct node **);
 void draw_power(WINDOW *, struct node **);
 void draw_freq(WINDOW *, struct node **);
 void draw_cpu(WINDOW *);

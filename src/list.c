@@ -5,30 +5,38 @@
 
 struct node *init_node(void)
 {
-        struct node *out = malloc(sizeof(struct node));
-        out->next = NULL;
-        out->data = 0;
-        return out;
+        /* add_node should be the only thing allocating */
+        return NULL;
 }
 
 struct node *last_elem(struct node *in)
 {
+        if(in == NULL)
+                return NULL;
         for( in; in->next != NULL; in = in->next) {}
         return in;
 }
 
-void add_node(struct node *in, long int data)
+void add_node(struct node **in, long int data)
 {
-        struct node *curs = last_elem(in);
-        curs->next = malloc(sizeof(struct node));
-        curs = curs->next;
+        struct node *curs;
+        if(*in == NULL){
+                *in = malloc(sizeof(struct node));
+                curs = *in;
+        } else {
+                curs = last_elem(in);
+                curs->next = malloc(sizeof(struct node));
+                curs = curs->next;
+        }
         curs->data = data;
         curs->next = NULL;
 }
 
 int count_elems(struct node *in)
 {
-        int i = 0;
+        int i = 1;
+        if(in == NULL)
+                return 0;
         for (in; in->next != NULL; in = in->next)
                 i++;
         return i;
@@ -36,8 +44,9 @@ int count_elems(struct node *in)
 
 struct node *nth_elem(struct node *in, int num)
 {
-        if (num > (count_elems(in) - 1))
+        if (num > count_elems(in))
                 return last_elem(in);
+
         for (int i = 0; i<num; i++)
                 in = in->next;
         return in;
@@ -46,6 +55,8 @@ struct node *nth_elem(struct node *in, int num)
 struct node *free_top(struct node *in)
 {
         struct node *prev;
+        if(in == NULL)
+                return in;
         
         prev = in;
         in = in->next;
