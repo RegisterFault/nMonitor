@@ -19,11 +19,11 @@ struct node *last_elem(struct node *in)
 
 void add_node(struct node *in, long int a)
 {
-        in = last_elem(in);
-        in->next = malloc(sizeof(struct node));
-        in = in->next;
-        in->data = a;
-        in->next = NULL;
+        struct node *curs = last_elem(in);
+        curs->next = malloc(sizeof(struct node));
+        curs = curs->next;
+        curs->data = a;
+        curs->next = NULL;
 }
 
 int count_elems(struct node *in)
