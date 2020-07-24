@@ -74,7 +74,7 @@ void trunc_list(struct node **list, int limit)
         
         while (size > limit && size > 0 ){
                 *list = free_top(*list);
-                size = count_elems(*list);
+                size--;
         }
 }
 
