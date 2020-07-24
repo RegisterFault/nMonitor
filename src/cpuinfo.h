@@ -32,6 +32,7 @@ long int get_sysfs_int(char*);
 char *get_sysfs_string(const char *);
 int is_amd(void);
 int get_cpu_family(void);
+void get_intel_cpuname(char **, int);
 void get_cpuname(char **, int );
 long int get_wattage(void);
 char *get_governor(void);
