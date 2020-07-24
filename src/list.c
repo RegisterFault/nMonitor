@@ -68,6 +68,16 @@ struct node *free_to_nth(struct node *in, int n)
         return in;
 }
 
+void free_list(struct node *in)
+{
+        struct node *prev;
+        do{
+                prev = in;
+                in = in->next;
+                free(prev);
+        } while(in != NULL);       
+}
+
 void trunc_list(struct node **list, int limit)
 {
         int size = count_elems(*list);
