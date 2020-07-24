@@ -103,7 +103,7 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_nmonitor_OBJECTS = nmonitor-main.$(OBJEXT) \
 	nmonitor-cpuinfo.$(OBJEXT) nmonitor-list.$(OBJEXT) \
-	nmonitor-msr.$(OBJEXT)
+	nmonitor-msr.$(OBJEXT) nmonitor-draw.$(OBJEXT)
 nmonitor_OBJECTS = $(am_nmonitor_OBJECTS)
 nmonitor_LDADD = $(LDADD)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -129,8 +129,8 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/nmonitor-cpuinfo.Po \
-	./$(DEPDIR)/nmonitor-list.Po ./$(DEPDIR)/nmonitor-main.Po \
-	./$(DEPDIR)/nmonitor-msr.Po
+	./$(DEPDIR)/nmonitor-draw.Po ./$(DEPDIR)/nmonitor-list.Po \
+	./$(DEPDIR)/nmonitor-main.Po ./$(DEPDIR)/nmonitor-msr.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -294,7 +294,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-nmonitor_SOURCES = main.c cpuinfo.c list.c msr.c
+nmonitor_SOURCES = main.c cpuinfo.c list.c msr.c draw.c
 nmonitor_CFLAGS = -Wno-unused-result
 all: all-am
 
@@ -390,6 +390,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nmonitor-cpuinfo.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nmonitor-draw.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nmonitor-list.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nmonitor-main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nmonitor-msr.Po@am__quote@ # am--include-marker
@@ -476,6 +477,20 @@ nmonitor-msr.obj: msr.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='msr.c' object='nmonitor-msr.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(nmonitor_CFLAGS) $(CFLAGS) -c -o nmonitor-msr.obj `if test -f 'msr.c'; then $(CYGPATH_W) 'msr.c'; else $(CYGPATH_W) '$(srcdir)/msr.c'; fi`
+
+nmonitor-draw.o: draw.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(nmonitor_CFLAGS) $(CFLAGS) -MT nmonitor-draw.o -MD -MP -MF $(DEPDIR)/nmonitor-draw.Tpo -c -o nmonitor-draw.o `test -f 'draw.c' || echo '$(srcdir)/'`draw.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/nmonitor-draw.Tpo $(DEPDIR)/nmonitor-draw.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='draw.c' object='nmonitor-draw.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(nmonitor_CFLAGS) $(CFLAGS) -c -o nmonitor-draw.o `test -f 'draw.c' || echo '$(srcdir)/'`draw.c
+
+nmonitor-draw.obj: draw.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(nmonitor_CFLAGS) $(CFLAGS) -MT nmonitor-draw.obj -MD -MP -MF $(DEPDIR)/nmonitor-draw.Tpo -c -o nmonitor-draw.obj `if test -f 'draw.c'; then $(CYGPATH_W) 'draw.c'; else $(CYGPATH_W) '$(srcdir)/draw.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/nmonitor-draw.Tpo $(DEPDIR)/nmonitor-draw.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='draw.c' object='nmonitor-draw.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(nmonitor_CFLAGS) $(CFLAGS) -c -o nmonitor-draw.obj `if test -f 'draw.c'; then $(CYGPATH_W) 'draw.c'; else $(CYGPATH_W) '$(srcdir)/draw.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -611,6 +626,7 @@ clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/nmonitor-cpuinfo.Po
+	-rm -f ./$(DEPDIR)/nmonitor-draw.Po
 	-rm -f ./$(DEPDIR)/nmonitor-list.Po
 	-rm -f ./$(DEPDIR)/nmonitor-main.Po
 	-rm -f ./$(DEPDIR)/nmonitor-msr.Po
@@ -660,6 +676,7 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/nmonitor-cpuinfo.Po
+	-rm -f ./$(DEPDIR)/nmonitor-draw.Po
 	-rm -f ./$(DEPDIR)/nmonitor-list.Po
 	-rm -f ./$(DEPDIR)/nmonitor-main.Po
 	-rm -f ./$(DEPDIR)/nmonitor-msr.Po
