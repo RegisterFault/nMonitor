@@ -4,15 +4,18 @@
 #include "../src/list.h"
 
 START_TEST(list_element_count_consistent)
+{
         struct node *list = init_node();
         add_node(&list,1);
         add_node(&list,1);
         add_node(&list,1);
         ck_assert_int_eq(count_elems(list), 3);
         free_list(list);
+}
 END_TEST
 
 START_TEST(list_nth_values_consistent)
+{
         struct node *list = init_node();
         add_node(&list, 1);
         add_node(&list, 2);
@@ -21,9 +24,11 @@ START_TEST(list_nth_values_consistent)
         ck_assert_int_eq(nth_elem(list,1)->data, 2);
         ck_assert_int_eq(nth_elem(list,2)->data, 3);
         free_list(list);
+}
 END_TEST
 
 START_TEST(list_free_top_consistent)
+{
         struct node *list = init_node();
         add_node(&list, 1);
         add_node(&list, 2);
@@ -32,9 +37,11 @@ START_TEST(list_free_top_consistent)
         ck_assert_int_eq(nth_elem(list,0)->data, 2);
         ck_assert_int_eq(nth_elem(list,1)->data, 3);
         free_list(list);
+}
 END_TEST
         
 START_TEST(list_last_elem_consistent)
+{
         struct node *list = init_node();
         add_node(&list, 1);
         add_node(&list, 2);
@@ -42,9 +49,11 @@ START_TEST(list_last_elem_consistent)
         ck_assert_int_eq(last_elem(list)->data, 3);
         ck_assert_int_eq(nth_elem(list, 15)->data, 3);
         free_list(list);
+}
 END_TEST
 
 START_TEST(list_free_to_nth)
+{
         struct node *list = init_node();
         add_node(&list, 1);
         add_node(&list, 2);
@@ -55,6 +64,7 @@ START_TEST(list_free_to_nth)
         free_to_nth(&list,3);
         ck_assert_int_eq(list->data, 4);
         free_list(list);
+}
 END_TEST
 
 
