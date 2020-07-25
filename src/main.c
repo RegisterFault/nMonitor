@@ -38,7 +38,7 @@ int main()
                 draw_power(wwin, &wlist);
                 draw_freq(fwin, &flist);
                 
-                refresh();
+                doupdate();
                 usleep(DUR);
         }
 

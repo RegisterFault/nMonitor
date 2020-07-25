@@ -47,7 +47,7 @@ void draw_amperage(WINDOW *win, struct node **list)
                   get_charge_pct(),
                   get_charge_full(),
                   get_charge_full_design());
-        wrefresh(win);
+        wnoutrefresh(win);
 }
 
 void draw_wattage(WINDOW *win, struct node **list)
@@ -57,7 +57,7 @@ void draw_wattage(WINDOW *win, struct node **list)
                   get_bat_pct(),
                   get_bat_full(),
                   get_bat_design());
-        wrefresh(win);
+        wnoutrefresh(win);
 }
 
 void draw_power(WINDOW *win, struct node **list)
@@ -82,7 +82,7 @@ void draw_freq(WINDOW *win, struct node **list)
         draw_graph(win, list, max_boost);
         mvwprintw(win, 0, 0, "%ld MHz", last_elem(*list)->data);
 
-        wrefresh(win);
+        wnoutrefresh(win);
 }
 
 void draw_cpu(WINDOW *win)
@@ -127,7 +127,7 @@ void draw_cpu(WINDOW *win)
         }
         free(cpu_name);
         free(governor);
-        wrefresh(win);
+        wnoutrefresh(win);
 }
 
 void draw_mem(WINDOW *win)
@@ -148,5 +148,5 @@ void draw_mem(WINDOW *win)
         mvwprintw(win, line++, 1, "Cache: %5ld MiB", mem.cache / 1024);
         /* this appears to be inaccurate */
         mvwprintw(win, line++, 1, "Used:  %5ld MiB", (mem.total - mem.avail) / 1024);
-        wrefresh(win);
+        wnoutrefresh(win);
 }
