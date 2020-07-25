@@ -548,11 +548,9 @@ int get_intel_temp()
         char *therm_pattern = "/sys/class/thermal/thermal_zone*/type";
         glob_t therm_glob;
         char *type_path;
-        char *temp_path = malloc(100);
+        char *temp_path;
         int temp = 0;
-        int i;
-        
-        bzero(temp_path, 100);
+        int i; // iterator preserved to locate the correct thermal_zone
         
         if (glob(therm_pattern, 0, NULL, &therm_glob) != 0)
                 goto cleanup;
@@ -567,12 +565,12 @@ int get_intel_temp()
         }
 
         /* i is the correct thermal zone number */
-        snprintf(temp_path, 100, "/sys/class/thermal/thermal_zone%d/temp", i);
+        asprintf(&temp_path, "/sys/class/thermal/thermal_zone%d/temp", i);
         temp = get_sysfs_int(temp_path) / 1000;
+        free(temp_path);
 
 cleanup:
         globfree(&therm_glob);
-        free(temp_path);
         return temp;
 }
 
