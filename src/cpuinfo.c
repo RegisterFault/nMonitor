@@ -518,9 +518,9 @@ int get_amd_temp()
         char *therm_pattern = "/sys/class/hwmon/hwmon*/name";
         glob_t therm_glob;
         char *name_path;
-        char *temp_path = malloc(100);
+        char *temp_path;
         int temp = 0;
-        int i;
+        int i; //iterator preserved for use as hwmon index
 
         if (glob(therm_pattern, 0, NULL, &therm_glob) != 0)
                 goto cleanup;
@@ -533,10 +533,8 @@ int get_amd_temp()
                 }
                 free(name_path);
         }
-
-        snprintf(temp_path, 100, "/sys/class/hwmon/hwmon%d/temp1_input", i);
+        asprintf(&temp_path, "/sys/class/hwmon/hwmon%d/temp1_input", i);
         temp = get_sysfs_int(temp_path)/1000;
-
 
 cleanup:
         globfree(&therm_glob);
