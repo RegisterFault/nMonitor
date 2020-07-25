@@ -478,13 +478,10 @@ int get_cores()
         if (!f)
                 return 0;
 
-        while (getline(&lbuf, &size, f) != -1){
-                if(strstr(lbuf, "cpu cores")){
-                        if(sscanf(lbuf, "cpu cores\t: %d", &cores) != 1)
-                                cores = 0;
+        while (getline(&lbuf, &size, f) != -1)
+                if(strstr(lbuf, "cpu cores"))
                         break;
-                }
-        }
+        sscanf(lbuf, "cpu cores\t: %d", &cores);
 
         fclose(f);
         free(lbuf);
