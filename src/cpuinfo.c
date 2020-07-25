@@ -32,9 +32,9 @@ void init_batinfo(void)
                 BatteryPath = NULL;
         } else {
                 len = strlen(globbuf.gl_pathv[0]) + 1;
-                /* BatteryPath only gets allocated once, and should never be freed except for termination*/
+                /* BatteryPath only gets allocated once, and should never be freed*/
                 BatteryPath = calloc(len, 1);
-                /* glob automatically sorts results, so I should get the lowest-numbered BAT entry */
+                /* glob sorts results, so we get the lowest-numbered BAT entry */
                 strcpy(BatteryPath, globbuf.gl_pathv[0]); 
         }
 
@@ -45,11 +45,12 @@ void init_batinfo(void)
 long int get_sysfs_int(char *path)
 {
         FILE *f = fopen(path,"r");
-        long int out;
+        long int out = 0;
         if (!f)
-                return 0;
-        if (fscanf(f, "%ld", &out) != 1)
-                out = 0;
+                return out;
+        
+        fscanf(f, "%ld", &out);
+        
         fclose(f);
         return out;
 }
@@ -58,12 +59,12 @@ long int get_sysfs_int(char *path)
 char *get_sysfs_string(const char *path)
 {
         FILE *f = fopen(path, "r");
-        char *out;
+        char *out = NULL;
         if (!f)
                 return NULL;;
         /* reminder that %m means scanf will malloc */
-        if (fscanf(f, "%ms", &out) != 1)
-                out = NULL;
+        fscanf(f, "%ms", &out);
+        
         fclose(f);
         return out;
 }
