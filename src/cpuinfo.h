@@ -31,6 +31,7 @@ void init_batinfo(void);
 long int get_sysfs_int(char*);
 char *get_sysfs_string(const char *);
 int is_amd(void);
+#define CPU_BRAND_STR() ((is_amd() ? "AMD" : "Intel"))
 int get_cpu_family(void);
 void get_amd_cpuname(char **);
 void get_intel_cpuname(char **);

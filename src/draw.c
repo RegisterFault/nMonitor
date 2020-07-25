@@ -91,10 +91,7 @@ void draw_cpu(WINDOW *win)
         static double last_pkg_nrg = 0;
         char *governor = get_governor();
         char *cpu_name = get_cpuname();
-        char *cpu_brand;
-        
-        
-        cpu_brand = is_amd() ? "AMD" : "Intel";
+        char *cpu_brand = CPU_BRAND_STR();
 
         wclear(win);
         box(win, 0, 0);
