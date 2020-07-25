@@ -223,6 +223,9 @@ int is_current()
 {
         char *path = NULL;
         int ret;
+
+        if(!BatteryPath)
+                return 0;
       
         asprintf(&path,"%s/charge_full", BatteryPath);
         ret = (access(path, F_OK) == 0) ? 1 : 0;
