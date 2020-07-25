@@ -101,19 +101,18 @@ int get_cpu_family()
 {
         char *path = "/proc/cpuinfo";
         FILE *f = fopen(path, "r");
-        if(!f)
-                return 0;
         size_t size = 1024;
         char *lbuf = malloc(size);
         int out = 0;
 
-        while (getline(&lbuf, &size, f) != -1) { 
-                if (strstr(lbuf, "cpu family")) {
-                        sscanf(lbuf, "cpu family\t: %d", &out);
-                        break;
-                }
-        }
+        if(!f)
+                return 0;
 
+        while (getline(&lbuf, &size, f) != -1)
+                if (strstr(lbuf, "cpu family"))
+                        break;
+        sscanf(lbuf, "cpu family\t: %d", &out);
+        
         fclose(f);
         free(lbuf);
         return out;
@@ -192,13 +191,11 @@ void get_intel_cpuname(char **str)
 
         lbuf = malloc(size);
 
-        while (getline(&lbuf, &size, f) != -1){
-                if (strstr(lbuf, "model name")){
-                        sscanf(lbuf, scanf_pattern, &scanf_buf);
+        while (getline(&lbuf, &size, f) != -1)
+                if (strstr(lbuf, "model name"))
                         break;
-                }
-        }
-        
+        sscanf(lbuf, scanf_pattern, &scanf_buf);
+
         if(scanf_buf != NULL)
                *str = scanf_buf; 
         free(lbuf);
