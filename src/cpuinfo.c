@@ -98,9 +98,8 @@ int is_amd()
         return is_amd;
 }
 
-int get_cpu_family()
+int extract_file_int(char *path, char *search, char* template)
 {
-        char *path = "/proc/cpuinfo";
         FILE *f = fopen(path, "r");
         size_t size = 1024;
         char *lbuf;
@@ -112,13 +111,29 @@ int get_cpu_family()
         lbuf = malloc(size);
 
         while (getline(&lbuf, &size, f) != -1)
-                if (strstr(lbuf, "cpu family"))
+                if (strstr(lbuf, search))
                         break;
-        sscanf(lbuf, "cpu family\t: %d", &out);
+        sscanf(lbuf, template, &out);
         
         fclose(f);
         free(lbuf);
         return out;
+}
+
+int get_cpu_family()
+{
+        char *path = "/proc/cpuinfo";
+        char *search = "cpu family";
+        char *template = "cpu family\t: %d";
+        return extract_file_int(path, search, template);
+}
+
+int get_cpu_model()
+{
+        char *path = "/proc/cpuinfo";
+        char *search = "model\t\t";
+        char *template = "model\t\t: %d";
+        return extract_file_int(path, search, template);
 }
 
 /* 
@@ -186,8 +201,7 @@ void get_intel_cpuname(char **str)
         FILE *f = fopen(path, "r");
         size_t size = 1024;
         char *lbuf;
-        char *scanf_pattern = "model name\t: %*s %*s %ms";
-        char *scanf_buf;
+        char *str_a, *str_b;
         
         if (!f)
                 return;
@@ -197,10 +211,25 @@ void get_intel_cpuname(char **str)
         while (getline(&lbuf, &size, f) != -1)
                 if (strstr(lbuf, "model name"))
                         break;
-        sscanf(lbuf, scanf_pattern, &scanf_buf);
 
-        if(scanf_buf != NULL)
-               *str = scanf_buf; 
+        sscanf(lbuf, "model name\t: %*s %*s %ms %ms", &str_a, &str_b);
+
+        if (str_a == NULL || str_b == NULL)
+                goto cleanup;
+
+        if(strcmp(str_a, "CPU") == 0      ||
+           strcmp(str_a, "Platinum") == 0 ||
+           strcmp(str_a, "Gold")   == 0   ||
+           strcmp(str_a, "Silver") == 0   ||
+           strcmp(str_a, "Bronze") == 0 ) {
+                free(str_a);
+                *str = str_b;
+        } else {
+                free(str_b);
+                *str = str_a;
+        };
+
+cleanup:
         free(lbuf);
         fclose(f);
 }
