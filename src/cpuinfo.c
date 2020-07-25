@@ -103,11 +103,13 @@ int get_cpu_family()
         char *path = "/proc/cpuinfo";
         FILE *f = fopen(path, "r");
         size_t size = 1024;
-        char *lbuf = malloc(size);
+        char *lbuf;
         int out = 0;
 
         if(!f)
                 return 0;
+
+        lbuf = malloc(size);
 
         while (getline(&lbuf, &size, f) != -1)
                 if (strstr(lbuf, "cpu family"))
