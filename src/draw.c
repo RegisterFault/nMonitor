@@ -107,11 +107,12 @@ void draw_cpu(WINDOW *win)
         mvwprintw(win, line++, 1, "Gov: %s", governor);
         if (is_root() && have_msr()){ 
                 cur_pkg_nrg = get_pkg_joules();
-                if (last_pkg_nrg != 0)
+                if (last_pkg_nrg != 0){
                         mvwprintw(win, line++, 1, "PKG:   %6.2f W",
                                   (cur_pkg_nrg - last_pkg_nrg) / DUR_SEC);
-                else
+                } else {
                         mvwprintw(win, line++, 1, "PKG:   %6.2f W", 0.0);
+                }
                 last_pkg_nrg = cur_pkg_nrg;
                 if (!is_amd()) {
                         mvwprintw(win, line++, 1, "Throttle: %c", get_throttle_char());
