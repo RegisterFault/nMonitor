@@ -88,7 +88,8 @@ void draw_freq(WINDOW *win, struct node **list)
 void draw_cpu(WINDOW *win)
 {
         int line = 0;
-        static double last_pkg_nrg = 0;
+        static double last_pkg_nrg = 0.0;
+        double cur_pkg_nrg = 0.0;
         char *governor = get_governor();
         char *cpu_name = get_cpuname();
         char *cpu_brand = CPU_BRAND_STR();
@@ -105,12 +106,13 @@ void draw_cpu(WINDOW *win)
         mvwprintw(win, line++, 1, "Boost: %s ", get_turbo() ? "on" : "off" );
         mvwprintw(win, line++, 1, "Gov: %s", governor);
         if (is_root() && have_msr()){ 
+                cur_pkg_nrg = get_pkg_joules();
                 if (last_pkg_nrg != 0)
                         mvwprintw(win, line++, 1, "PKG:   %6.2f W",
-                                  (get_pkg_joules() - last_pkg_nrg) / DUR_SEC);
+                                  (cur_pkg_nrg - last_pkg_nrg) / DUR_SEC);
                 else
                         mvwprintw(win, line++, 1, "PKG:   %6.2f W", 0.0);
-                last_pkg_nrg = get_pkg_joules();
+                last_pkg_nrg = cur_pkg_nrg;
                 if (!is_amd()) {
                         mvwprintw(win, line++, 1, "Throttle: %c", get_throttle_char());
                         if (have_cpuid()) {
