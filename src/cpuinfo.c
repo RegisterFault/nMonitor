@@ -72,30 +72,28 @@ int is_amd()
 {
         char *path = "/proc/cpuinfo";
         FILE *f = fopen(path, "r");
-        if (!f)
-                return 0;
         size_t size = 1024;
         char *lbuf = malloc(size);
         char *name = NULL;
         int is_amd = 0;
         
-        while (getline(&lbuf, &size, f) != -1){
-                if (strstr(lbuf, "vendor_id")){
-                        sscanf(lbuf, "vendor_id\t: %ms", &name);
-                        break;
-                }
-        }
-                                
-        if (!name)
-                goto exit;
-        if (strcmp(name, "AuthenticAMD") == 0)
-                is_amd = 1;
-        
-        free(name);
+        if (!f)
+                return 0;
 
-exit:
+        while (getline(&lbuf, &size, f) != -1)
+                if (strstr(lbuf, "vendor_id"))
+                        break;
+        sscanf(lbuf, "vendor_id\t: %ms", &name);
+
         fclose(f);
         free(lbuf);
+        
+        if (name == NULL)
+                return is_amd;
+        if (strcmp(name, "AuthenticAMD") == 0)
+                is_amd = 1;
+        free(name);
+        
         return is_amd;
 }
 
