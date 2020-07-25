@@ -535,10 +535,10 @@ int get_amd_temp()
         }
         asprintf(&temp_path, "/sys/class/hwmon/hwmon%d/temp1_input", i);
         temp = get_sysfs_int(temp_path)/1000;
+        free(temp_path);
 
 cleanup:
         globfree(&therm_glob);
-        free(temp_path);
         return temp;
 }
 
