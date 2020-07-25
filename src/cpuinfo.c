@@ -235,6 +235,10 @@ int get_charge_pct()
 {
         char *full = NULL;
         char *now = NULL;
+        
+        if(!BatteryPath)
+                return 0;
+        
         asprintf(&full, "%s/charge_full", BatteryPath); 
         asprintf(&now, "%s/charge_now", BatteryPath);
         
@@ -254,6 +258,10 @@ int get_charge_pct()
 float get_charge_full()
 {
         char *path = NULL;
+        
+        if(!BatteryPath)
+                return 0.0;
+
         asprintf(&path, "%s/charge_full", BatteryPath);
         
         float ret = ((float) get_sysfs_int(path)) / 1000000.0;
@@ -265,6 +273,10 @@ float get_charge_full()
 float get_charge_full_design()
 {
         char *path = NULL;
+        
+        if(!BatteryPath)
+                return 0.0;
+
         asprintf(&path, "%s/charge_full_design", BatteryPath);
         
         float ret = ((float) get_sysfs_int(path)) / 1000000.0;
@@ -278,6 +290,10 @@ int get_charge_wattage()
 {
         char *cur = NULL;
         char *volt = NULL;
+        
+        if(!BatteryPath)
+                return 0;
+
         asprintf(&cur, "%s/current_now", BatteryPath);
         asprintf(&volt, "%s/voltage_now", BatteryPath);
         float c_now = (float) get_sysfs_int(cur);
@@ -294,10 +310,13 @@ int get_charge_wattage()
 long int get_wattage(void)
 {
         char *path = NULL;
-        long int ret;
+        
+        if(!BatteryPath)
+                return 0;
+
         asprintf(&path, "%s/power_now", BatteryPath);
         
-        ret = get_sysfs_int(path) / 1000;
+        long int ret = get_sysfs_int(path) / 1000;
 
         free(path);
         return ret;
@@ -320,6 +339,10 @@ int get_bat_pct()
 {
         char *energy_full = NULL;
         char *energy_now = NULL; 
+
+        if(!BatteryPath)
+                return 0;
+
         asprintf(&energy_full, "%s/energy_full", BatteryPath);
         asprintf(&energy_now, "%s/energy_now", BatteryPath);
         
@@ -338,10 +361,13 @@ int get_bat_pct()
 int get_bat_full()
 {
         char *path = NULL;
-        int ret;
+        
+        if(!BatteryPath)
+                return 0;
+
         asprintf(&path, "%s/energy_full", BatteryPath);
         
-        ret = get_sysfs_int(path) / 1000000;
+        int ret = get_sysfs_int(path) / 1000000;
 
         free(path);
         return ret;
@@ -350,9 +376,12 @@ int get_bat_full()
 int get_bat_design()
 {
         char *path = NULL;
-        int ret;
+        
+        if(!BatteryPath)
+                return 0;
+
         asprintf(&path, "%s/energy_full_design", BatteryPath);
-        ret = get_sysfs_int(path) / 1000000;
+        int ret = get_sysfs_int(path) / 1000000;
 
         free(path);
         return ret;

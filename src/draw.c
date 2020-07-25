@@ -47,7 +47,6 @@ void draw_amperage(WINDOW *win, struct node **list)
                   get_charge_pct(),
                   get_charge_full(),
                   get_charge_full_design());
-        wnoutrefresh(win);
 }
 
 void draw_wattage(WINDOW *win, struct node **list)
@@ -57,7 +56,6 @@ void draw_wattage(WINDOW *win, struct node **list)
                   get_bat_pct(),
                   get_bat_full(),
                   get_bat_design());
-        wnoutrefresh(win);
 }
 
 void draw_power(WINDOW *win, struct node **list)
@@ -72,6 +70,7 @@ void draw_power(WINDOW *win, struct node **list)
                 draw_graph(win, list, 35000);
                 draw_wattage(win, list);
         }
+        wnoutrefresh(win);
 }
 
 void draw_freq(WINDOW *win, struct node **list)
