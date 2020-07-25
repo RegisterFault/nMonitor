@@ -497,13 +497,11 @@ int get_threads()
         int threads = 0;
         if (!f)
                 return 0;
-        while (getline(&lbuf, &size, f) != -1){
-                if (strstr(lbuf, "siblings")){
-                        if(sscanf(lbuf, "siblings\t: %d", &threads) != 1)
-                                threads = 0;
+
+        while (getline(&lbuf, &size, f) != -1)
+                if (strstr(lbuf, "siblings"))
                         break;
-                }
-        }
+        sscanf(lbuf, "siblings\t: %d", &threads);
 
         fclose(f);
         free(lbuf);
