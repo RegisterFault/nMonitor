@@ -29,9 +29,6 @@ int main()
         wwin = newwin(12, 50, 0, 20);
         fwin = newwin(12, 50, 12, 20);
 
-        /* this helps reduce glitchiness during initial loading */
-        refresh();
-
         while (1) {
                 draw_cpu(cpuwin);
                 draw_mem(memwin);
