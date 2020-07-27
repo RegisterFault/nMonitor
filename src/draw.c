@@ -51,8 +51,9 @@ void draw_amperage(WINDOW *win, struct node **list)
 
 void draw_wattage(WINDOW *win, struct node **list)
 {
-        mvwprintw(win, 0, 0, "%ld mW -- Battery: %d%% -- Capacity: %d/%d Wh",
+        mvwprintw(win, 0, 0, "%ld mW -- [%c] -- Bat: %d%% -- Cap: %d/%d Wh",
                   last_elem(*list)->data,
+                  is_charging() ? 'C' : ' ',
                   get_bat_pct(),
                   get_bat_full(),
                   get_bat_design());

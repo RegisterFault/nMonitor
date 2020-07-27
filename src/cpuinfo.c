@@ -249,6 +249,38 @@ int has_battery()
         return (BatteryPath != NULL) ? 1 : 0;
 }
 
+int ac_present()
+{
+        return (access("/sys/class/power_supply/AC", F_OK) == 0) ? 1 : 0;
+}
+
+
+int ac_attached()
+{
+        char *path = "/sys/class/power_supply/AC/online";
+
+        if (!ac_present())
+                return 0;
+
+        return get_sysfs_int(path);
+}
+
+int is_charging()
+{
+        char *path = NULL;
+        char *status = NULL;
+        int ret = 0;
+        asprintf(&path, "%s/status", BatteryPath);
+
+        status = get_sysfs_string(path);
+        if(strcmp(status, "Charging") == 0)
+                ret = 1;
+
+        free(status);
+        free(path);
+        return ret;
+}
+
 /* some systems report current charge, some report wattage */
 int is_current()
 {
