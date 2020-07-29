@@ -167,8 +167,9 @@ void draw_cpu(WINDOW *win)
         box(win, 0, 0);
 
         mvwprintw(win, line++, 0, "CPU INFO: %s", cpu_brand);
-        mvwprintw(win, line++, 1, "%s %dC/%dT",
-                  cpu_name,
+        mvwprintw(win, line++, 1, "Model: %s ", cpu_name);
+        mvwprintw(win, line++, 1, "[ %dS %4dC %4dT ]",
+                  get_sockets(),
                   get_cores(),
                   get_threads());
         mvwprintw(win, line++, 1, "Temp: %dC", get_temp());

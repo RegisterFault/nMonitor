@@ -616,6 +616,9 @@ int get_sockets()
 			}
 		}
 	}
+
+        free(lbuf);
+        fclose(f);
 	return highest_phys_id + 1; //physical ids are zero-indexed
 }
 
