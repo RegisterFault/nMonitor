@@ -28,6 +28,7 @@ struct cpuid_result {
 
 int is_root(void);
 void init_batinfo(void);
+void init_powerinfo(void);
 long int get_sysfs_int(char*);
 char *get_sysfs_string(const char *);
 int is_amd(void);

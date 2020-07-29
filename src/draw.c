@@ -1,5 +1,15 @@
 #include "draw.h"
 
+void debug_print(const char *fmt, ...)
+{
+        va_list dbg_list;
+        va_start(dbg_list, fmt);
+        move(24,0);
+        vw_printw(stdscr, fmt, dbg_list);
+        va_end(dbg_list);
+        refresh();
+}
+
 int calc_y(long int max, long int lines, long int in)
 {
         float a = in;
@@ -51,8 +61,9 @@ void draw_amperage(WINDOW *win, struct node **list)
 
 void draw_wattage(WINDOW *win, struct node **list)
 {
-        mvwprintw(win, 0, 0, "%ld mW -- [%c] -- Bat: %d%% -- Cap: %d/%d Wh",
+        mvwprintw(win, 0, 0, "%ld mW -- [%c][%c] -- Bat: %d%% -- Cap: %d/%d Wh",
                   last_elem(*list)->data,
+                  ac_attached() ? 'A' : ' ',
                   is_charging() ? 'C' : ' ',
                   get_bat_pct(),
                   get_bat_full(),

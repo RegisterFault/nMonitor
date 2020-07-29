@@ -8,11 +8,13 @@
 #include <glob.h>
 #include "cpuinfo.h"
 #include "msr.h"
+#include "draw.h"
 
 /* arbitrary max frequency bounds to use when max freq of processor unfetchable */
 #define MAX_FREQ_ARB 5000
 
 char * BatteryPath = NULL; //populated by init_batinfo
+char * PowerPath = NULL;   //populated by init_powerinfo
 
 int is_root(void)
 {
@@ -40,6 +42,22 @@ void init_batinfo(void)
 
         globfree(&globbuf);
         return;       
+}
+
+void init_powerinfo()
+{
+        int i;
+        static char *power_paths[] = {
+                "/sys/class/power_supply/AC",
+                "/sys/class/power_supply/ADP0",
+                NULL
+        };
+
+        for (i = 0; power_paths[i] != NULL; i++)
+                if(access(power_paths[i], F_OK) == 0)
+                        break;
+
+        PowerPath = power_paths[i];
 }
 
 long int get_sysfs_int(char *path)
@@ -251,18 +269,23 @@ int has_battery()
 
 int ac_present()
 {
-        return (access("/sys/class/power_supply/AC", F_OK) == 0) ? 1 : 0;
+        return (PowerPath != NULL) ? 1 : 0;
 }
 
 
 int ac_attached()
 {
-        char *path = "/sys/class/power_supply/AC/online";
+        char *path = NULL;
+        int ret;
 
         if (!ac_present())
                 return 0;
 
-        return get_sysfs_int(path);
+        asprintf(&path, "%s/online", PowerPath);
+        ret = get_sysfs_int(path);
+
+        free(path);
+        return ret;
 }
 
 int is_charging()

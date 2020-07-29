@@ -16,6 +16,7 @@
 /* used in logic of display routine */
 #define DUR_SEC (DUR*0.000001)
 
+void debug_print(const char *, ...);
 int calc_y(long int, long int, long int);
 void draw_points(WINDOW *, struct node **, int, char);
 void draw_graph(WINDOW *, struct node **, long int);

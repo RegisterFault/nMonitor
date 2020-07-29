@@ -19,6 +19,7 @@ int main()
         struct node *flist = init_node();
 
         init_batinfo();
+        init_powerinfo();
 
         /* ncurses setup */
         initscr();
