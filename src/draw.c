@@ -95,7 +95,7 @@ void draw_grid(WINDOW *win)
 
         while (i < threads) {
                 freq = get_cur_freq(i);
-                mvwprintw(win, i+1, 1, "%3d: %4d", i, freq);
+                mvwprintw(win, row, col, "%3d: %4d", i, freq);
                 i++;
                 row++;
                 if (row > (y - 2)){

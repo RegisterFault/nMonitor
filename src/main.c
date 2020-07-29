@@ -41,6 +41,10 @@ int main()
         fgwin = newwin(24,70,0,0);
 
         while (1) {
+                if(getch() == 'f')
+                        mode = !mode;
+                flushinp();
+
                 if (mode == STATS_MODE) {
                         draw_cpu(cpuwin);
                         draw_mem(memwin);
@@ -51,10 +55,6 @@ int main()
                         draw_grid(fgwin);
                         doupdate();
                 }
-                
-                if(getch() == 'f')
-                        mode = !mode;
-                flushinp();
 
                 usleep(DUR);
         }

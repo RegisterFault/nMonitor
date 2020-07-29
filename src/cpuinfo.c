@@ -296,11 +296,14 @@ int is_charging()
         asprintf(&path, "%s/status", BatteryPath);
 
         status = get_sysfs_string(path);
+        free(path);
+        if(status == NULL)
+                return 0;
+
         if(strcmp(status, "Charging") == 0)
                 ret = 1;
 
         free(status);
-        free(path);
         return ret;
 }
 
