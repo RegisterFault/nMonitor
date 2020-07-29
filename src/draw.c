@@ -50,6 +50,64 @@ void draw_graph(WINDOW *win, struct node **list, long int max)
         draw_points(win, list, max, '*'); 
 }
 
+void test_grid(WINDOW *win)
+{
+        int row = 1;
+        int col = 1;
+        int total = 256;
+        int iterations = 0;
+        int msgsz = 10;
+        int x,y;
+
+        getmaxyx(win, y, x);
+
+        box(win, 0, 0);
+        mvwprintw(win, 0, 0, "CPU FREQUENCY LISTING");
+        
+        while(iterations < total){
+                mvwprintw(win, row, col, "%3d: %4d", iterations, 5000);
+                iterations++;
+                row++;
+                if(row > (y-2)){
+                        row = 1;
+                        col += msgsz;
+                        if ((col + msgsz) > (x - 2))
+                                break;
+                }
+        }
+        wnoutrefresh(win);
+}
+
+void draw_grid(WINDOW *win)
+{
+        int threads = get_threads(); 
+        int freq;
+        int i = 0;
+        int row = 1; //row, col set to 1 to index loop inside window box
+        int col = 1;
+        int strsz = 10; //current size of cpu display string
+        int y,x; // using these to fetch window size.
+
+        getmaxyx(win, y, x);
+
+        box(win, 0, 0);
+        mvwprintw(win, 0, 0, "CPU FREQUENCY LISTING");
+
+        while (i < threads) {
+                freq = get_cur_freq(i);
+                mvwprintw(win, i+1, 1, "%3d: %4d", i, freq);
+                i++;
+                row++;
+                if (row > (y - 2)){
+                        row = 1;
+                        col += strsz;
+                        if ((col + strsz) > (x - 2)) //if the next column goes off the bounds
+                                break;
+                }
+        }
+
+        wnoutrefresh(win);
+}
 void draw_amperage(WINDOW *win, struct node **list)
 {
         mvwprintw(win, 0, 0, "%ld mW -- Battery: %d%% -- Capacity: %2.1f/%2.1f Ah",

@@ -20,6 +20,8 @@ void debug_print(const char *, ...);
 int calc_y(long int, long int, long int);
 void draw_points(WINDOW *, struct node **, int, char);
 void draw_graph(WINDOW *, struct node **, long int);
+void test_grid(WINDOW *);
+void draw_grid(WINDOW *);
 void draw_amperage(WINDOW *, struct node **);
 void draw_wattage(WINDOW *, struct node **);
 void draw_power(WINDOW *, struct node **);

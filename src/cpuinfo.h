@@ -40,6 +40,7 @@ char *get_cpuname(void);
 long int get_wattage(void);
 char *get_governor(void);
 long int get_freq(void);
+long int get_cur_freq(int);
 void get_mem(struct meminfo *);
 int has_battery(void);
 int ac_present(void);

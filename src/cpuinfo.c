@@ -413,8 +413,17 @@ long int get_wattage(void)
 
 long int get_freq()
 {
-        char * path = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
-        return get_sysfs_int(path) / 1000;
+        return get_cur_freq(0);
+}
+
+long int get_cur_freq(int cpu)
+{
+        char *path = NULL;
+        long int ret;
+        asprintf(&path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_cur_freq", cpu);
+        ret = get_sysfs_int(path) / 1000;
+        free(path);
+        return ret;
 }
 
 /* need to free the result of this function */
