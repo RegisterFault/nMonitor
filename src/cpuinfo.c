@@ -599,24 +599,49 @@ int get_intel_base_freq()
         return get_intel_freq(INTEL_BASE);
 }
 
+int get_sockets()
+{
+        char *path = "/proc/cpuinfo";
+        FILE *f = fopen(path,"r");
+        size_t size = 1024;
+        char *lbuf = malloc(size);
+	int phys_id = 0;
+	int highest_phys_id = 0;
+
+        while (getline(&lbuf, &size, f) != -1){
+		if (strstr(lbuf, "physical id")) {
+			sscanf(lbuf, "physical id\t: %d", &phys_id);
+			if (phys_id > highest_phys_id){
+				highest_phys_id = phys_id;
+			}
+		}
+	}
+	return highest_phys_id + 1; //physical ids are zero-indexed
+}
+
 int get_cores()
 {
         char *path = "/proc/cpuinfo";
         FILE *f = fopen(path,"r");
         size_t size = 1024;
         char *lbuf = malloc(size);
-        int cores = 0;
+        int pkg_cores = 0;
+	int total_cores = 0;
+	int sockets = get_sockets();
         if (!f)
                 return 0;
 
+	/* assuming multi-socket x64 systems are symmetrical */
         while (getline(&lbuf, &size, f) != -1)
                 if(strstr(lbuf, "cpu cores"))
-                        break;
-        sscanf(lbuf, "cpu cores\t: %d", &cores);
+			break;
+	sscanf(lbuf, "cpu cores\t: %d", &pkg_cores);
+
+	total_cores = sockets * pkg_cores;
 
         fclose(f);
         free(lbuf);
-        return cores;
+        return total_cores;
 }
 
 int get_threads()
@@ -626,13 +651,18 @@ int get_threads()
         size_t size = 1024;
         char *lbuf = malloc(size);
         int threads = 0;
+	int siblings = 0;
+	int sockets = get_sockets();
         if (!f)
                 return 0;
 
+	/* assuming multi-socket x64 systems are symmetric */
         while (getline(&lbuf, &size, f) != -1)
                 if (strstr(lbuf, "siblings"))
-                        break;
-        sscanf(lbuf, "siblings\t: %d", &threads);
+			break;
+	sscanf(lbuf, "siblings\t: %d", &siblings);
+
+	threads = sockets * siblings;
 
         fclose(f);
         free(lbuf);
