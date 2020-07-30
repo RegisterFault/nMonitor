@@ -76,6 +76,7 @@ int get_pl1(void);
 int get_pl2(void);
 double get_pkg_joules(void);
 double get_intel_pkg_joules(void);
+double get_pp0_joules(void);
 double get_amd_pkg_joules();
 double get_pp0_joules(void);
 double get_volt( unsigned int);

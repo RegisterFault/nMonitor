@@ -58,8 +58,8 @@ int main()
         cbreak();
         nodelay(stdscr, 1);
 
-        cpuwin = newwin(14, 20, 0, 0);
-        memwin = newwin(10, 20, 14, 0);
+        cpuwin = newwin(15, 20, 0, 0);
+        memwin = newwin(9, 20, 15, 0);
         wwin = newwin(12, 50, 0, 20);
         fwin = newwin(12, 50, 12, 20);
         fgwin = newwin(24,70,0,0);

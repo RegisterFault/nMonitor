@@ -160,7 +160,9 @@ void draw_cpu(WINDOW *win)
 {
         int line = 0;
         static double last_pkg_nrg = 0.0;
+        static double last_pp0_nrg = 0.0;
         double cur_pkg_nrg = 0.0;
+        double cur_pp0_nrg = 0.0;
         char *governor = get_governor();
         char *cpu_name = get_cpuname();
         char *cpu_brand = CPU_BRAND_STR();
@@ -179,19 +181,36 @@ void draw_cpu(WINDOW *win)
         mvwprintw(win, line++, 1, "Gov: %s", governor);
         if (is_root() && have_msr()){ 
                 cur_pkg_nrg = get_pkg_joules();
-                if (last_pkg_nrg != 0){
+
+                if(!is_amd())
+                        cur_pp0_nrg = get_pp0_joules();
+
+                if (!is_amd())
+                        mvwprintw(win, line++, 1, "Throttle: %c", get_throttle_char());
+
+                if (last_pkg_nrg != 0.0){
                         mvwprintw(win, line++, 1, "PKG:   %6.2f W",
                                   (cur_pkg_nrg - last_pkg_nrg) / DUR_SEC);
                 } else {
                         mvwprintw(win, line++, 1, "PKG:   %6.2f W", 0.0);
                 }
+
+                if(!is_amd()){
+                        if (last_pp0_nrg != 0.0){
+                                mvwprintw(win, line++, 1, "CPU:   %6.2f W",
+                                          (cur_pp0_nrg - last_pp0_nrg) / DUR_SEC);
+                        } else {
+                                mvwprintw(win, line++, 1, "CPU:   %6.2f W", 0.0);
+                        }
+                }
+
                 last_pkg_nrg = cur_pkg_nrg;
+                last_pp0_nrg = cur_pp0_nrg;
 
                 if (!is_amd() && hwp_enabled())
                         mvwprintw(win, line++, 1, "HWP Pref: 0x%x", get_hwp_pref());
 
                 if (!is_amd()) {
-                        mvwprintw(win, line++, 1, "Throttle: %c", get_throttle_char());
                         if (have_cpuid()) {
                                 mvwprintw(win, line++, 1, "Base:  %ld MHz", get_base_freq());
                                 mvwprintw(win, line++, 1, "Boost: %ld MHz", get_boost_freq());

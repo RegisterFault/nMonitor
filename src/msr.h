@@ -174,6 +174,23 @@ typedef union {
         uint64_t w;
 }HWP_REQUEST;
 
+#define PKG_HDC_CTL_MSR 0x00000DB0
+typedef union {
+        struct {
+                uint8_t enable:1;
+                uint64_t res:63;
+        }s __attribute__((packed));
+        uint64_t w;
+}PKG_HDC_CTL;
+
+#define PM_CTL1_MSR 0x00000652
+typedef union {
+        struct {
+                uint8_t allow:1;
+                uint64_t res:63;
+        }s __attribute__((packed));
+        uint64_t w;
+}PM_CTL1;
 
 #define CPU_PLANE 0
 #define GPU_PLANE 1
