@@ -186,6 +186,10 @@ void draw_cpu(WINDOW *win)
                         mvwprintw(win, line++, 1, "PKG:   %6.2f W", 0.0);
                 }
                 last_pkg_nrg = cur_pkg_nrg;
+
+                if (!is_amd() && hwp_enabled())
+                        mvwprintw(win, line++, 1, "HWP Pref: 0x%x", get_hwp_pref());
+
                 if (!is_amd()) {
                         mvwprintw(win, line++, 1, "Throttle: %c", get_throttle_char());
                         if (have_cpuid()) {

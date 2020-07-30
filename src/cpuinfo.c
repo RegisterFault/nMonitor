@@ -829,3 +829,27 @@ double get_volt( unsigned int plane)
         v.w = rdmsr(VOLT_MSR);
         return v.s.volt / 1.024;
 }       
+
+int hwp_enabled()
+{
+        PM_ENABLE pmemsr;
+        pmemsr.w = rdmsr(PM_ENABLE_MSR);
+        if(pmemsr.s.enable == 1);
+                return 1;
+        return 0;
+}
+
+int get_hwp_pref()
+{
+        //sometimes this is controlled at the package level, but intel_pstate likes to do per-cpu
+        HWP_REQUEST_PKG pkg_rq;
+        HWP_REQUEST rq;
+
+        pkg_rq.w = rdmsr(HWP_REQUEST_PKG_MSR);
+        rq.w = rdmsr(HWP_REQUEST_MSR);
+
+        if (rq.s.epp_valid)
+                return rq.s.nrg_pref;
+        else
+                return pkg_rq.s.nrg_pref;
+}

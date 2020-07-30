@@ -79,4 +79,6 @@ double get_intel_pkg_joules(void);
 double get_amd_pkg_joules();
 double get_pp0_joules(void);
 double get_volt( unsigned int);
+int hwp_enabled(void);
+int get_hwp_pref(void);
 #endif
