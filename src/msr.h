@@ -133,6 +133,48 @@ typedef union {
         uint64_t w;
 }ENER;
 
+#define PM_ENABLE_MSR   0x00000770
+typedef union {
+        struct {
+                uint64_t enable:1;
+                uint64_t res:63;
+        }s __attribute__((packed));
+        uint64_t w;
+}PM_ENABLE;
+
+#define HWP_REQUEST_PKG_MSR 0x00000772
+typedef union {
+        struct {
+                uint8_t min_perf:8;
+                uint8_t max_perf:8;
+                uint8_t des_perf:8;
+                uint8_t nrg_pref:8;
+                uint16_t act_win:10;
+                uint32_t res:22;
+        }s __attribute__((packed));
+        uint64_t w;
+}HWP_REQUEST_PKG;
+
+#define HWP_REQUEST_MSR 0x00000774
+typedef union {
+        struct {
+                uint8_t min_perf:8;
+                uint8_t max_perf:8;
+                uint8_t des_perf:8;
+                uint8_t nrg_pref:8;
+                uint16_t act_win:10;
+                uint8_t pkg_ctl:1;
+                uint16_t res1:16;
+                uint8_t act_win_valid:1;
+                uint8_t epp_valid:1;
+                uint8_t des_valid:1;
+                uint8_t max_valid:1;
+                uint8_t min_valid:1;
+        }s __attribute__((packed));
+        uint64_t w;
+}HWP_REQUEST;
+
+
 #define CPU_PLANE 0
 #define GPU_PLANE 1
 #define CACHE_PLANE 2
