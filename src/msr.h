@@ -259,7 +259,11 @@ typedef union {
 } AMD_PS;
 
 int have_msr(void);
+uint64_t rdmsr_cpu(uint32_t, unsigned int);
 uint64_t rdmsr(uint32_t);
+uint64_t wrmsr_cpu(uint32_t, uint64_t, unsigned int);
+uint64_t wrmsr_all(uint32_t, uint64_t);
 uint64_t wrmsr(uint32_t, uint64_t);
+
 
 #endif
