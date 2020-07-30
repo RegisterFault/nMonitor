@@ -189,18 +189,18 @@ void draw_cpu(WINDOW *win)
                         mvwprintw(win, line++, 1, "Throttle: %c", get_throttle_char());
 
                 if (last_pkg_nrg != 0.0){
-                        mvwprintw(win, line++, 1, "PKG:   %6.2f W",
+                        mvwprintw(win, line++, 1, "PKG:    %6.2f W",
                                   (cur_pkg_nrg - last_pkg_nrg) / DUR_SEC);
                 } else {
-                        mvwprintw(win, line++, 1, "PKG:   %6.2f W", 0.0);
+                        mvwprintw(win, line++, 1, "PKG:    %6.2f W", 0.0);
                 }
 
                 if(!is_amd()){
                         if (last_pp0_nrg != 0.0){
-                                mvwprintw(win, line++, 1, "CPU:   %6.2f W",
+                                mvwprintw(win, line++, 1, "CPU:    %6.2f W",
                                           (cur_pp0_nrg - last_pp0_nrg) / DUR_SEC);
                         } else {
-                                mvwprintw(win, line++, 1, "CPU:   %6.2f W", 0.0);
+                                mvwprintw(win, line++, 1, "CPU:    %6.2f W", 0.0);
                         }
                 }
 
@@ -208,12 +208,12 @@ void draw_cpu(WINDOW *win)
                 last_pp0_nrg = cur_pp0_nrg;
 
                 if (!is_amd() && hwp_enabled())
-                        mvwprintw(win, line++, 1, "HWP Pref: 0x%x", get_hwp_pref());
+                        mvwprintw(win, line++, 1, "HWP Pref:   0x%02x", get_hwp_pref());
 
                 if (!is_amd()) {
                         if (have_cpuid()) {
-                                mvwprintw(win, line++, 1, "Base:  %ld MHz", get_base_freq());
-                                mvwprintw(win, line++, 1, "Boost: %ld MHz", get_boost_freq());
+                                mvwprintw(win, line++, 1, "Base:   %ld MHz", get_base_freq());
+                                mvwprintw(win, line++, 1, "Boost:  %ld MHz", get_boost_freq());
                         }
                         mvwprintw(win, line++, 1, "CPU:   %+2.2f mV", get_volt(CPU_PLANE));
                         mvwprintw(win, line++, 1, "Cache: %+2.2f mV", get_volt(CACHE_PLANE));
