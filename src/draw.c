@@ -110,8 +110,10 @@ void draw_grid(WINDOW *win)
 }
 void draw_amperage(WINDOW *win, struct node **list)
 {
-        mvwprintw(win, 0, 0, "%ld mW -- Battery: %d%% -- Capacity: %2.1f/%2.1f Ah",
+        mvwprintw(win, 0, 0, "%ld mW -- [%c][%c] -- Bat: %d%% -- Cap: %2.1f/%2.1f Ah",
                   last_elem(*list)->data,
+                  ac_attached() ? 'A' : ' ',
+                  is_charging() ? 'C' : ' ',
                   get_charge_pct(),
                   get_charge_full(),
                   get_charge_full_design());
