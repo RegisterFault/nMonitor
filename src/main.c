@@ -11,29 +11,6 @@
 #include "msr.h"
 #include "draw.h"
 
-void draw_HWP(WINDOW *win)
-{
-        int line = 1;
-        HWP_REQUEST foo;
-
-        box(win, 0, 0);
-        foo.w = rdmsr(HWP_REQUEST_MSR);
-        mvwprintw(win, line++, 1, "MSR_HWP_REQUEST: %lx", foo.w);
-        mvwprintw(win, line++, 1, "min_perf: %x", foo.s.min_perf);
-        mvwprintw(win, line++, 1, "max_perf: %x", foo.s.max_perf);
-        mvwprintw(win, line++, 1, "des_perf: %x", foo.s.des_perf);
-        mvwprintw(win, line++, 1, "nrg_pref: %x", foo.s.nrg_pref);
-        mvwprintw(win, line++, 1, "act_win: %x", foo.s.act_win);
-        mvwprintw(win, line++, 1, "pkg_ctl: %x", foo.s.pkg_ctl);
-        mvwprintw(win, line++, 1, "res1: %x", foo.s.res1);
-        mvwprintw(win, line++, 1, "act_win_valid: %x", foo.s.act_win_valid);
-        mvwprintw(win, line++, 1, "epp_valid: %x", foo.s.epp_valid);
-        mvwprintw(win, line++, 1, "des_valid: %x", foo.s.des_valid);
-        mvwprintw(win, line++, 1, "max_valid: %x", foo.s.max_valid);
-        mvwprintw(win, line++, 1, "min_valid: %x", foo.s.min_valid);
-        wnoutrefresh(win);
-}
-
 int main()
 {
         WINDOW *wwin;
@@ -78,7 +55,6 @@ int main()
                         doupdate();
                 } else if (mode == GRID_MODE) {
                         draw_grid(fgwin);
-                        //draw_HWP(msrwin);
                         doupdate();
                 }
 
