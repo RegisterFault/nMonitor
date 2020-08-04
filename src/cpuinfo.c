@@ -49,7 +49,9 @@ void init_powerinfo()
         int i;
         static char *power_paths[] = {
                 "/sys/class/power_supply/AC",
+                "/sys/class/power_supply/AC0",
                 "/sys/class/power_supply/ADP0",
+                "/sys/class/power_supply/ACAD",
                 NULL
         };
 
