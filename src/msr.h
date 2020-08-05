@@ -99,6 +99,19 @@ typedef union {
         uint64_t w;
 }PPLC;
 
+#define PKG_POWER_LIMIT_MSR 0x00000610
+typedef union {
+        struct {
+                uint16_t limit:14-0;
+                uint8_t enable:15-14;
+                uint8_t clamp:16-15;
+                uint16_t timew:23-17;
+                uint16_t res1:30-24;
+                uint8_t lock:31-30;
+                uint32_t res2:63-32;
+        }s __attribute__((packed));
+        uint64_t w;
+}PKG_POWER_LIMIT;
 
 #define RAPLU_MSR 0x606  //power unit register
 typedef union {
@@ -222,6 +235,33 @@ typedef union {
         }s __attribute__((packed));
         uint64_t w;
 } NRGP;
+
+#define PP0_NRG_MSR 0x00000639
+typedef union {
+        struct {
+                uint64_t energy:32;
+                uint64_t res:32;
+        }s __attribute__((packed));
+        uint64_t w;
+}PP0_NRG;
+
+#define PP1_NRG_MSR 0x00000641
+typedef union {
+        struct {
+                uint64_t energy:32;
+                uint64_t res:32;
+        }s __attribute__((packed));
+        uint64_t w;
+}PP1_NRG;
+
+#define DRAM_NRG_MSR 0x00000619
+typedef union {
+        struct {
+                uint64_t energy:32;
+                uint64_t res:32;
+        }s __attribute__((packed));
+        uint64_t w;
+}DRAM_NRG;
 
 #define NRG0_MSR 0x639
 typedef union {
