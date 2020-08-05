@@ -817,6 +817,30 @@ double get_pp0_joules()
 }
 
 /* requires root */
+double get_pp1_joules()
+{ 
+        RAPLU u;
+        PP1_NRG e;
+
+        u.w = rdmsr(RAPLU_MSR);
+        e.w = rdmsr(PP1_NRG_MSR);
+
+        return (double) (e.s.energy * (pow(0.5, (double) u.s.es_units)));
+}
+
+/* requires root */
+double get_dram_joules()
+{
+        RAPLU u;
+        DRAM_NRG  e;
+
+        u.w = rdmsr(RAPLU_MSR);
+        e.w = rdmsr(DRAM_NRG_MSR);
+
+        return (double) (e.s.energy * (pow(0.5, (double) u.s.es_units)));
+}
+
+/* requires root */
 double get_volt( unsigned int plane)
 {
         VOLT v;

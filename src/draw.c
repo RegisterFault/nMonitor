@@ -161,8 +161,12 @@ void draw_cpu(WINDOW *win)
         int line = 0;
         static double last_pkg_nrg = 0.0;
         static double last_pp0_nrg = 0.0;
+        static double last_pp1_nrg = 0.0;
+        static double last_dram_nrg = 0.0;
         double cur_pkg_nrg = 0.0;
         double cur_pp0_nrg = 0.0;
+        double cur_pp1_nrg = 0.0;
+        double cur_dram_nrg = 0.0;
         char *governor = get_governor();
         char *cpu_name = get_cpuname();
         char *cpu_brand = CPU_BRAND_STR();
@@ -182,8 +186,11 @@ void draw_cpu(WINDOW *win)
         if (is_root() && have_msr()){ 
                 cur_pkg_nrg = get_pkg_joules();
 
-                if(!is_amd())
+                if(!is_amd()){
                         cur_pp0_nrg = get_pp0_joules();
+                        cur_pp1_nrg = get_pp1_joules();
+                        cur_dram_nrg = get_dram_joules();
+                }
 
                 if (!is_amd())
                         mvwprintw(win, line++, 1, "Throttle: %c", get_throttle_char());
@@ -206,6 +213,8 @@ void draw_cpu(WINDOW *win)
 
                 last_pkg_nrg = cur_pkg_nrg;
                 last_pp0_nrg = cur_pp0_nrg;
+                last_pp1_nrg = cur_pp1_nrg;
+                last_dram_nrg = cur_dram_nrg;
 
                 if (!is_amd() && hwp_enabled())
                         mvwprintw(win, line++, 1, "HWP Pref:   0x%02x", get_hwp_pref());
