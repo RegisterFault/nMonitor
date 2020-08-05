@@ -852,11 +852,11 @@ int hwp_enabled()
 int get_hwp_pref()
 {
         //sometimes this is controlled at the package level, but intel_pstate likes to do per-cpu
-        HWP_REQUEST_PKG pkg_rq;
-        HWP_REQUEST rq;
+        IA32_HWP_REQUEST_PKG pkg_rq;
+        IA32_HWP_REQUEST rq;
 
-        pkg_rq.w = rdmsr(HWP_REQUEST_PKG_MSR);
-        rq.w = rdmsr(HWP_REQUEST_MSR);
+        pkg_rq.w = rdmsr(IA32_HWP_REQUEST_PKG_MSR);
+        rq.w = rdmsr(IA32_HWP_REQUEST_MSR);
 
         if (rq.s.epp_valid)
                 return rq.s.nrg_pref;

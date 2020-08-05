@@ -152,7 +152,7 @@ typedef union {
         uint64_t w;
 } IA32_PM_ENABLE;
 
-#define HWP_REQUEST_PKG_MSR 0x00000772
+#define IA32_HWP_REQUEST_PKG_MSR 0x00000772
 typedef union {
         struct {
                 uint8_t min_perf:8;
@@ -163,9 +163,9 @@ typedef union {
                 uint32_t res:22;
         } s __attribute__((packed));
         uint64_t w;
-} HWP_REQUEST_PKG;
+} IA32_HWP_REQUEST_PKG;
 
-#define HWP_REQUEST_MSR 0x00000774
+#define IA32_HWP_REQUEST_MSR 0x00000774
 typedef union {
         struct {
                 uint8_t min_perf:8;
@@ -182,7 +182,7 @@ typedef union {
                 uint8_t min_valid:1;
         } s __attribute__((packed));
         uint64_t w;
-} HWP_REQUEST;
+} IA32_HWP_REQUEST;
 
 #define PKG_HDC_CTL_MSR 0x00000DB0
 typedef union {
