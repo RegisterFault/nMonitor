@@ -233,50 +233,41 @@ typedef union {
         uint64_t w;
 } VOLT;
 
-#define NRGP_MSR 0x00000611
+#define PKG_ENERGY_STATUS_MSR 0x00000611
 typedef union {
         struct {
                 uint64_t energy:32; /* joules consumed total, 15.3 uJ */
                 uint64_t res:32;
         } s __attribute__((packed));
         uint64_t w;
-} NRGP;
+} PKG_ENERGY_STATUS;
 
-#define PP0_NRG_MSR 0x00000639
+#define PP0_ENERGY_STATUS_MSR 0x00000639
 typedef union {
         struct {
                 uint64_t energy:32;
                 uint64_t res:32;
         } s __attribute__((packed));
         uint64_t w;
-} PP0_NRG;
+} PP0_ENERGY_STATUS;
 
-#define PP1_NRG_MSR 0x00000641
+#define PP1_ENERGY_STATUS_MSR 0x00000641
 typedef union {
         struct {
                 uint64_t energy:32;
                 uint64_t res:32;
         } s __attribute__((packed));
         uint64_t w;
-} PP1_NRG;
+} PP1_ENERGY_STATUS;
 
-#define DRAM_NRG_MSR 0x00000619
+#define DRAM_ENERGY_STATUS_MSR 0x00000619
 typedef union {
         struct {
                 uint64_t energy:32;
                 uint64_t res:32;
         } s __attribute__((packed));
         uint64_t w;
-} DRAM_NRG;
-
-#define NRG0_MSR 0x639
-typedef union {
-        struct {
-                uint64_t energy:32; /* joules consumed total, 15.3 uJ */
-                uint64_t res:32;
-        } s __attribute__((packed));
-        uint64_t w;
-} NRG0;
+} DRAM_ENERGY_STATUS;
 
 #define AMD_RAPLU_MSR 0xC0010299
 typedef union {

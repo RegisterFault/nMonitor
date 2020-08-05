@@ -768,10 +768,10 @@ double get_pkg_joules()
 double get_intel_pkg_joules()
 {
         RAPL_POWER_UNIT u;
-        NRGP e;
+        PKG_ENERGY_STATUS e;
 
         u.w = rdmsr(RAPL_POWER_UNIT_MSR);
-        e.w = rdmsr(NRGP_MSR);
+        e.w = rdmsr(PKG_ENERGY_STATUS_MSR);
 
         return (double) (e.s.energy * (pow(0.5, (double)u.s.es_units)));
 }
@@ -792,10 +792,10 @@ double get_amd_pkg_joules()
 double get_pp0_joules()
 {
         RAPL_POWER_UNIT u;
-        NRG0 e;
+        PP0_ENERGY_STATUS e;
 
         u.w = rdmsr(RAPL_POWER_UNIT_MSR);
-        e.w = rdmsr(NRG0_MSR);
+        e.w = rdmsr(PP0_ENERGY_STATUS_MSR);
 
         return (double) (e.s.energy * (pow(0.5, (double) u.s.es_units)));
 }
@@ -804,10 +804,10 @@ double get_pp0_joules()
 double get_pp1_joules()
 { 
         RAPL_POWER_UNIT u;
-        PP1_NRG e;
+        PP1_ENERGY_STATUS e;
 
         u.w = rdmsr(RAPL_POWER_UNIT_MSR);
-        e.w = rdmsr(PP1_NRG_MSR);
+        e.w = rdmsr(PP1_ENERGY_STATUS_MSR);
 
         return (double) (e.s.energy * (pow(0.5, (double) u.s.es_units)));
 }
@@ -816,10 +816,10 @@ double get_pp1_joules()
 double get_dram_joules()
 {
         RAPL_POWER_UNIT u;
-        DRAM_NRG  e;
+        DRAM_ENERGY_STATUS  e;
 
         u.w = rdmsr(RAPL_POWER_UNIT_MSR);
-        e.w = rdmsr(DRAM_NRG_MSR);
+        e.w = rdmsr(DRAM_ENERGY_STATUS_MSR);
 
         return (double) (e.s.energy * (pow(0.5, (double) u.s.es_units)));
 }
