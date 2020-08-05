@@ -30,7 +30,6 @@ typedef union {
         uint64_t w;
 } THERM;
 
-
 #define LIMITS_MSR 0x0000064F
 typedef union {
         struct {
@@ -65,7 +64,6 @@ typedef union {
         } s __attribute__((packed));
         uint64_t w;
 } LIMITS;
-
 
 #define PWCTL_MSR 0x000001FC
 typedef union {
@@ -320,6 +318,5 @@ uint64_t rdmsr(uint32_t);
 uint64_t wrmsr_cpu(uint32_t, uint64_t, unsigned int);
 uint64_t wrmsr_all(uint32_t, uint64_t);
 uint64_t wrmsr(uint32_t, uint64_t);
-
 
 #endif
