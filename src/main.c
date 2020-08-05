@@ -7,6 +7,8 @@
 #include <string.h>
 #include <math.h>
 #include <signal.h>
+#include <errno.h>
+#include <time.h>
 #include "cpuinfo.h"
 #include "list.h"
 #include "msr.h"
@@ -24,7 +26,6 @@ struct {
 #define GRID_MODE 1
         int mode;
 } app;
-        
 
 void draw_app()
 {
@@ -34,7 +35,7 @@ void draw_app()
         noecho();
         cbreak();
         nodelay(stdscr, 1);
-        
+
         app.cpuwin = newwin(15, 20, 0, 0);
         app.memwin = newwin(9, 20, 15, 0);
         app.wwin =   newwin(12, 50, 0, 20);
@@ -60,9 +61,20 @@ void handle_resize(int unused)
         draw_app();
 }
 
+void usleep_nointr(unsigned long micro)
+{
+        struct timespec dur = {.tv_sec = 0, .tv_nsec = micro * 1000 };
+        struct timespec rem = {.tv_sec = 0, .tv_nsec = 0 };
+        while(nanosleep(&dur, &rem) == -1){
+                if(errno == EINTR)
+                        dur.tv_nsec = rem.tv_nsec;
+                else
+                        return;
+        }
+}
+
 int main()
 {
-
         init_app();
         signal(SIGWINCH, handle_resize);
 
@@ -89,4 +101,3 @@ int main()
 
         return 0;
 }
-
