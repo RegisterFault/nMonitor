@@ -202,25 +202,28 @@ void draw_cpu(WINDOW *win)
                 if(!is_amd()){
                         double cpu_watts = (last_pp0_nrg == 0.0) ? 0.0 : 
                                            (cur_pp0_nrg - last_pp0_nrg) / DUR_SEC;
+                        double uncore_watts = (last_pp1_nrg == 0.0) ? 0.0 :
+                                              (cur_pp1_nrg - last_pp1_nrg) / DUR_SEC;
+                        double dram_watts = (last_dram_nrg == 0.0)? 0.0 :
+                                            (cur_dram_nrg - last_dram_nrg) / DUR_SEC;
                         mvwprintw(win, line++, 1, "CPU:    %6.2f W", cpu_watts);
+                        mvwprintw(win, line++, 1, "UNCORE: %6.2f W", uncore_watts);
+                        mvwprintw(win, line++, 1, "DRAM:   %6.2f W", dram_watts);
+                }
+
+
+                if (!is_amd() && hwp_enabled())
+                        mvwprintw(win, line++, 1, "HWP Pref:   0x%02x", get_hwp_pref());
+
+                if (!is_amd()) {
+                        mvwprintw(win, line++, 1, "CPU:   %+2.2f mV", get_volt(CPU_PLANE));
+                        mvwprintw(win, line++, 1, "Cache: %+2.2f mV", get_volt(CACHE_PLANE));
                 }
 
                 last_pkg_nrg = cur_pkg_nrg;
                 last_pp0_nrg = cur_pp0_nrg;
                 last_pp1_nrg = cur_pp1_nrg;
                 last_dram_nrg = cur_dram_nrg;
-
-                if (!is_amd() && hwp_enabled())
-                        mvwprintw(win, line++, 1, "HWP Pref:   0x%02x", get_hwp_pref());
-
-                if (!is_amd()) {
-                        if (have_cpuid()) {
-                                mvwprintw(win, line++, 1, "Base:   %ld MHz", get_base_freq());
-                                mvwprintw(win, line++, 1, "Boost:  %ld MHz", get_boost_freq());
-                        }
-                        mvwprintw(win, line++, 1, "CPU:   %+2.2f mV", get_volt(CPU_PLANE));
-                        mvwprintw(win, line++, 1, "Cache: %+2.2f mV", get_volt(CACHE_PLANE));
-                }
 
         }
         free(cpu_name);
