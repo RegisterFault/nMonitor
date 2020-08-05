@@ -148,6 +148,8 @@ void draw_power(WINDOW *win, struct node **list)
 void draw_freq(WINDOW *win, struct node **list)
 {
         int max_boost = get_boost_freq();
+        if(max_boost < 100) /*arbitrarily low and invalid number*/
+                max_boost = 5000;
 
         add_node(list, get_freq());
         draw_graph(win, list, max_boost);
@@ -183,7 +185,13 @@ void draw_cpu(WINDOW *win)
         mvwprintw(win, line++, 1, "Temp: %dC", get_temp());
         mvwprintw(win, line++, 1, "Boost: %s ", get_turbo() ? "on" : "off" );
         mvwprintw(win, line++, 1, "Gov: %s", governor);
-        if (is_root() && have_msr()){ 
+
+        if (is_root()){
+                if(!have_msr()){
+                        mvwprintw(win, line++, 1, "(msr not detected)");
+                        goto cleanup;
+                }
+
                 cur_pkg_nrg = get_pkg_joules();
                 if(!is_amd()){
                         cur_pp0_nrg = get_pp0_joules();
@@ -226,6 +234,7 @@ void draw_cpu(WINDOW *win)
                 last_dram_nrg = cur_dram_nrg;
 
         }
+cleanup:
         free(cpu_name);
         free(governor);
         wnoutrefresh(win);
