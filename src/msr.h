@@ -2,9 +2,9 @@
 #define MSR_H
 #include <stdint.h>
 
-#define THERM_MSR 0x19C
-typedef union {  //msr 0x19C
-        struct  {
+#define THERM_MSR 0x0000019C
+typedef union {
+        struct {
                 uint8_t status:1;
                 uint8_t slog:1;
                 uint8_t prochot:1;
@@ -26,14 +26,14 @@ typedef union {  //msr 0x19C
                 uint8_t res:4;
                 uint8_t valid:1;
                 uint32_t pad:32;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
 } THERM;
 
 
-#define LIMITS_MSR 0x64F
-typedef union { //msr 0x64F
-        struct{
+#define LIMITS_MSR 0x0000064F
+typedef union {
+        struct {
                 uint8_t prochot:1;     /* prochot line active */
                 uint8_t thermal:1;     /* thermal throttling */
                 uint8_t res1:2;        /* reserved */
@@ -62,13 +62,13 @@ typedef union { //msr 0x64F
                 uint8_t max_turbo_log:1;
                 uint8_t ttas_log:1;
                 uint64_t res6:34;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
-}LIMITS;
+} LIMITS;
 
 
-#define PWCTL_MSR 0x1FC
-typedef union{
+#define PWCTL_MSR 0x000001FC
+typedef union {
         struct {
                 uint8_t res1:1;
                 uint8_t c1e_enable;
@@ -76,11 +76,11 @@ typedef union{
                 uint8_t r2h_disable:1;
                 uint8_t eeo_disable:1;
                 uint64_t res3:43;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
-}PWCTL;
+} PWCTL;
 
-#define PPLC_MSR 0x65C //power limit control register
+#define PPLC_MSR 0x0000065C //power limit control register
 typedef union {
         struct {
                 uint16_t pl1_value:15; //long duration power limit. multiplied by MSR_RAPLPOWER_UNIT
@@ -94,10 +94,9 @@ typedef union {
                 uint8_t pl2_window:7;
                 uint16_t res2:14;
                 uint8_t lock:1;
-
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
-}PPLC;
+} PPLC;
 
 #define PKG_POWER_LIMIT_MSR 0x00000610
 typedef union {
@@ -109,11 +108,11 @@ typedef union {
                 uint16_t res1:30-24;
                 uint8_t lock:31-30;
                 uint32_t res2:63-32;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
-}PKG_POWER_LIMIT;
+} PKG_POWER_LIMIT;
 
-#define RAPLU_MSR 0x606  //power unit register
+#define RAPLU_MSR 0x00000606  //power unit register
 typedef union {
         struct {
                 uint8_t power_units:4; // 1 / 2^power_units. default 3 = 1/8 watts
@@ -122,38 +121,38 @@ typedef union {
                 uint8_t res2:2;
                 uint8_t time_units:4;
                 uint64_t res3:44;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
-}RAPLU;
+} RAPLU;
 
-#define SPEC_MSR 0x48
+#define SPEC_MSR 0x00000048
 typedef union {
         struct {
                 uint8_t ibrs:1;
                 uint8_t stibp:1;
                 uint8_t ssbd:1;
                 uint64_t res1:61;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
-}SPEC;
+} SPEC;
 
-#define ENER_MSR 0x64D
+#define ENER_MSR 0x0000064D
 typedef union {
         struct {
                 uint32_t energy:32; //multiply by RAPL_UNITS
                 uint32_t res1:32;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
-}ENER;
+} ENER;
 
-#define PM_ENABLE_MSR   0x00000770
+#define PM_ENABLE_MSR 0x00000770
 typedef union {
         struct {
                 uint64_t enable:1;
                 uint64_t res:63;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
-}PM_ENABLE;
+} PM_ENABLE;
 
 #define HWP_REQUEST_PKG_MSR 0x00000772
 typedef union {
@@ -164,9 +163,9 @@ typedef union {
                 uint8_t nrg_pref:8;
                 uint16_t act_win:10;
                 uint32_t res:22;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
-}HWP_REQUEST_PKG;
+} HWP_REQUEST_PKG;
 
 #define HWP_REQUEST_MSR 0x00000774
 typedef union {
@@ -183,27 +182,27 @@ typedef union {
                 uint8_t des_valid:1;
                 uint8_t max_valid:1;
                 uint8_t min_valid:1;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
-}HWP_REQUEST;
+} HWP_REQUEST;
 
 #define PKG_HDC_CTL_MSR 0x00000DB0
 typedef union {
         struct {
                 uint8_t enable:1;
                 uint64_t res:63;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
-}PKG_HDC_CTL;
+} PKG_HDC_CTL;
 
 #define PM_CTL1_MSR 0x00000652
 typedef union {
         struct {
                 uint8_t allow:1;
                 uint64_t res:63;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
-}PM_CTL1;
+} PM_CTL1;
 
 #define CPU_PLANE 0
 #define GPU_PLANE 1
@@ -212,7 +211,7 @@ typedef union {
 #define ANALOG_PLANE 4
 #define VOLT_READ  (0x8000001000000000L)
 #define VOLT_WRITE (0x8000001100000000L)
-#define VOLT_MSR 0x150 //undocumented voltage msr
+#define VOLT_MSR 0x00000150 //undocumented voltage msr
 typedef union {
         struct {
                 uint64_t res1:21;
@@ -223,16 +222,16 @@ typedef union {
                 uint8_t res3:3;
                 uint8_t plane:4;
                 uint32_t res4:20;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
-}VOLT;
+} VOLT;
 
-#define NRGP_MSR 0x611
+#define NRGP_MSR 0x00000611
 typedef union {
         struct {
                 uint64_t energy:32; /* joules consumed total, 15.3 uJ */
                 uint64_t res:32;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
 } NRGP;
 
@@ -241,34 +240,34 @@ typedef union {
         struct {
                 uint64_t energy:32;
                 uint64_t res:32;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
-}PP0_NRG;
+} PP0_NRG;
 
 #define PP1_NRG_MSR 0x00000641
 typedef union {
         struct {
                 uint64_t energy:32;
                 uint64_t res:32;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
-}PP1_NRG;
+} PP1_NRG;
 
 #define DRAM_NRG_MSR 0x00000619
 typedef union {
         struct {
                 uint64_t energy:32;
                 uint64_t res:32;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
-}DRAM_NRG;
+} DRAM_NRG;
 
 #define NRG0_MSR 0x639
 typedef union {
         struct {
                 uint64_t energy:32; /* joules consumed total, 15.3 uJ */
                 uint64_t res:32;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
 } NRG0;
 
@@ -281,7 +280,7 @@ typedef union {
                 uint8_t res2:3;
                 uint8_t time_units:4;
                 uint64_t res3:44;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
 } AMD_RAPLU;
 
@@ -290,7 +289,7 @@ typedef union{
         struct {
                 uint32_t energy:32;
                 uint32_t res:32;
-        }s __attribute__((packed));
+        } s __attribute__((packed));
         uint64_t w;
 } AMD_NRGP;
 
