@@ -78,7 +78,7 @@ typedef union {
         uint64_t w;
 } POWER_CTL;
 
-#define PPLC_MSR 0x0000065C //power limit control register
+#define PLATFORM_POWER_LIMIT_MSR 0x0000065C //power limit control register
 typedef union {
         struct {
                 uint16_t pl1_value:15; //long duration power limit. multiplied by MSR_RAPLPOWER_UNIT
@@ -94,7 +94,7 @@ typedef union {
                 uint8_t lock:1;
         } s __attribute__((packed));
         uint64_t w;
-} PPLC;
+} PLATFORM_POWER_LIMIT;
 
 #define PKG_POWER_LIMIT_MSR 0x00000610
 typedef union {

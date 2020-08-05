@@ -759,22 +759,6 @@ char get_throttle_char()
 }
 
 /* requires root */
-int get_pl1()
-{
-        PPLC a;
-        a.w = rdmsr(PPLC_MSR);
-        return (int) (a.s.pl1_value * 0.032);
-}
-
-/* requires root */
-int get_pl2()
-{
-        PPLC a;
-        a.w = rdmsr(PPLC_MSR);
-        return (int) (a.s.pl2_value * 0.032);
-}
-
-/* requires root */
 double get_pkg_joules()
 {
         return is_amd() ? get_amd_pkg_joules() : get_intel_pkg_joules();
