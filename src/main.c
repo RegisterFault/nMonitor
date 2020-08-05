@@ -6,72 +6,12 @@
 #include <fcntl.h>
 #include <string.h>
 #include <math.h>
-#include <signal.h>
-#include <errno.h>
-#include <time.h>
 #include "cpuinfo.h"
 #include "list.h"
 #include "msr.h"
 #include "draw.h"
 
-struct {
-        WINDOW *wwin;
-        WINDOW *fwin;
-        WINDOW *cpuwin;
-        WINDOW *memwin;
-        WINDOW *fgwin;
-        struct node *wlist;
-        struct node *flist;
-#define STATS_MODE 0
-#define GRID_MODE 1
-        int mode;
-} app;
-
-void draw_app()
-{
-        /* ncurses setup */
-        initscr();
-        curs_set(0);
-        noecho();
-        cbreak();
-        nodelay(stdscr, 1);
-
-        app.cpuwin = newwin(15, 20, 0, 0);
-        app.memwin = newwin(9, 20, 15, 0);
-        app.wwin =   newwin(12, 50, 0, 20);
-        app.fwin =   newwin(12, 50, 12, 20);
-        app.fgwin =  newwin(24,70,0,0);
-}
-
-void init_app()
-{
-        init_batinfo();
-        init_powerinfo();
-
-        app.wlist = init_node();
-        app.flist = init_node();
-        app.mode = STATS_MODE;
-
-        draw_app();
-}
-
-void handle_resize(int unused)
-{
-        endwin();
-        draw_app();
-}
-
-void usleep_nointr(unsigned long micro)
-{
-        struct timespec dur = {.tv_sec = 0, .tv_nsec = micro * 1000 };
-        struct timespec rem = {.tv_sec = 0, .tv_nsec = 0 };
-        while(nanosleep(&dur, &rem) == -1){
-                if(errno == EINTR)
-                        dur.tv_nsec = rem.tv_nsec;
-                else
-                        return;
-        }
-}
+struct application app;
 
 int main()
 {
@@ -79,7 +19,7 @@ int main()
         signal(SIGWINCH, handle_resize);
 
         while (1) {
-                if(getch() == 'f')
+                if (getch() == 'f')
                         app.mode = !app.mode;
                 flushinp();
 
