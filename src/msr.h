@@ -143,14 +143,14 @@ typedef union {
         uint64_t w;
 } PLATFORM_ENERGY_COUNTER;
 
-#define PM_ENABLE_MSR 0x00000770
+#define IA32_PM_ENABLE_MSR 0x00000770
 typedef union {
         struct {
                 uint64_t enable:1;
                 uint64_t res:63;
         } s __attribute__((packed));
         uint64_t w;
-} PM_ENABLE;
+} IA32_PM_ENABLE;
 
 #define HWP_REQUEST_PKG_MSR 0x00000772
 typedef union {

@@ -842,8 +842,8 @@ double get_volt( unsigned int plane)
 
 int hwp_enabled()
 {
-        PM_ENABLE pmemsr;
-        pmemsr.w = rdmsr(PM_ENABLE_MSR);
+        IA32_PM_ENABLE pmemsr;
+        pmemsr.w = rdmsr(IA32_PM_ENABLE_MSR);
         if(pmemsr.s.enable == 1);
                 return 1;
         return 0;
