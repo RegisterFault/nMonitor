@@ -743,8 +743,8 @@ cleanup:
 /* requires root */
 char get_throttle_char()
 {
-        LIMITS a;
-        a.w = rdmsr(LIMITS_MSR);
+        CORE_PERF_LIMIT_REASONS a;
+        a.w = rdmsr(CORE_PERF_LIMIT_REASONS_MSR);
 
         if (a.s.thermal || a.s.ratl || a.s.vreg || a.s.prochot)
                 return 'T';

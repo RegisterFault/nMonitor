@@ -2,7 +2,7 @@
 #define MSR_H
 #include <stdint.h>
 
-#define THERM_MSR 0x0000019C
+#define IA32_THERM_STATUS_MSR 0x0000019C
 typedef union {
         struct {
                 uint8_t status:1;
@@ -28,9 +28,9 @@ typedef union {
                 uint32_t pad:32;
         } s __attribute__((packed));
         uint64_t w;
-} THERM;
+} IA32_THERM_STATUS;
 
-#define LIMITS_MSR 0x0000064F
+#define CORE_PERF_LIMIT_REASONS_MSR 0x0000064F
 typedef union {
         struct {
                 uint8_t prochot:1;     /* prochot line active */
@@ -63,7 +63,7 @@ typedef union {
                 uint64_t res6:34;
         } s __attribute__((packed));
         uint64_t w;
-} LIMITS;
+} CORE_PERF_LIMIT_REASONS;
 
 #define PWCTL_MSR 0x000001FC
 typedef union {
