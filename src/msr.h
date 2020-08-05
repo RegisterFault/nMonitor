@@ -65,18 +65,18 @@ typedef union {
         uint64_t w;
 } CORE_PERF_LIMIT_REASONS;
 
-#define PWCTL_MSR 0x000001FC
+#define POWER_CTL_MSR 0x000001FC
 typedef union {
         struct {
                 uint8_t res1:1;
-                uint8_t c1e_enable;
-                uint32_t res2:17;
+                uint8_t c1e_enable:1;
+                uint32_t res2:18-2;
                 uint8_t r2h_disable:1;
                 uint8_t eeo_disable:1;
-                uint64_t res3:43;
+                uint64_t res3:63-12;
         } s __attribute__((packed));
         uint64_t w;
-} PWCTL;
+} POWER_CTL;
 
 #define PPLC_MSR 0x0000065C //power limit control register
 typedef union {
