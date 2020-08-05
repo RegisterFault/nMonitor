@@ -134,14 +134,14 @@ typedef union {
         uint64_t w;
 } SPEC;
 
-#define ENER_MSR 0x0000064D
+#define PLATFORM_ENERGY_COUNTER_MSR 0x0000064D
 typedef union {
         struct {
                 uint32_t energy:32; //multiply by RAPL_UNITS
                 uint32_t res1:32;
         } s __attribute__((packed));
         uint64_t w;
-} ENER;
+} PLATFORM_ENERGY_COUNTER;
 
 #define PM_ENABLE_MSR 0x00000770
 typedef union {
