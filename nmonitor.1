@@ -1,0 +1,59 @@
+.TH nmonitor 1 "2020-08-11" "nmonitor 1.0" "ncurses laptop-aware system monitor"
+.SH "NAME"
+nmonitor \- displays live-updating information on laptop power consumption.
+.SH "SYNOPSIS"
+.BI "nmonitor"
+.SH "DESCRIPTION"
+.B "nmonitor"
+is an ncurses-based terminal application that monitors the power 
+consumption of a Linux-powered laptop.
+.PP
+run \fBnmonitor\fR as \fIroot\fR in order to gain access to more detailed CPU information
+.PP
+\fBnmonitor\fR should be able to run on desktop or server computers, and 
+some of the information will even be useful, but this program has been 
+explicitly designed to run on laptops, especially intel laptops running 
+.B "5th generation Haswell"
+parts or later.
+.PP
+There is support for 
+.B "Raven Ridge"
+(AMD Ryzen 2xxx) or later laptops, but there are not as many explicitly documented power 
+interfaces as there are with intel, so the information available is far more limited.
+.SH "KEY BINDINGS"
+.PP
+Interactive key bindings are being experimentally added into the program:
+.RS
+.IP f
+\- switch between cpu display and freq grid
+.RP
+.SH "FILES"
+nmonitor makes use of several files:
+.TP
+.I /dev/cpu/#/msr 
+msr device, provided by the 
+.I msr
+kernel module.
+.TP
+.I /dev/cpu/#/cpuid
+cpuid device, provided by the
+.I cpuid
+kernel module.
+.TP
+.I /sys/class/power_supply/*
+Used for most of the power characteristics of the wattage graph.
+.TP
+.I /sys/devices/system/cpu/*
+Used for obtaining freuqency stats from cpu.
+.TP
+.I /sys/class/thermal/*
+Used for obtaining thermal information on Intel platforms.
+.TP
+.I /sys/class/hwmon/*
+Used for obtaining thermal information on AMD platforms.
+.TP
+.I /proc/cpuinfo
+Source for processor information and core topology.
+.TP
+.I /proc/meminfo
+Source for memory information.
