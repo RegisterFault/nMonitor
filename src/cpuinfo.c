@@ -221,7 +221,7 @@ void get_intel_cpuname(char **str)
         FILE *f = fopen(path, "r");
         size_t size = 1024;
         char *lbuf;
-        char *str_a, *str_b;
+        char *str_a, *str_b, *str_c, *str_d;
         
         if (!f)
                 return;
@@ -232,21 +232,30 @@ void get_intel_cpuname(char **str)
                 if (strstr(lbuf, "model name"))
                         break;
 
-        sscanf(lbuf, "model name\t: %*s %*s %ms %ms", &str_a, &str_b);
+        sscanf(lbuf, "model name\t: %ms %*s %ms %ms %ms", &str_a, &str_b, &str_c, &str_d);
 
         if (str_a == NULL || str_b == NULL)
                 goto cleanup;
 
-        if(strcmp(str_a, "CPU") == 0      ||
-           strcmp(str_a, "Platinum") == 0 ||
-           strcmp(str_a, "Gold")   == 0   ||
-           strcmp(str_a, "Silver") == 0   ||
-           strcmp(str_a, "Bronze") == 0 ) {
-                free(str_a);
-                *str = str_b;
-        } else {
+        if(strcmp(str_b, "CPU") == 0      ||
+           strcmp(str_b, "Platinum") == 0 ||
+           strcmp(str_b, "Gold")   == 0   ||
+           strcmp(str_b, "Silver") == 0   ||
+           strcmp(str_b, "Bronze") == 0 ) {
+				free(str_a);
                 free(str_b);
-                *str = str_a;
+				free(str_d);
+                *str = str_c;
+        } else if (strcmp(str_a, "11th") == 0) { /* Tiger lake add an EXTRA word to the model name */
+				free(str_a);
+				free(str_b);
+				free(str_c);
+				*str = str_d;
+		} else {
+				free(str_a);
+                free(str_c);
+				free(str_d);
+                *str = str_b;
         };
 
 cleanup:
