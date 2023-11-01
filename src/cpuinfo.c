@@ -242,19 +242,20 @@ void get_intel_cpuname(char **str)
            strcmp(str_b, "Gold")   == 0   ||
            strcmp(str_b, "Silver") == 0   ||
            strcmp(str_b, "Bronze") == 0 ) {
-				free(str_a);
+                free(str_a);
                 free(str_b);
-				free(str_d);
+                free(str_d);
                 *str = str_c;
-        } else if (strcmp(str_a, "11th") == 0) { /* Tiger lake add an EXTRA word to the model name */
-				free(str_a);
-				free(str_b);
-				free(str_c);
-				*str = str_d;
-		} else {
-				free(str_a);
+        } else if (strcmp(str_a, "11th") == 0 ||
+                   strcmp(str_a, "12th") == 0 ) { /* 11th and 12th gen add an EXTRA word to the model name */
+                free(str_a);
+                free(str_b);
                 free(str_c);
-				free(str_d);
+                *str = str_d;
+        } else {
+                free(str_a);
+                free(str_c);
+                free(str_d);
                 *str = str_b;
         };
 
