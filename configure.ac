@@ -9,6 +9,8 @@ AC_PROG_CC
 PKG_CHECK_MODULES([CHECK], [check],,
                   AC_MSG_NOTICE([no unit testing available]))
 AM_PROG_CC_C_O
+AC_PROG_LEX([noyywrap])
+AM_PROG_LEX
 AC_CHECK_FUNCS([bzero memset strstr])
 AC_CHECK_HEADERS([fcntl.h])
 AC_FUNC_MALLOC()

@@ -10,10 +10,10 @@ void draw_app()
         cbreak();
         nodelay(stdscr, 1);
 
-        app.cpuwin = newwin(15, 20, 0, 0);
-        app.memwin = newwin(9, 20, 15, 0);
-        app.wwin   = newwin(12, 50, 0, 20);
-        app.fwin   = newwin(12, 50, 12, 20);
+        app.cpuwin = newwin(15, 25, 0, 0);
+        app.memwin = newwin(9, 25, 15, 0);
+        app.wwin   = newwin(12, 45, 0, 25);
+        app.fwin   = newwin(12, 45, 12, 25);
         app.fgwin  = newwin(24, 70, 0, 0);
 }
 

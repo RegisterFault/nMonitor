@@ -1,3 +1,4 @@
+#include "amdparse.h"
 #define _GNU_SOURCE
 #include <string.h>
 #include <fcntl.h>
@@ -8,7 +9,7 @@
 #include <glob.h>
 #include "cpuinfo.h"
 #include "msr.h"
-#include "draw.h"
+#include "amdparse.h"
 
 /* arbitrary max frequency bounds to use when max freq of processor unfetchable */
 #define MAX_FREQ_ARB 5000
@@ -156,62 +157,9 @@ int get_cpu_model()
         return extract_file_int(path, search, template);
 }
 
-/* 
- * I really, really shouldn't have to string-scan human-readable 
- * output in order to get this information....
- */
 void get_amd_cpuname(char **str)
 {
-        char *path = "/proc/cpuinfo";
-        FILE *f = fopen(path, "r");
-        char *a, *b; //placeholder strings for scanf parsing
-        size_t size = 1024;
-        char *lbuf;
-        char *scanf_out;
-        int fam;
-
-        if (!f)
-                return;
-
-        lbuf = malloc(size);
-        
-        fam = get_cpu_family();
-
-        while (getline(&lbuf, &size, f) != -1)
-                if (strstr(lbuf, "model name"))
-                        break;
-
-        if(fam == 21) {
-                sscanf(lbuf, "model name\t: %*s %ms %ms", &a, &b);
-                if (strcmp(a, "PRO") == 0) {
-                        free(a);
-                        scanf_out = b;
-                } else {
-                        free(b);
-                        scanf_out = a;
-                }
-        } else if (fam == 23 ) {
-                sscanf(lbuf, "model name\t: %*s %*s %*s %ms %ms", &a, &b);
-                if (strcmp(a, "PRO") == 0){
-                        free(a);
-                        scanf_out = b;
-                } else {
-                        free(b);
-                        scanf_out = a;
-                }
-        } else {
-                sscanf(lbuf, "model name\t: %*s %*s %*s %ms", &a);
-                        scanf_out = a;
-        }
-        
-        if(scanf_out != NULL)
-                *str = scanf_out;
-        else
-                free(scanf_out);
-
-        fclose(f);
-        free(lbuf);
-        return;
+    *str = fetch_amd_cpu_model();
 }
 
 /* mallocs output string, free after use */
