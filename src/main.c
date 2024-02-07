@@ -1,14 +1,7 @@
 #define _GNU_SOURCE
 #include <ncurses.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <string.h>
-#include <math.h>
-#include "cpuinfo.h"
-#include "list.h"
-#include "msr.h"
 #include "draw.h"
 
 struct application app;
