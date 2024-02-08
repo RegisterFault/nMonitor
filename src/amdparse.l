@@ -143,5 +143,6 @@ char * fetch_amd_cpu_model(void){
       yyin = fp;
   } 
   yylex();
+  fclose(fp);
   return amd_modelname;
 }

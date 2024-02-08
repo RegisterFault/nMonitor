@@ -148,5 +148,6 @@ char * fetch_intel_cpu_model(void){
       yyin = fp;
   } 
   yylex();
+  fclose(fp);
   return intel_modelname;
 }
