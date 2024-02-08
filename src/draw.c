@@ -158,7 +158,7 @@ void draw_grid(WINDOW *win)
 }
 void draw_amperage(WINDOW *win, struct node **list)
 {
-        mvwprintw(win, 0, 0, "%ld mW -- [%c][%c] -- Bat: %d%% -- Cap: %2.1f/%2.1f Ah",
+        mvwprintw(win, 0, 0, "%ld mW -- [%c%c] -- Bat %d%% -- Cap %2.1f/%2.1f Ah",
                   last_elem(*list)->data,
                   ac_attached() ? 'A' : ' ',
                   is_charging() ? 'C' : ' ',
@@ -169,7 +169,7 @@ void draw_amperage(WINDOW *win, struct node **list)
 
 void draw_wattage(WINDOW *win, struct node **list)
 {
-        mvwprintw(win, 0, 0, "%ld mW -- [%c][%c] -- Bat: %d%% -- Cap: %d/%d Wh",
+        mvwprintw(win, 0, 0, "%ld mW -- [%c%c] -- Bat %d%% -- Cap %d/%d Wh",
                   last_elem(*list)->data,
                   ac_attached() ? 'A' : ' ',
                   is_charging() ? 'C' : ' ',
