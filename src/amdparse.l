@@ -25,11 +25,11 @@
 "mobile AMD Athlon(tm) XP-M"  BEGIN(athlon);
 <amd>"Embedded "(G|R)"-Series" ;
 <amd>A(4|6|8|10|12)" PRO-"[^ \n\t]+ {
-  printf("Basic: %s\n", yytext);
+  snprintf(modelname,256,"%s",yytext);
   BEGIN(endline);
 }
 <amd>A(4|6|8|10|12)" Extreme" {
-  printf("Basic: %s\n", yytext);
+  snprintf(modelname,256,"%s",yytext);
   BEGIN(endline);
 }
 <amd>PRO ;
