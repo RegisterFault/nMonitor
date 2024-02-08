@@ -1,7 +1,8 @@
 
 %{
-  char *modelname;
+  char *amd_modelname;
 %}
+%option prefix="amd" outfile="amdparse.c"
 %s model
 %s amd
 %s opteron
@@ -25,11 +26,11 @@
 "mobile AMD Athlon(tm) XP-M"  BEGIN(athlon);
 <amd>"Embedded "(G|R)"-Series" ;
 <amd>A(4|6|8|10|12)" PRO-"[^ \n\t]+ {
-  snprintf(modelname,256,"%s",yytext);
+  snprintf(amd_modelname,256,"%s",yytext);
   BEGIN(endline);
 }
 <amd>A(4|6|8|10|12)" Extreme" {
-  snprintf(modelname,256,"%s",yytext);
+  snprintf(amd_modelname,256,"%s",yytext);
   BEGIN(endline);
 }
 <amd>PRO ;
@@ -82,48 +83,48 @@
 <amd>"Ryzen Threadripper"(" PRO")? BEGIN(threadripper);
 <amd>"EPYC" BEGIN(epyc);
 <amd>[^ \n\t]+ {
-  snprintf(modelname,256,"%s",yytext);
+  snprintf(amd_modelname,256,"%s",yytext);
   //printf("Basic: %s\n", yytext);
   BEGIN(endline);
 }
 <sempron>[^ \n\t]+ {
-  snprintf(modelname,256,"Sempron %s",yytext);
+  snprintf(amd_modelname,256,"Sempron %s",yytext);
   // printf("Sempron %s\n",yytext);
   BEGIN(endline);
 }
 <epyc>[^ \n\t]+ {
-  snprintf(modelname,256,"EPYC %s",yytext);
+  snprintf(amd_modelname,256,"EPYC %s",yytext);
   // printf("EPYC %s\n", yytext);
   BEGIN(endline);
 }
 <threadripper>[^ \n\t]+ {
-  snprintf(modelname,256,"Threadripper %s",yytext);
+  snprintf(amd_modelname,256,"Threadripper %s",yytext);
   // printf("Threadripper %s\n", yytext);
   BEGIN(endline);
 }
 <ryzen>[^ \n\t]+ {
-  snprintf(modelname,256,"Ryzen %s",yytext);
+  snprintf(amd_modelname,256,"Ryzen %s",yytext);
   // printf("Ryzen %s\n", yytext);
   BEGIN(endline);
 }
 <opteron>[^ \n\t]+ {
-  snprintf(modelname,256,"Opteron %s",yytext);
-  // printf("opteron %s\n", modelname);
+  snprintf(amd_modelname,256,"Opteron %s",yytext);
+  // printf("opteron %s\n", amd_modelname);
   BEGIN(endline);
 }
 <turion>[^ \n\t]+ {
-  snprintf(modelname,256,"Turion %s",yytext);
-  // printf("turion %s\n", modelname);
+  snprintf(amd_modelname,256,"Turion %s",yytext);
+  // printf("turion %s\n", amd_modelname);
   BEGIN(endline);
 }
 <phenom>[^ \n\t]+ {
-  snprintf(modelname,256,"Phenom %s",yytext);
+  snprintf(amd_modelname,256,"Phenom %s",yytext);
   // printf("phenom %s\n",yytext);
   BEGIN(endline);
 }
 <athlon>[^ \n\t]+ {
-  snprintf(modelname,256,"Athlon %s",yytext);
-  // printf("athlon %s\n", modelname);
+  snprintf(amd_modelname,256,"Athlon %s",yytext);
+  // printf("athlon %s\n", amd_modelname);
   BEGIN(endline);
 }
 <endline>[^\n]+ /* eat up the rest of the line*/ ;
@@ -136,11 +137,11 @@ int yywrap() {
 }
 
 char * fetch_amd_cpu_model(void){
-  modelname = malloc(256);
+  amd_modelname = malloc(256);
   FILE *fp = fopen("/proc/cpuinfo","r");
   if(fp){
       yyin = fp;
   } 
   yylex();
-  return modelname;
+  return amd_modelname;
 }

@@ -1,4 +1,3 @@
-#include "amdparse.h"
 #define _GNU_SOURCE
 #include <string.h>
 #include <fcntl.h>
@@ -9,7 +8,7 @@
 #include <glob.h>
 #include "cpuinfo.h"
 #include "msr.h"
-#include "amdparse.h"
+#include "modelparse.h"
 
 /* arbitrary max frequency bounds to use when max freq of processor unfetchable */
 #define MAX_FREQ_ARB 5000
@@ -165,51 +164,7 @@ void get_amd_cpuname(char **str)
 /* mallocs output string, free after use */
 void get_intel_cpuname(char **str)
 {
-        char *path = "/proc/cpuinfo";
-        FILE *f = fopen(path, "r");
-        size_t size = 1024;
-        char *lbuf;
-        char *str_a, *str_b, *str_c, *str_d;
-        
-        if (!f)
-                return;
-
-        lbuf = malloc(size);
-
-        while (getline(&lbuf, &size, f) != -1)
-                if (strstr(lbuf, "model name"))
-                        break;
-
-        sscanf(lbuf, "model name\t: %ms %*s %ms %ms %ms", &str_a, &str_b, &str_c, &str_d);
-
-        if (str_a == NULL || str_b == NULL)
-                goto cleanup;
-
-        if(strcmp(str_b, "CPU") == 0      ||
-           strcmp(str_b, "Platinum") == 0 ||
-           strcmp(str_b, "Gold")   == 0   ||
-           strcmp(str_b, "Silver") == 0   ||
-           strcmp(str_b, "Bronze") == 0 ) {
-                free(str_a);
-                free(str_b);
-                free(str_d);
-                *str = str_c;
-        } else if (strcmp(str_a, "11th") == 0 ||
-                   strcmp(str_a, "12th") == 0 ) { /* 11th and 12th gen add an EXTRA word to the model name */
-                free(str_a);
-                free(str_b);
-                free(str_c);
-                *str = str_d;
-        } else {
-                free(str_a);
-                free(str_c);
-                free(str_d);
-                *str = str_b;
-        };
-
-cleanup:
-        free(lbuf);
-        fclose(f);
+    *str = fetch_intel_cpu_model();
 }
 
 char *get_cpuname()

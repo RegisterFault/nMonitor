@@ -107,7 +107,7 @@ PROGRAMS = $(bin_PROGRAMS)
 am_nmonitor_OBJECTS = nmonitor-main.$(OBJEXT) \
 	nmonitor-cpuinfo.$(OBJEXT) nmonitor-list.$(OBJEXT) \
 	nmonitor-msr.$(OBJEXT) nmonitor-draw.$(OBJEXT) \
-	nmonitor-amdparse.$(OBJEXT)
+	nmonitor-intelparse.$(OBJEXT) nmonitor-amdparse.$(OBJEXT)
 nmonitor_OBJECTS = $(am_nmonitor_OBJECTS)
 nmonitor_LDADD = $(LDADD)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -134,6 +134,7 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/nmonitor-amdparse.Po \
 	./$(DEPDIR)/nmonitor-cpuinfo.Po ./$(DEPDIR)/nmonitor-draw.Po \
+	./$(DEPDIR)/nmonitor-intelparse.Po \
 	./$(DEPDIR)/nmonitor-list.Po ./$(DEPDIR)/nmonitor-main.Po \
 	./$(DEPDIR)/nmonitor-msr.Po
 am__mv = mv -f
@@ -189,7 +190,7 @@ am__define_uniq_tagged_files = \
     if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
   done | $(am__uniquify_input)`
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp \
-	$(top_srcdir)/ylwrap amdparse.c
+	$(top_srcdir)/ylwrap amdparse.c intelparse.c
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -318,9 +319,9 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-nmonitor_SOURCES = main.c cpuinfo.c list.c msr.c draw.c amdparse.l
+nmonitor_SOURCES = main.c cpuinfo.c list.c msr.c draw.c intelparse.l amdparse.l
 nmonitor_CFLAGS = -Wno-unused-result
-CLEANFILES = amdparse.c
+CLEANFILES = amdparse.c intelparse.c
 all: all-am
 
 .SUFFIXES:
@@ -417,6 +418,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nmonitor-amdparse.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nmonitor-cpuinfo.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nmonitor-draw.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nmonitor-intelparse.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nmonitor-list.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nmonitor-main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nmonitor-msr.Po@am__quote@ # am--include-marker
@@ -520,6 +522,20 @@ nmonitor-draw.obj: draw.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='draw.c' object='nmonitor-draw.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(nmonitor_CFLAGS) $(CFLAGS) -c -o nmonitor-draw.obj `if test -f 'draw.c'; then $(CYGPATH_W) 'draw.c'; else $(CYGPATH_W) '$(srcdir)/draw.c'; fi`
+
+nmonitor-intelparse.o: intelparse.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(nmonitor_CFLAGS) $(CFLAGS) -MT nmonitor-intelparse.o -MD -MP -MF $(DEPDIR)/nmonitor-intelparse.Tpo -c -o nmonitor-intelparse.o `test -f 'intelparse.c' || echo '$(srcdir)/'`intelparse.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/nmonitor-intelparse.Tpo $(DEPDIR)/nmonitor-intelparse.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='intelparse.c' object='nmonitor-intelparse.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(nmonitor_CFLAGS) $(CFLAGS) -c -o nmonitor-intelparse.o `test -f 'intelparse.c' || echo '$(srcdir)/'`intelparse.c
+
+nmonitor-intelparse.obj: intelparse.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(nmonitor_CFLAGS) $(CFLAGS) -MT nmonitor-intelparse.obj -MD -MP -MF $(DEPDIR)/nmonitor-intelparse.Tpo -c -o nmonitor-intelparse.obj `if test -f 'intelparse.c'; then $(CYGPATH_W) 'intelparse.c'; else $(CYGPATH_W) '$(srcdir)/intelparse.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/nmonitor-intelparse.Tpo $(DEPDIR)/nmonitor-intelparse.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='intelparse.c' object='nmonitor-intelparse.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(nmonitor_CFLAGS) $(CFLAGS) -c -o nmonitor-intelparse.obj `if test -f 'intelparse.c'; then $(CYGPATH_W) 'intelparse.c'; else $(CYGPATH_W) '$(srcdir)/intelparse.c'; fi`
 
 nmonitor-amdparse.o: amdparse.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(nmonitor_CFLAGS) $(CFLAGS) -MT nmonitor-amdparse.o -MD -MP -MF $(DEPDIR)/nmonitor-amdparse.Tpo -c -o nmonitor-amdparse.o `test -f 'amdparse.c' || echo '$(srcdir)/'`amdparse.c
@@ -667,6 +683,7 @@ maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
 	-rm -f amdparse.c
+	-rm -f intelparse.c
 clean: clean-am
 
 clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
@@ -675,6 +692,7 @@ distclean: distclean-am
 		-rm -f ./$(DEPDIR)/nmonitor-amdparse.Po
 	-rm -f ./$(DEPDIR)/nmonitor-cpuinfo.Po
 	-rm -f ./$(DEPDIR)/nmonitor-draw.Po
+	-rm -f ./$(DEPDIR)/nmonitor-intelparse.Po
 	-rm -f ./$(DEPDIR)/nmonitor-list.Po
 	-rm -f ./$(DEPDIR)/nmonitor-main.Po
 	-rm -f ./$(DEPDIR)/nmonitor-msr.Po
@@ -726,6 +744,7 @@ maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/nmonitor-amdparse.Po
 	-rm -f ./$(DEPDIR)/nmonitor-cpuinfo.Po
 	-rm -f ./$(DEPDIR)/nmonitor-draw.Po
+	-rm -f ./$(DEPDIR)/nmonitor-intelparse.Po
 	-rm -f ./$(DEPDIR)/nmonitor-list.Po
 	-rm -f ./$(DEPDIR)/nmonitor-main.Po
 	-rm -f ./$(DEPDIR)/nmonitor-msr.Po
