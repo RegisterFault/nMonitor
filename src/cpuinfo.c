@@ -1,11 +1,12 @@
 #define _GNU_SOURCE
-#include <string.h>
 #include <fcntl.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <math.h>
 #include <glob.h>
+#include <math.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 #include "cpuinfo.h"
 #include "msr.h"
 #include "modelparse.h"
@@ -740,6 +741,14 @@ double get_dram_joules()
 /* requires root */
 double get_volt( unsigned int plane)
 {
+        /* 
+         * kernel lockdown can forbid the use of this undocumented MSR and flood dmesg
+         * We should have a flag for determining if we still try to pull from this,
+         * toggling to false if the first attempt to read the msr failed
+         */
+        static bool can_get_volt = true; 
+        if(!can_get_volt)
+                return 0.0;
         VOLT v;
         if (plane > 4)
                 return 0.0;
@@ -747,7 +756,10 @@ double get_volt( unsigned int plane)
         /* have to write which plane to read */
         v.w = VOLT_READ;
         v.s.plane = plane;
-        wrmsr(VOLT_MSR, v.w);
+        if (wrmsr(VOLT_MSR, v.w) == -1){
+                can_get_volt = false;
+                return 0.0;
+        }
 
         v.w = rdmsr(VOLT_MSR);
         return v.s.volt / 1.024;
