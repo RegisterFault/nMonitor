@@ -271,10 +271,10 @@ void draw_cpu(WINDOW *win)
                 if (!is_amd() && hwp_enabled())
                         mvwprintw(win, line++, 1, "HWP Pref:   0x%02x", get_hwp_pref());
 
-                if (!is_amd()) {
+                /*if (!is_amd()) {
                         mvwprintw(win, line++, 1, "CPU:   %+2.2f mV", get_volt(CPU_PLANE));
                         mvwprintw(win, line++, 1, "Cache: %+2.2f mV", get_volt(CACHE_PLANE));
-                }
+                }*/ //This generates too many errors in syslog
 
                 last_pkg_nrg = cur_pkg_nrg;
                 last_pp0_nrg = cur_pp0_nrg;
