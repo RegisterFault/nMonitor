@@ -15,6 +15,11 @@ void draw_app()
         app.wwin   = newwin(12, 45, 0, 25);
         app.fwin   = newwin(12, 45, 12, 25);
         app.fgwin  = newwin(24, 70, 0, 0);
+	syncok(app.cpuwin , TRUE);
+	syncok(app.memwin , TRUE);
+	syncok(app.wwin , TRUE);
+	syncok(app.fwin , TRUE);
+	syncok(app.fgwin , TRUE);
 }
 
 void init_app()
@@ -89,6 +94,7 @@ void draw_graph(WINDOW *win, struct node **list, long int max)
         int cols = 0;
         
         getmaxyx(win, lines, cols);
+	clearok(win, TRUE);
         wclear(win);
         box(win, 0, 0);
        
@@ -190,6 +196,7 @@ void draw_power(WINDOW *win, struct node **list)
                 draw_graph(win, list, 35000);
                 draw_wattage(win, list);
         }
+	touchwin(win);
         wnoutrefresh(win);
 }
 
@@ -203,6 +210,7 @@ void draw_freq(WINDOW *win, struct node **list)
         draw_graph(win, list, max_boost);
         mvwprintw(win, 0, 0, "%ld MHz", last_elem(*list)->data);
 
+	touchwin(win);
         wnoutrefresh(win);
 }
 
@@ -221,6 +229,7 @@ void draw_cpu(WINDOW *win)
         char *cpu_name = get_cpuname();
         char *cpu_brand = CPU_BRAND_STR();
 
+	clearok(win, TRUE);
         wclear(win);
         box(win, 0, 0);
 
@@ -285,6 +294,7 @@ void draw_cpu(WINDOW *win)
 cleanup:
         free(cpu_name);
         free(governor);
+	touchwin(win);
         wnoutrefresh(win);
 }
 
@@ -295,6 +305,7 @@ void draw_mem(WINDOW *win)
         
         get_mem(&mem);
         
+	clearok(win, TRUE);
         wclear(win);
         box(win, 0, 0);
         
@@ -306,5 +317,6 @@ void draw_mem(WINDOW *win)
         mvwprintw(win, line++, 1, "Cache: %5ld MiB", mem.cache / 1024);
         /* this appears to be inaccurate */
         mvwprintw(win, line++, 1, "Used:  %5ld MiB", (mem.total - mem.avail) / 1024);
+	touchwin(win);
         wnoutrefresh(win);
 }
