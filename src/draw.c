@@ -1,5 +1,6 @@
 #include "draw.h"
 
+
 void draw_app()
 {
         extern struct application app;
@@ -292,7 +293,6 @@ void draw_cpu(WINDOW *win)
 
         }
 cleanup:
-        free(cpu_name);
         free(governor);
 	touchwin(win);
         wnoutrefresh(win);

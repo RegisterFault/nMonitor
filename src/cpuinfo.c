@@ -166,14 +166,17 @@ void get_intel_cpuname(char **str)
     *str = fetch_intel_cpu_model();
 }
 
+static char * CPUName = NULL;
+
 char *get_cpuname()
 {
-        char *str = "";
+		if (CPUName != NULL)
+			return CPUName;
         if (is_amd())
-                get_amd_cpuname(&str);
+                get_amd_cpuname(&CPUName);
         else 
-                get_intel_cpuname(&str);
-        return str;
+                get_intel_cpuname(&CPUName);
+        return CPUName;
 }
 
 int has_battery(unsigned int batteryIndex)

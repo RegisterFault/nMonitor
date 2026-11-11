@@ -12,8 +12,13 @@ int main()
         signal(SIGWINCH, handle_resize);
 
         while (1) {
-                if (getch() == 'f')
+                if (getch() == 'f') {
                         app.mode = !app.mode;
+				}
+				else if (getch() == 'q'){
+						endwin();
+						exit(1);
+				}
                 flushinp();
 
                 if (app.mode == STATS_MODE) {
