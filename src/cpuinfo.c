@@ -419,6 +419,20 @@ unsigned long get_bat_cycle_count(unsigned int batteryIndex)
 	return ret;
 }
 
+char * get_bat_brand(unsigned int batteryIndex)
+{
+	char *path = NULL;
+
+	if(!has_battery(batteryIndex))
+		   return 0;
+	
+	asprintf(&path, "%s/manufacturer", BatteryPaths[batteryIndex]);
+	char * ret = get_sysfs_string(path);
+
+	free(path);
+	return ret;
+}
+
 void get_mem(struct meminfo *in)
 {
         char *path = "/proc/meminfo";
