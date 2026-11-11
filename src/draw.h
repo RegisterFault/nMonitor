@@ -20,13 +20,13 @@
 #define DUR_SEC (DUR*0.000001)
 
 struct application {
-        WINDOW *wwin;
-        WINDOW *fwin;
+        WINDOW *bat0_win;
+        WINDOW *bat1_win;
         WINDOW *cpuwin;
         WINDOW *memwin;
         WINDOW *fgwin;
-        struct node *wlist;
-        struct node *flist;
+        struct node *bat0_list;
+        struct node *bat1_list;
 #define STATS_MODE 0
 #define GRID_MODE 1
         int mode;
@@ -42,9 +42,9 @@ void draw_points(WINDOW *, struct node **, int, char);
 void draw_graph(WINDOW *, struct node **, long int);
 void test_grid(WINDOW *);
 void draw_grid(WINDOW *);
-void draw_amperage(WINDOW *, struct node **);
-void draw_wattage(WINDOW *, struct node **);
-void draw_power(WINDOW *, struct node **);
+void draw_amperage(WINDOW *, struct node **, unsigned int);
+void draw_wattage(WINDOW *, struct node **, unsigned int);
+void draw_power(WINDOW *, struct node **, unsigned int);
 void draw_freq(WINDOW *, struct node **);
 void draw_cpu(WINDOW *);
 void draw_mem(WINDOW *);

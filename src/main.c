@@ -19,8 +19,8 @@ int main()
                 if (app.mode == STATS_MODE) {
                         draw_cpu(app.cpuwin);
                         draw_mem(app.memwin);
-                        draw_power(app.wwin, &app.wlist);
-                        draw_freq(app.fwin, &app.flist);
+                        draw_power(app.bat0_win, &app.bat0_list, 0);
+                        draw_power(app.bat1_win, &app.bat1_list, 1);
                         doupdate();
                 } else if (app.mode == GRID_MODE) {
                         draw_grid(app.fgwin);

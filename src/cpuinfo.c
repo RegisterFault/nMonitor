@@ -14,7 +14,7 @@
 /* arbitrary max frequency bounds to use when max freq of processor unfetchable */
 #define MAX_FREQ_ARB 5000
 
-char * BatteryPath = NULL; //populated by init_batinfo
+char * BatteryPaths[2] = { NULL, NULL }; //populated by init_batinfo, support up to two batteries
 char * PowerPath = NULL;   //populated by init_powerinfo
 
 int is_root(void)
@@ -31,15 +31,13 @@ void init_batinfo(void)
         
         glob(battery_glob, 0, NULL, &globbuf);
         
-        if(globbuf.gl_pathc == 0){
-                BatteryPath = NULL;
-        } else {
-                len = strlen(globbuf.gl_pathv[0]) + 1;
-                /* BatteryPath only gets allocated once, and should never be freed*/
-                BatteryPath = calloc(len, 1);
-                /* glob sorts results, so we get the lowest-numbered BAT entry */
-                strcpy(BatteryPath, globbuf.gl_pathv[0]); 
-        }
+		for ( size_t i = 0; i < globbuf.gl_pathc; i++) {
+			len = strlen(globbuf.gl_pathv[0]) + 1;
+			/* BatteryPath only gets allocated once, and should never be freed*/
+			BatteryPaths[i] = calloc(len, 1);
+			/* glob sorts results, so we get the lowest-numbered BAT entry */
+			strcpy(BatteryPaths[i], globbuf.gl_pathv[i]); 
+		}
 
         globfree(&globbuf);
         return;       
@@ -178,9 +176,9 @@ char *get_cpuname()
         return str;
 }
 
-int has_battery()
+int has_battery(unsigned int batteryIndex)
 {
-        return (BatteryPath != NULL) ? 1 : 0;
+        return (BatteryPaths[batteryIndex] != NULL) ? 1 : 0;
 }
 
 int ac_present()
@@ -204,12 +202,12 @@ int ac_attached()
         return ret;
 }
 
-int is_charging()
+int is_charging(unsigned int batteryIndex)
 {
         char *path = NULL;
         char *status = NULL;
         int ret = 0;
-        asprintf(&path, "%s/status", BatteryPath);
+        asprintf(&path, "%s/status", BatteryPaths[batteryIndex]);
 
         status = get_sysfs_string(path);
         free(path);
@@ -224,31 +222,31 @@ int is_charging()
 }
 
 /* some systems report current charge, some report wattage */
-int is_current()
+int is_current(unsigned int batteryIndex)
 {
         char *path = NULL;
         int ret;
 
-        if(!BatteryPath)
+        if(!has_battery(batteryIndex))
                 return 0;
       
-        asprintf(&path,"%s/charge_full", BatteryPath);
+        asprintf(&path,"%s/charge_full", BatteryPaths[batteryIndex]);
         ret = (access(path, F_OK) == 0) ? 1 : 0;
         free(path);
         
         return ret;
 }
 
-int get_charge_pct()
+int get_charge_pct(unsigned int batteryIndex)
 {
         char *full = NULL;
         char *now = NULL;
         
-        if(!BatteryPath)
+        if(!has_battery(batteryIndex))
                 return 0;
         
-        asprintf(&full, "%s/charge_full", BatteryPath); 
-        asprintf(&now, "%s/charge_now", BatteryPath);
+        asprintf(&full, "%s/charge_full", BatteryPaths[batteryIndex]); 
+        asprintf(&now, "%s/charge_now", BatteryPaths[batteryIndex]);
         
         float c_full = (float) get_sysfs_int(full);
         float c_now = (float) get_sysfs_int(now);
@@ -263,29 +261,29 @@ int get_charge_pct()
 }
 
 /* this is in amp-hours, not watts */
-float get_charge_full()
+float get_charge_full(unsigned int batteryIndex)
 {
         char *path = NULL;
-        
-        if(!BatteryPath)
-                return 0.0;
 
-        asprintf(&path, "%s/charge_full", BatteryPath);
-        
+        if(!has_battery(batteryIndex))
+                return 0.0;
+ 
+        asprintf(&path, "%s/charge_full", BatteryPaths[batteryIndex]);
+
         float ret = ((float) get_sysfs_int(path)) / 1000000.0;
-        
+
         free(path);
         return ret;
 }
 
-float get_charge_full_design()
+float get_charge_full_design(unsigned int batteryIndex)
 {
         char *path = NULL;
         
-        if(!BatteryPath)
+        if(!has_battery(batteryIndex))
                 return 0.0;
 
-        asprintf(&path, "%s/charge_full_design", BatteryPath);
+        asprintf(&path, "%s/charge_full_design", BatteryPaths[batteryIndex]);
         
         float ret = ((float) get_sysfs_int(path)) / 1000000.0;
 
@@ -294,16 +292,16 @@ float get_charge_full_design()
 }
 
 /* we return milliwatts */
-int get_charge_wattage()
+int get_charge_wattage(unsigned int batteryIndex)
 {
         char *cur = NULL;
         char *volt = NULL;
         
-        if(!BatteryPath)
+        if(!has_battery(batteryIndex))
                 return 0;
 
-        asprintf(&cur, "%s/current_now", BatteryPath);
-        asprintf(&volt, "%s/voltage_now", BatteryPath);
+        asprintf(&cur, "%s/current_now", BatteryPaths[batteryIndex]);
+        asprintf(&volt, "%s/voltage_now", BatteryPaths[batteryIndex]);
         float c_now = (float) get_sysfs_int(cur);
         float v_now = (float) get_sysfs_int(volt);
         
@@ -315,14 +313,14 @@ int get_charge_wattage()
         return (int) (wattage * 1000);
 }
 
-long int get_wattage(void)
+long int get_wattage(unsigned int batteryIndex)
 {
         char *path = NULL;
         
-        if(!BatteryPath)
+        if(!has_battery(batteryIndex))
                 return 0;
 
-        asprintf(&path, "%s/power_now", BatteryPath);
+        asprintf(&path, "%s/power_now", BatteryPaths[batteryIndex]);
         
         long int ret = get_sysfs_int(path) / 1000;
 
@@ -352,16 +350,16 @@ char *get_governor()
         return get_sysfs_string(path);
 }
 
-int get_bat_pct()
+int get_bat_pct(unsigned int batteryIndex)
 {
         char *energy_full = NULL;
         char *energy_now = NULL; 
 
-        if(!BatteryPath)
+        if(!has_battery(batteryIndex))
                 return 0;
 
-        asprintf(&energy_full, "%s/energy_full", BatteryPath);
-        asprintf(&energy_now, "%s/energy_now", BatteryPath);
+        asprintf(&energy_full, "%s/energy_full", BatteryPaths[batteryIndex]);
+        asprintf(&energy_now, "%s/energy_now", BatteryPaths[batteryIndex]);
         
         float e_full = (float) get_sysfs_int(energy_full);
         float e_now = (float) get_sysfs_int(energy_now);
@@ -375,14 +373,14 @@ int get_bat_pct()
         return 0;
 }
 
-int get_bat_full()
+int get_bat_full(unsigned int batteryIndex)
 {
         char *path = NULL;
         
-        if(!BatteryPath)
+        if(!has_battery(batteryIndex))
                 return 0;
 
-        asprintf(&path, "%s/energy_full", BatteryPath);
+        asprintf(&path, "%s/energy_full", BatteryPaths[batteryIndex]);
         
         int ret = get_sysfs_int(path) / 1000000;
 
@@ -390,14 +388,14 @@ int get_bat_full()
         return ret;
 }
 
-int get_bat_design()
+int get_bat_design(unsigned int batteryIndex)
 {
         char *path = NULL;
         
-        if(!BatteryPath)
+        if(!has_battery(batteryIndex))
                 return 0;
 
-        asprintf(&path, "%s/energy_full_design", BatteryPath);
+        asprintf(&path, "%s/energy_full_design", BatteryPaths[batteryIndex]);
         int ret = get_sysfs_int(path) / 1000000;
 
         free(path);

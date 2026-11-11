@@ -12,13 +12,13 @@ void draw_app()
 
         app.cpuwin = newwin(15, 25, 0, 0);
         app.memwin = newwin(9, 25, 15, 0);
-        app.wwin   = newwin(12, 45, 0, 25);
-        app.fwin   = newwin(12, 45, 12, 25);
+        app.bat0_win   = newwin(12, 45, 0, 25);
+        app.bat1_win   = newwin(12, 45, 12, 25);
         app.fgwin  = newwin(24, 70, 0, 0);
 	syncok(app.cpuwin , TRUE);
 	syncok(app.memwin , TRUE);
-	syncok(app.wwin , TRUE);
-	syncok(app.fwin , TRUE);
+	syncok(app.bat0_win , TRUE);
+	syncok(app.bat1_win , TRUE);
 	syncok(app.fgwin , TRUE);
 }
 
@@ -28,8 +28,8 @@ void init_app()
         init_batinfo();
         init_powerinfo();
 
-        app.wlist = init_node();
-        app.flist = init_node();
+        app.bat0_list = init_node();
+        app.bat1_list = init_node();
         app.mode = STATS_MODE;
 
         draw_app();
@@ -162,39 +162,39 @@ void draw_grid(WINDOW *win)
 
         wnoutrefresh(win);
 }
-void draw_amperage(WINDOW *win, struct node **list)
+void draw_amperage(WINDOW *win, struct node **list, unsigned int batteryIndex)
 {
         mvwprintw(win, 0, 0, "%ld mW -- [%c%c] -- Bat %d%% -- Cap %2.1f/%2.1f Ah",
                   last_elem(*list)->data,
                   ac_attached() ? 'A' : ' ',
-                  is_charging() ? 'C' : ' ',
-                  get_charge_pct(),
-                  get_charge_full(),
-                  get_charge_full_design());
+                  is_charging(batteryIndex) ? 'C' : ' ',
+                  get_charge_pct(batteryIndex),
+                  get_charge_full(batteryIndex),
+                  get_charge_full_design(batteryIndex));
 }
 
-void draw_wattage(WINDOW *win, struct node **list)
+void draw_wattage(WINDOW *win, struct node **list, unsigned int batteryIndex)
 {
         mvwprintw(win, 0, 0, "%ld mW -- [%c%c] -- Bat %d%% -- Cap %d/%d Wh",
                   last_elem(*list)->data,
                   ac_attached() ? 'A' : ' ',
-                  is_charging() ? 'C' : ' ',
-                  get_bat_pct(),
-                  get_bat_full(),
-                  get_bat_design());
+                  is_charging(batteryIndex) ? 'C' : ' ',
+                  get_bat_pct(batteryIndex),
+                  get_bat_full(batteryIndex),
+                  get_bat_design(batteryIndex));
 }
 
-void draw_power(WINDOW *win, struct node **list)
+void draw_power(WINDOW *win, struct node **list, unsigned int batteryIndex)
 {       
         /* some systems report Amp-Hours, some report Watt-Hours */
-        if (is_current()){
-                add_node(list, get_charge_wattage());
+        if (is_current(batteryIndex)){
+                add_node(list, get_charge_wattage(batteryIndex));
                 draw_graph(win, list, 35000);
-                draw_amperage(win, list);
+                draw_amperage(win, list, batteryIndex);
         } else {
-                add_node(list, get_wattage());
+                add_node(list, get_wattage(batteryIndex));
                 draw_graph(win, list, 35000);
-                draw_wattage(win, list);
+                draw_wattage(win, list, batteryIndex);
         }
 	touchwin(win);
         wnoutrefresh(win);
