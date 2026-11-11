@@ -54,6 +54,7 @@ int get_charge_wattage(unsigned int);
 int get_bat_pct(unsigned int);
 int get_bat_full(unsigned int);
 int get_bat_design(unsigned int);
+unsigned long get_bat_cycle_count(unsigned int);
 int get_turbo(void);
 int get_amd_boost(void);
 int get_intel_boost(void);

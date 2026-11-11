@@ -172,6 +172,9 @@ void draw_amperage(WINDOW *win, struct node **list, unsigned int batteryIndex)
                   get_charge_pct(batteryIndex),
                   get_charge_full(batteryIndex),
                   get_charge_full_design(batteryIndex));
+		mvwprintw(win, 11, 0, "cycles [%ld]", 
+				 get_bat_cycle_count(batteryIndex));
+
 }
 
 void draw_wattage(WINDOW *win, struct node **list, unsigned int batteryIndex)
@@ -183,6 +186,8 @@ void draw_wattage(WINDOW *win, struct node **list, unsigned int batteryIndex)
                   get_bat_pct(batteryIndex),
                   get_bat_full(batteryIndex),
                   get_bat_design(batteryIndex));
+		mvwprintw(win, 11, 0, "cycles [%ld]", 
+				 get_bat_cycle_count(batteryIndex));
 }
 
 void draw_power(WINDOW *win, struct node **list, unsigned int batteryIndex)
