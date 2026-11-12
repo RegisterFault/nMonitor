@@ -13,8 +13,9 @@
 
 /* arbitrary max frequency bounds to use when max freq of processor unfetchable */
 #define MAX_FREQ_ARB 5000
+#define MAX_BATS 2
 
-char * BatteryPaths[2] = { NULL, NULL }; //populated by init_batinfo, support up to two batteries
+char * BatteryPaths[MAX_BATS] = { NULL, NULL }; //populated by init_batinfo, support up to two batteries
 char * PowerPath = NULL;   //populated by init_powerinfo
 
 int is_root(void)
@@ -22,25 +23,33 @@ int is_root(void)
         return geteuid() == 0;
 }
 
-//locate the primary BAT*
-void init_batinfo(void)
+//locate the batteries
+void refresh_batinfo(void)
 {
         glob_t globbuf;
         char *battery_glob = "/sys/class/power_supply/BAT*";
         size_t len;
+       
+	   //I don't want to design a more complex management system so heap-thrashing it is.
+		for (int i = 0; i < MAX_BATS; i++)
+			if (BatteryPaths[i] != NULL){
+				free(BatteryPaths[i]);
+				BatteryPaths[i] = NULL;
+			}
+
         
-        glob(battery_glob, 0, NULL, &globbuf);
-        
-		for ( size_t i = 0; i < globbuf.gl_pathc; i++) {
+		glob(battery_glob, 0, NULL, &globbuf);
+       	
+		for ( size_t i = 0; i < globbuf.gl_pathc && i < MAX_BATS; i++) {
 			len = strlen(globbuf.gl_pathv[0]) + 1;
 			/* BatteryPath only gets allocated once, and should never be freed*/
 			BatteryPaths[i] = calloc(len, 1);
 			/* glob sorts results, so we get the lowest-numbered BAT entry */
-			strcpy(BatteryPaths[i], globbuf.gl_pathv[i]); 
+			strcpy(BatteryPaths[i], globbuf.gl_pathv[i]);
 		}
 
         globfree(&globbuf);
-        return;       
+        return;
 }
 
 void init_powerinfo()

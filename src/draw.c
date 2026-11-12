@@ -26,7 +26,7 @@ void draw_app()
 void init_app()
 {
         extern struct application app;
-        init_batinfo();
+        refresh_batinfo();
         init_powerinfo();
 
         app.bat0_list = init_node();
