@@ -12,6 +12,7 @@
 #include "cpuinfo.h"
 #include "list.h"
 #include "msr.h"
+#include "dmi.h"
 
 /* hard-coded update interval, in microseconds */
 #define DUR (500000L)
