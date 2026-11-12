@@ -3,7 +3,7 @@
 uint16_t MemorySpeed = 0;
 char * MemoryTechnology = NULL;
 
-const char * memtypes[] = {
+char * memtypes[] = {
 	"",
 	"Other",
 	"Unkown",

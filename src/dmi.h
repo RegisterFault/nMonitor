@@ -75,7 +75,7 @@ void skip_strings(FILE *);
 const char * get_mem_tech();
 uint16_t get_mem_speed();
 
-extern const char * memtypes[];
+extern char * memtypes[];
 extern uint16_t MemorySpeed;
 extern char * MemoryTechnology;
 

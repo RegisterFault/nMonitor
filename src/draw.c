@@ -322,7 +322,7 @@ void draw_mem(WINDOW *win)
         // /proc/cpuinfo reports in KiB, despite actually showing kB 
         mvwprintw(win, line++, 0, "MEM INFO");
 		if(get_mem_tech() != NULL)
-			mvwprintw(win, line++, 1, "TYPE: %s-%u", 
+			mvwprintw(win, line++, 1, "Type: %s-%u", 
 					  get_mem_tech(),
 					  get_mem_speed());
         mvwprintw(win, line++, 1, "Total: %5ld MiB", mem.total / 1024);
