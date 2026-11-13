@@ -114,6 +114,7 @@ const char * get_mem_tech(){
 		if (feof(fp))
 			break;
 
+		// look for memory device type
 		if(head.type != 17){
 			skip_table(&head, fp);
 			continue;
@@ -123,6 +124,24 @@ const char * get_mem_tech(){
 		if(ferror(fp)){
 			perror("Failed to read memory table: ");
 			exit(1);
+		}
+
+		// skip if not real RAM
+		if(md.memory_type <3 ||
+		   md.memory_type == 5 ||
+		   md.memory_type == 6 ||
+		   md.memory_type == 8 ||
+		   md.memory_type == 9 ||
+		   md.memory_type == 10 ||
+		   md.memory_type == 11 ||
+		   md.memory_type == 12 ||
+		   md.memory_type == 21 ||
+		   md.memory_type == 22 ||
+		   md.memory_type == 23 ||
+		   md.memory_type == 31 
+		   ){
+			skip_strings(fp);
+			continue;
 		}
 	
 		// just going to return the first memory module that shows up for now
