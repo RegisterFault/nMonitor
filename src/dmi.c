@@ -187,6 +187,24 @@ uint16_t get_mem_speed(){
 			exit(1);
 		}
 
+		// skip if not real RAM
+		if(md.memory_type <3 ||
+		   md.memory_type == 5 ||
+		   md.memory_type == 6 ||
+		   md.memory_type == 8 ||
+		   md.memory_type == 9 ||
+		   md.memory_type == 10 ||
+		   md.memory_type == 11 ||
+		   md.memory_type == 12 ||
+		   md.memory_type == 21 ||
+		   md.memory_type == 22 ||
+		   md.memory_type == 23 ||
+		   md.memory_type == 31 
+		   ){
+			skip_strings(fp);
+			continue;
+		}
+
 		//same as above, return the first module seen
 		fclose(fp);
 		MemorySpeed = md.configured_memory_speed;
